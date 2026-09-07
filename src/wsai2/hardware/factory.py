@@ -10,6 +10,8 @@ from __future__ import annotations
 from .base import HardwareDiscoverer, HardwareProfile
 from .cpu import discover_cpu
 from .memory import discover_memory
+from .gpu import discover_gpus
+from .storage import discover_storage
 
 
 class _GenericHardwareDiscoverer:
@@ -22,12 +24,10 @@ class _GenericHardwareDiscoverer:
         return discover_memory()
 
     def discover_gpus(self):
-        # Unidade inicial: GPU vazio
-        return ()
+        return tuple(discover_gpus())
 
     def discover_storage(self):
-        # Unidade inicial: storage vazio
-        return ()
+        return tuple(discover_storage())
 
     def discover_all(self) -> HardwareProfile:
         """Descobre e agrega todo o perfil de hardware."""

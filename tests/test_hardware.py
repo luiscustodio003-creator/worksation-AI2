@@ -1,16 +1,20 @@
 """Testes do subsistema Hardware Intelligence.
 
-Valida a descoberta de CPU e memória, a normalização de dados e a
-agregação do perfil de hardware.
+Valida a descoberta de CPU, memória, GPU e armazenamento, a normalização
+de dados e a agregação do perfil de hardware.
 """
 
 from wsai2.hardware import (
     Architecture,
     CpuInfo,
     CpuVendor,
+    GpuInfo,
     HardwareProfile,
     MemoryInfo,
+    StorageInfo,
+    discover_gpus,
     discover_hardware,
+    discover_storage,
 )
 from wsai2.hardware.cpu import discover_cpu
 from wsai2.hardware.memory import discover_memory
@@ -48,8 +52,37 @@ def test_descobrir_memoria_retorna_estrutura_valida() -> None:
     assert mem.has_swap == (mem.swap_total_bytes > 0)
 
 
+def test_descobrir_gpu_retorna_lista() -> None:
+    """A descoberta de GPU deve devolver uma lista (pode ser vazia)."""
+    gpus = discover_gpus()
+    assert isinstance(gpus, list)
+    for gpu in gpus:
+        assert isinstance(gpu, GpuInfo)
+        assert isinstance(gpu.name, str)
+        assert len(gpu.name) > 0
+        assert isinstance(gpu.vendor, str)
+        assert len(gpu.vendor) > 0
+        if gpu.vram_bytes is not None:
+            assert gpu.vram_bytes >= 0
+
+
+def test_descobrir_storage_retorna_lista() -> None:
+    """A descoberta de armazenamento deve devolver uma lista não vazia."""
+    storage = discover_storage()
+    assert isinstance(storage, list)
+    assert len(storage) > 0  # Pelo menos a partição do sistema
+    for disk in storage:
+        assert isinstance(disk, StorageInfo)
+        assert isinstance(disk.device_path, str)
+        assert len(disk.device_path) > 0
+        assert disk.total_bytes > 0
+        assert disk.type in ("ssd", "hdd", "nvme", "usb", "unknown")
+        if disk.mount_point:
+            assert isinstance(disk.mount_point, str)
+
+
 def test_perfil_hardware_agregado() -> None:
-    """A fábrica deve agregar CPU e memória num HardwareProfile coerente."""
+    """A fábrica deve agregar CPU, memória, GPU e storage num HardwareProfile coerente."""
     profile = discover_hardware()
 
     assert isinstance(profile, HardwareProfile)
@@ -57,9 +90,12 @@ def test_perfil_hardware_agregado() -> None:
     assert isinstance(profile.memory, MemoryInfo)
     assert isinstance(profile.gpus, tuple)
     assert isinstance(profile.storage, tuple)
-    # GPU e storage vazios na unidade inicial
-    assert len(profile.gpus) == 0
-    assert len(profile.storage) == 0
+    # GPU pode ser vazio se não detectado, storage deve ter pelo menos 1
+    assert len(profile.storage) > 0
+    for gpu in profile.gpus:
+        assert isinstance(gpu, GpuInfo)
+    for disk in profile.storage:
+        assert isinstance(disk, StorageInfo)
 
 
 def test_resumos_textuais_nao_vazios() -> None:

@@ -12,16 +12,24 @@ from .base import (
     Architecture,
     CpuInfo,
     CpuVendor,
+    GpuInfo,
     HardwareProfile,
     MemoryInfo,
+    StorageInfo,
 )
 from .factory import discover_hardware
+from .gpu import discover_gpus
+from .storage import discover_storage
 
 __all__ = [
     "Architecture",
     "CpuInfo",
     "CpuVendor",
+    "GpuInfo",
     "HardwareProfile",
     "MemoryInfo",
+    "StorageInfo",
+    "discover_gpus",
+    "discover_storage",
     "discover_hardware",
 ]

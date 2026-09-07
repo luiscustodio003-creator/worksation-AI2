@@ -1,47 +1,44 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
-## 2026-09-07 — Hardware Intelligence (CPU e memória) — Fase 2
+## 2026-09-07 — Hardware Intelligence (GPU e armazenamento) — Fase 2
 
 ### Objectivo
 
-Implementar a unidade inicial do Hardware Intelligence: descoberta de CPU e
-memória com normalização cross-platform, contratos estáveis e testes.
+Continuar o Hardware Intelligence adicionando descoberta de GPU e
+armazenamento com suporte cross-platform e fallbacks graciosos.
 
 ### Criado
 
-- `src/wsai2/hardware/__init__.py`
-- `src/wsai2/hardware/base.py`
-- `src/wsai2/hardware/cpu.py`
-- `src/wsai2/hardware/memory.py`
-- `src/wsai2/hardware/factory.py`
-- `tests/test_hardware.py`
-- `docs/hardware/BASE-03-hardware-cpu-memoria.md`
-- Atualizado `pyproject.toml` (dependência `psutil>=5.9`)
+- `src/wsai2/hardware/gpu.py`
+- `src/wsai2/hardware/storage.py`
+- Actualizado `src/wsai2/hardware/factory.py`
+- Actualizado `src/wsai2/hardware/__init__.py`
+- `tests/test_hardware.py` (expandido)
+- `docs/hardware/BASE-04-hardware-gpu-storage.md`
 
 ### Arquitectura abrangida
 
 Fase 2 — Hardware Intelligence. Subsistema 3.2 da arquitectura.
-Representa *Hardware Capability* (capacidade estrutural). Isola lógica
-de descoberta concreta (psutil) atrás do protocolo `HardwareDiscoverer`.
+Completa *Hardware Capability*: CPU, memória, GPU, armazenamento.
 
 ### Resultado
 
-CPU e memória descobertos correctamente no Windows actual; estrutura
-extensível para GPU/armazenamento; fábrica agrega `HardwareProfile`.
+GPU detectada via WMI (Windows) / lspci (Linux); armazenamento via psutil
+com heurísticas de tipo (SSD/HDD/NVMe); integrados no HardwareProfile.
 
 ### Validação
 
 ```text
-py -3.12 -m pytest -v   →   15 passed (3 fundação + 5 platform + 7 hardware)
+py -3.12 -m pytest -v   →   17 passed (3 fundação + 5 platform + 9 hardware)
 ```
 
 ### Próximo passo
 
-Continuar Fase 2 (GPU, armazenamento, perfil completo) ou iniciar Fase 3 — Runtime Intelligence.
+Completar Fase 2 (perfil hardware, capacidades derivadas) ou iniciar Fase 3 — Runtime Intelligence.
 
 ---
 
-## 2026-09-07 — Platform Foundation (Fase 1)
+## 2026-09-07 — Hardware Intelligence (CPU e memória) — Fase 2
 
 ### Objectivo
 
