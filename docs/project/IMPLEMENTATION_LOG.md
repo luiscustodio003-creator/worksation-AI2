@@ -1,5 +1,49 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-07 — Runtime Intelligence (estado de execução) — Fase 3
+
+### Objectivo
+
+Iniciar a Fase 3 — Runtime Intelligence com o estado de execução do
+sistema: carga de CPU, utilização de memória, processos activos e
+tempo de actividade, mantendo-o separado da capacidade estrutural.
+
+### Criado
+
+- `src/wsai2/runtime/base.py`
+- `src/wsai2/runtime/cpu.py`
+- `src/wsai2/runtime/memory.py`
+- `src/wsai2/runtime/processes.py`
+- `src/wsai2/runtime/factory.py`
+- `src/wsai2/runtime/__init__.py`
+- `tests/test_runtime.py`
+- `docs/runtime/BASE-06-runtime-intelligence.md`
+
+### Arquitectura abrangida
+
+Fase 3 — Runtime Intelligence. Subsistema 3.3 da arquitectura.
+Representa *Runtime State* — distinto de *Hardware Capability*
+(Artigo 5 da Constituição).
+
+### Resultado
+
+`discover_runtime()` devolve um `RuntimeProfile` com `CpuLoad`,
+`MemoryRuntime`, top de processos por memória RSS e `SystemUptime`,
+tudo via psutil cross-platform com resumos textuais de apresentação.
+
+### Validação
+
+```text
+py -3.12 -m pytest -v   →   39 passed (3 fundação + 5 platform + 17 hardware + 14 runtime)
+```
+
+### Próximo passo
+
+Continuar a Fase 3 (análise de disponibilidade efectiva / health checks)
+ou fechar a base e avançar para a Fase 4 — Capability Engine.
+
+---
+
 ## 2026-09-07 — Hardware Intelligence (perfil e capacidades) — Fase 2
 
 ### Objectivo

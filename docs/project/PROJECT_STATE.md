@@ -14,19 +14,19 @@ EM PROGRESSO
 
 ## Base actual
 
-Fase 2 — Hardware Intelligence **CONCLUÍDA**: perfil de hardware agregado com capacidades estruturais derivadas (compute, memory, graphics, storage), scores quantificados, níveis e nível global.
+Fase 3 — Runtime Intelligence **INICIADA**: estado de execução (carga de CPU, utilização de memória, processos activos, uptime) agregado em RuntimeProfile, separado da capacidade estrutural de hardware.
 
 ## Última unidade concluída
 
-Fase 2 — Hardware Intelligence (conclusão): perfil de hardware completo com `HardwareCapability` por domínio, `HardwareProfile` expandido com `overall_level`, scoring cross-platform, testes.
+Fase 3 — Runtime Intelligence (unidade inicial): pacote `wsai2.runtime` com `CpuLoad`, `MemoryRuntime`, `ProcessInfo`, `SystemUptime`, `RuntimeProfile` e descoberta via `discover_runtime()` usando psutil cross-platform.
 
 ## Próxima unidade
 
-Iniciar a Fase 3 — Runtime Intelligence (recursos disponíveis, carga, processos, estado de execução, perfil de runtime).
+Continuar a Fase 3 — Runtime Intelligence (análise derivada de disponibilidade efectiva / health checks) ou fechar a base e avançar para a Fase 4 — Capability Engine.
 
 ## Subsistemas funcionais implementados
 
-Platform Foundation (detecção e abstração de SO), Hardware Intelligence (CPU, memória, GPU, armazenamento, perfil, capacidades).
+Platform Foundation (detecção e abstração de SO), Hardware Intelligence (CPU, memória, GPU, armazenamento, perfil, capacidades), Runtime Intelligence (carga, memória, processos, uptime).
 
 ## Testes
 
@@ -36,7 +36,7 @@ Base de testes configurada com `pytest`. Executar:
 py -3.12 -m pytest -v
 ```
 
-Resultado actual: 25 testes aprovados (3 fundação + 5 platform + 17 hardware).
+Resultado actual: 39 testes aprovados (3 fundação + 5 platform + 17 hardware + 14 runtime).
 
 ## Estado da arquitectura
 
@@ -44,7 +44,7 @@ Resultado actual: 25 testes aprovados (3 fundação + 5 platform + 17 hardware).
 Foundation             ████████░░ 80%
 Platform               ████████░░ 80%
 Hardware Intelligence  ██████████ 100%
-Runtime Intelligence   ░░░░░░░░░░ 0%
+Runtime Intelligence   ██████░░░░ 60%
 Capability Engine      ░░░░░░░░░░ 0%
 Model Intelligence     ░░░░░░░░░░ 0%
 Provider Layer         ░░░░░░░░░░ 0%
