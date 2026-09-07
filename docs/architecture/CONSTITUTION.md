@@ -62,3 +62,11 @@ Uma base arquitectural só está concluída quando possui:
 ## ARTIGO 12 — Evolução
 
 Alterações à arquitectura exigem análise de impacto e actualização da documentação correspondente.
+
+## ARTIGO 13 — Independência de modelos e fornecedores
+
+O WSAI 2 não pode depender de um modelo, fabricante, repositório, runtime de inferência ou fornecedor específico.
+
+A selecção de modelo e a selecção de fornecedor são decisões distintas. O Model Intelligence decide a adequação do modelo; o Provider Layer determina através de que fornecedor compatível esse modelo pode ser disponibilizado.
+
+Um novo fornecedor deve poder ser integrado através do contrato e dos adaptadores apropriados sem alterar a lógica central do domínio.
