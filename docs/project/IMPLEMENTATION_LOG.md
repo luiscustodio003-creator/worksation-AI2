@@ -1,5 +1,45 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-07 — Fundação Python e base de testes
+
+### Objectivo
+
+Estabelecer a infraestrutura Python mínima do projecto e a configuração
+inicial da base de testes, tornando verificável cada unidade futura.
+
+### Criado
+
+- `pyproject.toml`
+- `src/wsai2/__init__.py`
+- `src/wsai2/version.py`
+- `tests/__init__.py`
+- `tests/conftest.py`
+- `tests/test_foundation.py`
+- `docs/foundation/BASE-01-fundacao-python-testes.md`
+- `.gitignore`
+
+### Arquitectura abrangida
+
+Fase 0 — Fundação e Governação. Cria o pacote raiz `wsai2` e a base de
+testes. Não implementa nenhum subsistema funcional.
+
+### Resultado
+
+Projecto Python instalável em modo editável e base de testes a funcionar.
+
+### Validação
+
+```text
+py -3.12 -m pytest -v   →   3 passed
+```
+
+### Próximo passo
+
+Concluir os restantes itens da Fase 0 (política de modelos OpenCode e
+workflow de sincronização Git) ou iniciar a Fase 1 — Platform Foundation.
+
+---
+
 ## 2026-09-07 — Inicialização do projecto
 
 ### Objectivo
