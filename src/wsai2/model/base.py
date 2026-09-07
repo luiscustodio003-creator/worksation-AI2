@@ -25,6 +25,18 @@ class ModelKind(Enum):
     EMBEDDING = "embedding"  # Modelo de representações vectoriais
 
 
+class ModelCategory(Enum):
+    """Categoria funcional primária de um modelo.
+
+    Usada na classificação dos modelos do catálogo. Quando a definição
+    não declara categoria, esta é derivada do tipo do modelo.
+    """
+
+    CHAT = "chat"              # Diálogo e instruções
+    COMPLETION = "completion"  # Geração de texto livre
+    EMBEDDING = "embedding"    # Representações vectoriais
+
+
 @dataclass(frozen=True)
 class ModelRequirements:
     """Requisitos mínimos para executar um modelo.
@@ -74,6 +86,7 @@ class ModelDefinition:
     kind: ModelKind
     metadata: ModelMetadata
     requirements: ModelRequirements = field(default_factory=ModelRequirements)
+    category: ModelCategory | None = None
 
     @property
     def summary(self) -> str:
@@ -134,6 +147,7 @@ class ModelVerdict:
 
 
 __all__ = [
+    "ModelCategory",
     "ModelCheck",
     "ModelDefinition",
     "ModelKind",

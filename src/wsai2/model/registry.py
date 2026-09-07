@@ -9,6 +9,7 @@ recomendação).
 from __future__ import annotations
 
 from .base import (
+    ModelCategory,
     ModelDefinition,
     ModelKind,
     ModelMetadata,
@@ -34,6 +35,7 @@ _DEFAULT_MODEL_DEFINITIONS: tuple[ModelDefinition, ...] = (
             license="Apache 2.0",
             architecture="transformer",
         ),
+        category=ModelCategory.CHAT,
         requirements=ModelRequirements(
             min_ram_gb=8.0,
             min_cpu_cores=4,
@@ -56,6 +58,7 @@ _DEFAULT_MODEL_DEFINITIONS: tuple[ModelDefinition, ...] = (
             license="MIT",
             architecture="transformer",
         ),
+        category=ModelCategory.CHAT,
         requirements=ModelRequirements(
             min_ram_gb=4.0,
             min_cpu_cores=2,
@@ -78,6 +81,7 @@ _DEFAULT_MODEL_DEFINITIONS: tuple[ModelDefinition, ...] = (
             license="Apache 2.0",
             architecture="transformer",
         ),
+        category=ModelCategory.EMBEDDING,
         requirements=ModelRequirements(
             min_ram_gb=1.0,
             min_cpu_cores=1,

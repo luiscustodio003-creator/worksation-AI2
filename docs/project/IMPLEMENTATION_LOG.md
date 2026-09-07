@@ -1,5 +1,46 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-07 — Model Intelligence (classificação) — Fase 5
+
+### Objectivo
+
+Implementar a classificação dos modelos: categoria funcional primária e
+score de adequação determinístico derivado da compatibilidade, base
+para a recomendação.
+
+### Criado
+
+- `src/wsai2/model/classification.py`
+- Actualizado `src/wsai2/model/base.py` (ModelCategory; campo category em ModelDefinition)
+- Actualizado `src/wsai2/model/registry.py` (catálogo com categorias)
+- Actualizado `src/wsai2/model/__init__.py` (exporta novos tipos e funções)
+- `tests/test_model_classification.py`
+- `docs/model/BASE-13-model-intelligence-classification.md`
+
+### Arquitectura abrangida
+
+Fase 5 — Model Intelligence. Subsistema 3.5 da arquitectura.
+Rubrica de classificação determinística (disponível=1.0, condicionado=0.5,
+indisponível=0.0) aplicada sobre os veredictos de compatibilidade.
+
+### Resultado
+
+`classify_model`/`classify_models` devolvem `ModelClassification`
+(categoria + score + veredicto). Categoria declarada na definição ou
+derivada do tipo (LLM → chat; embedding → embedding).
+
+### Validação
+
+```text
+py -3.12 -m pytest -v   →   114 passed (3 fundação + 5 platform + 17 hardware + 24 runtime + 33 capability + 32 model)
+```
+
+### Próximo passo
+
+Continuar a Fase 5 (recomendação de modelos — encerra a fase).
+
+---
+
 ## 2026-09-07 — Model Intelligence (compatibilidade) — Fase 5
 
 ### Objectivo
