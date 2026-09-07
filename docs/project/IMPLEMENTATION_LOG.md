@@ -1,5 +1,45 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-07 — Provider Layer (health checks) — Fase 6
+
+### Objectivo
+
+Concluir o Provider Layer com a saúde fina dos fornecedores
+(saudável / degradado / indisponível), combinando detecção e
+adaptadores, encerrando a Fase 6.
+
+### Criado
+
+- `src/wsai2/provider/health.py`
+- Actualizado `src/wsai2/provider/__init__.py`
+- `tests/test_provider_health.py`
+- `docs/provider/BASE-18-provider-layer-health.md`
+
+### Arquitectura abrangida
+
+Fase 6 — Provider Layer. Subsistema 3.6 da arquitectura.
+Os health checks consomem a detecção e os adaptadores; a decisão é
+pura e o I/O (probe + transporte) injectado. Fornecedores sem
+adaptador são reportados como DEGRADED (não propagam erros).
+
+### Resultado
+
+`check_provider_health` / `check_providers_health` devolvem `ProviderHealth`
+com contagem de modelos, latência e erro; `healthy_providers` filtra os
+operacionais. Integração real validada contra servidor local.
+
+### Validação
+
+```text
+py -3.12 -m pytest -v   →   170 passed (3 fundação + 5 platform + 17 hardware + 24 runtime + 33 capability + 42 model + 46 provider)
+```
+
+### Próximo passo
+
+Iniciar a Fase 7 — Task Intelligence (subsistema 3.7).
+
+---
+
 ## 2026-09-07 — Provider Layer (adaptadores de runtime) — Fase 6
 
 ### Objectivo

@@ -10,19 +10,19 @@
 
 ## Estado da fase
 
-EM PROGRESSO
+CONCLUÍDA
 
 ## Base actual
 
-Fase 6 — Provider Layer **EM PROGRESSO**: contratos, registo, **detecção** e **adaptadores de runtime** (interface estável para listar modelos e gerar texto, com transporte HTTP isolado e injectável).
+Fase 6 — Provider Layer **CONCLUÍDA**: contratos, registo, **detecção**, **adaptadores de runtime** e **health checks** (saudável / degradado / indisponível), com I/O sempre injectado e isolado do domínio.
 
 ## Última unidade concluída
 
-Fase 6 — Provider Layer (adaptadores de runtime): interface `RuntimeAdapter` com implementações Ollama (nativo) e compatível com OpenAI, para listar modelos e gerar texto; transporte HTTP injectável isolado em `transports.py`.
+Fase 6 — Provider Layer (health checks): saúde fina por fornecedor combinando detecção + adaptador, com integração real contra servidor local; encerrou a Fase 6.
 
 ## Próxima unidade
 
-Continuar a Fase 6 — Provider Layer (health checks: saúde fina por fornecedor e fecho da fase).
+Iniciar a **Fase 7 — Task Intelligence** (tarefas e planos, selecção de fornecedor/modelo por tarefa, execução e gestão de erros).
 
 ## Subsistemas funcionais implementados:
 
@@ -31,7 +31,7 @@ Continuar a Fase 6 — Provider Layer (health checks: saúde fina por fornecedor
 - Runtime Intelligence (carga, memória, processos, uptime, disponibilidade)
 - Capability Engine (definições, registo, avaliação, compatibilidade, capacidades disponíveis)
 - Model Intelligence (registo, metadados, requisitos, compatibilidade, classificação, recomendação)
-- Provider Layer (contratos de fornecedor, registo, detecção, adaptadores de runtime)
+- Provider Layer (contratos, registo, detecção, adaptadores de runtime, health checks)
 
 ## Testes
 
@@ -41,7 +41,7 @@ Base de testes configurada com `pytest`. Executar:
 py -3.12 -m pytest -v
 ```
 
-Resultado actual: 160 testes aprovados (3 fundação + 5 platform + 17 hardware + 24 runtime + 33 capability + 42 model + 36 provider).
+Resultado actual: 170 testes aprovados (3 fundação + 5 platform + 17 hardware + 24 runtime + 33 capability + 42 model + 46 provider).
 
 ## Estado da arquitectura
 
@@ -52,7 +52,7 @@ Hardware Intelligence  ██████████ 100%
 Runtime Intelligence   ██████████ 100%
 Capability Engine      ██████████ 100%
 Model Intelligence     ██████████ 100%
-Provider Layer         ████████░░ 80%
+Provider Layer         ██████████ 100%
 Task Intelligence      ░░░░░░░░░░ 0%
 Runtime Engine         ░░░░░░░░░░ 0%
 Knowledge Engine       ░░░░░░░░░░ 0%
