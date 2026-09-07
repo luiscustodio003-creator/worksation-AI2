@@ -6,23 +6,23 @@
 
 ## Fase actual
 
-**FASE 5 — Model Intelligence**
+**FASE 6 — Provider Layer**
 
 ## Estado da fase
 
-CONCLUÍDA
+EM PROGRESSO
 
 ## Base actual
 
-Fase 5 — Model Intelligence **CONCLUÍDA**: registo, metadados, requisitos, compatibilidade, **classificação** (categoria + score de adequação) e **recomendação** do modelo mais adequado com justificação e alternativas.
+Fase 6 — Provider Layer **INICIADA**: contratos de fornecedor (`ProviderDefinition` com tipo, endpoint base e capacidades disponibilizadas) e registo central (`ProviderRegistry`) com catálogo base (Ollama, llama.cpp, API compatível com OpenAI).
 
 ## Última unidade concluída
 
-Fase 5 — Model Intelligence (recomendação): selecção determinística do modelo mais adequado por categoria e score, excluindo indisponíveis, com justificação e alternativas.
+Fase 6 — Provider Layer (unidade inicial): contrato declarativo de fornecedor e registo central com catálogo base, ligado ao Capability Engine por ids de capacidades.
 
 ## Próxima unidade
 
-Iniciar a **Fase 6 — Provider Layer** (contratos de fornecedor, detecção, adaptadores de runtime e health checks).
+Continuar a Fase 6 — Provider Layer (detecção de fornecedores presentes e acessíveis no ambiente real).
 
 ## Subsistemas funcionais implementados:
 
@@ -31,6 +31,7 @@ Iniciar a **Fase 6 — Provider Layer** (contratos de fornecedor, detecção, ad
 - Runtime Intelligence (carga, memória, processos, uptime, disponibilidade)
 - Capability Engine (definições, registo, avaliação, compatibilidade, capacidades disponíveis)
 - Model Intelligence (registo, metadados, requisitos, compatibilidade, classificação, recomendação)
+- Provider Layer (contratos de fornecedor, registo)
 
 ## Testes
 
@@ -40,7 +41,7 @@ Base de testes configurada com `pytest`. Executar:
 py -3.12 -m pytest -v
 ```
 
-Resultado actual: 124 testes aprovados (3 fundação + 5 platform + 17 hardware + 24 runtime + 33 capability + 42 model).
+Resultado actual: 135 testes aprovados (3 fundação + 5 platform + 17 hardware + 24 runtime + 33 capability + 42 model + 11 provider).
 
 ## Estado da arquitectura
 
@@ -51,7 +52,7 @@ Hardware Intelligence  ██████████ 100%
 Runtime Intelligence   ██████████ 100%
 Capability Engine      ██████████ 100%
 Model Intelligence     ██████████ 100%
-Provider Layer         ░░░░░░░░░░ 0%
+Provider Layer         ████░░░░░░ 40%
 Task Intelligence      ░░░░░░░░░░ 0%
 Runtime Engine         ░░░░░░░░░░ 0%
 Knowledge Engine       ░░░░░░░░░░ 0%

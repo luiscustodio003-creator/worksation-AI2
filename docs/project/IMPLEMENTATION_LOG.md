@@ -1,5 +1,48 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-07 — Provider Layer (contratos e registo) — Fase 6
+
+### Objectivo
+
+Iniciar a Fase 6 — Provider Layer com os contratos de fornecedor e o
+registo central, base declarativa para a detecção, os adaptadores e os
+health checks das unidades seguintes.
+
+### Criado
+
+- `src/wsai2/provider/base.py`
+- `src/wsai2/provider/registry.py`
+- `src/wsai2/provider/__init__.py`
+- `tests/test_provider.py`
+- `docs/provider/BASE-15-provider-layer-contracts.md`
+
+### Arquitectura abrangida
+
+Fase 6 — Provider Layer. Subsistema 3.6 da arquitectura.
+Isola os fornecedores e motores concretos (runtimes locais e APIs
+compatíveis) através de contratos estáveis.
+
+### Resultado
+
+`ProviderDefinition` com `ProviderType` (local_runtime / remote_api),
+endpoint base predefinido e `capabilities_provided` (ligação ao
+Capability Engine). `ProviderRegistry` com catálogo base (Ollama,
+llama.cpp, API compatível com OpenAI). Domínio puro, sem dependências de
+plataforma.
+
+### Validação
+
+```text
+py -3.12 -m pytest -v   →   135 passed (3 fundação + 5 platform + 17 hardware + 24 runtime + 33 capability + 42 model + 11 provider)
+```
+
+### Próximo passo
+
+Continuar a Fase 6 (detecção de fornecedores presentes e acessíveis no
+ambiente real).
+
+---
+
 ## 2026-09-07 — Model Intelligence (recomendação) — Fase 5
 
 ### Objectivo
