@@ -4,11 +4,11 @@ Responsável por manter informação sobre os modelos conhecidos do
 sistema: metadados, requisitos, compatibilidade, desempenho e
 adequação às tarefas (subsistema 3.5 da arquitectura).
 
-Nesta unidade foi adicionada a **classificação dos modelos**: categoria
-funcional primária (chat/completion/embedding) e score de adequação
-(0.0–1.0) derivado da compatibilidade. A recomendação — que combina
-categoria, score e critérios da tarefa — é a unidade que encerra a
-Fase 5.
+Nesta unidade foi adicionada a **recomendação de modelos**: selecção do
+modelo mais adequado por categoria e score de adequação, com
+justificação e alternativas. Com esta unidade, a Fase 5 fica **concluída**
+(registo, metadados, requisitos, compatibilidade, classificação e
+recomendação).
 """
 
 from .base import (
@@ -29,6 +29,7 @@ from .classification import (
     classify_models,
 )
 from .compatibility import compatible_models, evaluate_model, evaluate_models
+from .recommendation import ModelRecommendation, recommend_model
 from .registry import ModelRegistry, create_default_registry, default_models
 
 __all__ = [
@@ -38,6 +39,7 @@ __all__ = [
     "ModelDefinition",
     "ModelKind",
     "ModelMetadata",
+    "ModelRecommendation",
     "ModelRegistry",
     "ModelRequirements",
     "ModelState",
@@ -51,4 +53,5 @@ __all__ = [
     "default_models",
     "evaluate_model",
     "evaluate_models",
+    "recommend_model",
 ]

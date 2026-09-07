@@ -1,5 +1,45 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-07 — Model Intelligence (recomendação) — Fase 5
+
+### Objectivo
+
+Concluir a Fase 5 — Model Intelligence com a recomendação do modelo
+mais adequado (por categoria e score), com justificação e alternativas.
+
+### Criado
+
+- `src/wsai2/model/recommendation.py`
+- Actualizado `src/wsai2/model/__init__.py` (exporta novos tipos e função)
+- `tests/test_model_recommendation.py`
+- `docs/model/BASE-14-model-intelligence-recommendation.md`
+
+### Arquitectura abrangida
+
+Fase 5 — Model Intelligence. Subsistema 3.5 da arquitectura.
+Fecho do item "recomendação" do roadmap da fase. Política determinística
+documentada: candidatos com score > 0; ordenação por score, parâmetros,
+RAM e id.
+
+### Resultado
+
+`recommend_model` devolve `ModelRecommendation` (modelo, categoria,
+score, estado, razão e alternativas) ou `None` sem candidatos. Modelos
+indisponíveis nunca são recomendados.
+
+### Validação
+
+```text
+py -3.12 -m pytest -v   →   124 passed (3 fundação + 5 platform + 17 hardware + 24 runtime + 33 capability + 42 model)
+```
+
+### Próximo passo
+
+Iniciar a Fase 6 — Provider Layer (subsistema 3.6): contratos de
+fornecedor, detecção, adaptadores de runtime e health checks.
+
+---
+
 ## 2026-09-07 — Model Intelligence (classificação) — Fase 5
 
 ### Objectivo
