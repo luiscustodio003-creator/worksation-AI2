@@ -1,5 +1,43 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-08 — Task Intelligence (requisitos de tarefa) — Fase 7
+
+### Objectivo
+
+Materializar as exigências de uma tarefa (categoria, capacidades,
+tokens) num contrato consumível pelo Model Intelligence.
+
+### Criado
+
+- `src/wsai2/task/requirements.py`
+- Actualizado `src/wsai2/task/__init__.py`
+- `tests/test_task_requirements.py`
+- `docs/task/BASE-22-task-intelligence-requirements.md`
+
+### Arquitectura abrangida
+
+Fase 7 — Task Intelligence. Subsistema 3.7 da arquitectura.
+`TaskRequirements` agrega a categoria (da classificação) e as
+capacidades exigidas pela tarefa — únicas, por ordem, sem invenção
+(limite BASE-19).
+
+### Resultado
+
+`requirements_for` / `requirements_for_many` devolvem o contrato de
+requisitos das tarefas; `capabilities_for_task` normaliza a lista.
+
+### Validação
+
+```text
+py -3.12 -m pytest -v   →   194 passed (3 fundação + 5 platform + 17 hardware + 24 runtime + 33 capability + 42 model + 46 provider + 24 task)
+```
+
+### Próximo passo
+
+Continuar a Fase 7 (selecção de capacidades contra o Capability Engine).
+
+---
+
 ## 2026-09-08 — Task Intelligence (classificação de tarefas) — Fase 7
 
 ### Objectivo
