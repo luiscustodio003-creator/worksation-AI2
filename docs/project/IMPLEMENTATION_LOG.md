@@ -1,5 +1,46 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-07 — Provider Layer (adaptadores de runtime) — Fase 6
+
+### Objectivo
+
+Definir a interface estável de comunicação com os motores concretos
+(listar modelos, gerar texto) por tipo de fornecedor, mantendo o I/O de
+rede injectável e isolado do domínio.
+
+### Criado
+
+- `src/wsai2/provider/adapters.py`
+- `src/wsai2/provider/transports.py`
+- Actualizado `src/wsai2/provider/__init__.py`
+- `tests/test_provider_adapters.py`
+- `docs/provider/BASE-17-provider-layer-adapters.md`
+
+### Arquitectura abrangida
+
+Fase 6 — Provider Layer. Subsistema 3.6 da arquitectura.
+`RuntimeAdapter` (Protocol) com `OllamaAdapter` (protocolo nativo) e
+`OpenAiCompatibleAdapter` (llama.cpp e APIs compatíveis); `build_adapter`
+constrói por id de fornecedor; `http_json_transport` separa o I/O.
+
+### Resultado
+
+Toda a lógica dos adaptadores é testável sem rede (transport
+injectável); erros normalizados em `AdapterError`; fábrica de
+adaptadores por id cobrindo todo o catálogo base.
+
+### Validação
+
+```text
+py -3.12 -m pytest -v   →   160 passed (3 fundação + 5 platform + 17 hardware + 24 runtime + 33 capability + 42 model + 36 provider)
+```
+
+### Próximo passo
+
+Concluir a Fase 6 (health checks: saúde fina por fornecedor).
+
+---
+
 ## 2026-09-07 — Provider Layer (detecção) — Fase 6
 
 ### Objectivo
