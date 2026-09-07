@@ -4,10 +4,9 @@ Responsável por definir e analisar o que o sistema tem de fazer —
 tarefas, requisitos, capacidades e plano de execução (subsistema 3.7
 da arquitectura).
 
-Nesta unidade é implementada a **selecção de capacidades**: a
-verificação, contra o Capability Engine, de quais capacidades exigidas
-pela tarefa estão disponíveis, determinando a viabilidade da execução.
-A unidade final constrói o plano de execução.
+Nesta unidade final é implementado o **plano de execução**: a
+integração dos requisitos, da viabilidade, da recomendação de modelo e
+de um fornecedor saudável num plano determinístico, encerrando a Fase 7.
 """
 
 from .base import Task, TaskKind
@@ -18,6 +17,7 @@ from .classification import (
     classify_task,
     classify_tasks,
 )
+from .plan import ExecutionPlan, build_execution_plan
 from .requirements import (
     TaskRequirements,
     capabilities_for_task,
@@ -26,11 +26,13 @@ from .requirements import (
 )
 
 __all__ = [
+    "ExecutionPlan",
     "Task",
     "TaskCapabilitySelection",
     "TaskClassification",
     "TaskKind",
     "TaskRequirements",
+    "build_execution_plan",
     "capabilities_for_task",
     "category_for_task",
     "classify_task",

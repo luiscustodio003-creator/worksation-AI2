@@ -10,19 +10,19 @@
 
 ## Estado da fase
 
-EM PROGRESSO
+CONCLUÍDA
 
 ## Base actual
 
-Fase 7 — Task Intelligence **EM PROGRESSO**: contrato, classificação, requisitos e **selecção de capacidades** (viabilidade contra o Capability Engine, sem duplicar a avaliação).
+Fase 7 — Task Intelligence **CONCLUÍDA**: contrato, classificação, requisitos, selecção de capacidades e **plano de execução** (modelo + fornecedor saudável + passos).
 
 ## Última unidade concluída
 
-Fase 7 — Task Intelligence (selecção de capacidades): separação das capacidades satisfeitas e em falta por tarefa, com decisão de viabilidade delegada ao Capability Engine.
+Fase 7 — Task Intelligence (plano de execução): integração determinística requisitos → capacidades → modelo recomendado → fornecedor saudável → passos; encerrou a Fase 7.
 
 ## Próxima unidade
 
-Continuar a Fase 7 — Task Intelligence (plano de execução: modelo, fornecedor saudável e passos — encerra a fase).
+Iniciar a **Fase 8 — Runtime Engine** (execução no fornecedor/modelo escolhidos, monitorização, cancelamento e gestão de recursos).
 
 ## Subsistemas funcionais implementados:
 
@@ -32,7 +32,7 @@ Continuar a Fase 7 — Task Intelligence (plano de execução: modelo, fornecedo
 - Capability Engine (definições, registo, avaliação, compatibilidade, capacidades disponíveis)
 - Model Intelligence (registo, metadados, requisitos, compatibilidade, classificação, recomendação)
 - Provider Layer (contratos, registo, detecção, adaptadores de runtime, health checks)
-- Task Intelligence (contrato, classificação, requisitos, selecção de capacidades)
+- Task Intelligence (contrato, classificação, requisitos, selecção de capacidades, plano de execução)
 
 ## Testes
 
@@ -42,7 +42,7 @@ Base de testes configurada com `pytest`. Executar:
 py -3.12 -m pytest -v
 ```
 
-Resultado actual: 201 testes aprovados (3 fundação + 5 platform + 17 hardware + 24 runtime + 33 capability + 42 model + 46 provider + 31 task).
+Resultado actual: 209 testes aprovados (3 fundação + 5 platform + 17 hardware + 24 runtime + 33 capability + 42 model + 46 provider + 39 task).
 
 ## Estado da arquitectura
 
@@ -54,7 +54,7 @@ Runtime Intelligence   ██████████ 100%
 Capability Engine      ██████████ 100%
 Model Intelligence     ██████████ 100%
 Provider Layer         ██████████ 100%
-Task Intelligence      ████████░░ 80%
+Task Intelligence      ██████████ 100%
 Runtime Engine         ░░░░░░░░░░ 0%
 Knowledge Engine       ░░░░░░░░░░ 0%
 API                    ░░░░░░░░░░ 0%

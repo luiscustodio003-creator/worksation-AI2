@@ -1,5 +1,46 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-08 — Task Intelligence (plano de execução) — Fase 7
+
+### Objectivo
+
+Integrar os requisitos, a viabilidade, a recomendação de modelo e um
+fornecedor saudável num plano de execução determinístico, encerrando a
+Fase 7.
+
+### Criado
+
+- `src/wsai2/task/plan.py`
+- Actualizado `src/wsai2/task/__init__.py`
+- `tests/test_task_plan.py`
+- `docs/task/BASE-24-task-intelligence-execution-plan.md`
+
+### Arquitectura abrangida
+
+Fase 7 — Task Intelligence. Subsistema 3.7 da arquitectura.
+`build_execution_plan` fecha o ciclo (requisitos → capacidades →
+modelo → fornecedor saudável → passos). A selecção de modelo e de
+fornecedor permanece separada (constituição, artigo 13); o health check
+dos fornecedores é injectado (`ProviderHealth`), sem I/O no plano.
+
+### Resultado
+
+`ExecutionPlan` (feasible, model_id, provider_id, reasons, steps) com
+`is_executable`; escolha do fornecedor determinística (saudável + com
+capacidades do modelo) e justificações de inviabilidade.
+
+### Validação
+
+```text
+py -3.12 -m pytest -v   →   209 passed (3 fundação + 5 platform + 17 hardware + 24 runtime + 33 capability + 42 model + 46 provider + 39 task)
+```
+
+### Próximo passo
+
+Iniciar a Fase 8 — Runtime Engine (subsistema 3.8).
+
+---
+
 ## 2026-09-08 — Task Intelligence (selecção de capacidades) — Fase 7
 
 ### Objectivo
