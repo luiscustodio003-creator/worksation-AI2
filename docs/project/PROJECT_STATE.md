@@ -6,23 +6,23 @@
 
 ## Fase actual
 
-**FASE 4 — Capability Engine**
+**FASE 5 — Model Intelligence**
 
 ## Estado da fase
 
-CONCLUÍDA
+EM PROGRESSO
 
 ## Base actual
 
-Fase 4 — Capability Engine **CONCLUÍDA**: definições de capacidade, registo central, avaliação contra `HardwareProfile`/`RuntimeProfile` e **relatório de compatibilidade** com justificação textual, fechando o catálogo de capacidades disponíveis.
+Fase 5 — Model Intelligence **INICIADA**: registo de modelos com metadados e requisitos declarativos (`ModelDefinition`, `ModelMetadata`, `ModelRequirements`) e registo central (`ModelRegistry`) com catálogo base (Qwen 2.5 7B, Phi-3 Mini, All MiniLM L6 v2).
 
 ## Última unidade concluída
 
-Fase 4 — Capability Engine (compatibilidade): relatório consolidado por capacidade (estado, requisitos e justificação em linguagem natural) e catálogo final de capacidades disponíveis.
+Fase 5 — Model Intelligence (unidade inicial): contrato declarativo de modelo (metadados e requisitos, incluindo capacidades do sistema requeridas) e registo central com catálogo base.
 
 ## Próxima unidade
 
-Iniciar a **Fase 5 — Model Intelligence** (registo de modelos, metadados, requisitos, classificação e recomendação).
+Continuar a Fase 5 — Model Intelligence (compatibilidade: avaliar cada modelo do registo contra o hardware/runtime e as capacidades requeridas).
 
 ## Subsistemas funcionais implementados:
 
@@ -30,6 +30,7 @@ Iniciar a **Fase 5 — Model Intelligence** (registo de modelos, metadados, requ
 - Hardware Intelligence (CPU, memória, GPU, armazenamento, perfil, capacidades)
 - Runtime Intelligence (carga, memória, processos, uptime, disponibilidade)
 - Capability Engine (definições, registo, avaliação, compatibilidade, capacidades disponíveis)
+- Model Intelligence (registo, metadados, requisitos)
 
 ## Testes
 
@@ -39,7 +40,7 @@ Base de testes configurada com `pytest`. Executar:
 py -3.12 -m pytest -v
 ```
 
-Resultado actual: 82 testes aprovados (3 fundação + 5 platform + 17 hardware + 24 runtime + 33 capability).
+Resultado actual: 93 testes aprovados (3 fundação + 5 platform + 17 hardware + 24 runtime + 33 capability + 11 model).
 
 ## Estado da arquitectura
 
@@ -49,7 +50,7 @@ Platform               ████████░░ 80%
 Hardware Intelligence  ██████████ 100%
 Runtime Intelligence   ██████████ 100%
 Capability Engine      ██████████ 100%
-Model Intelligence     ░░░░░░░░░░ 0%
+Model Intelligence     ████░░░░░░ 40%
 Provider Layer         ░░░░░░░░░░ 0%
 Task Intelligence      ░░░░░░░░░░ 0%
 Runtime Engine         ░░░░░░░░░░ 0%

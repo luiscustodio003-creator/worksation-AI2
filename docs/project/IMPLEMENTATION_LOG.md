@@ -1,5 +1,49 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-07 — Model Intelligence (registo e metadados) — Fase 5
+
+### Objectivo
+
+Iniciar a Fase 5 — Model Intelligence com o registo de modelos,
+metadados e requisitos, base declarativa para a compatibilidade e a
+recomendação das unidades seguintes.
+
+### Criado
+
+- `src/wsai2/model/base.py`
+- `src/wsai2/model/registry.py`
+- `src/wsai2/model/__init__.py`
+- `tests/test_model.py`
+- `docs/model/BASE-11-model-intelligence-metadata.md`
+
+### Arquitectura abrangida
+
+Fase 5 — Model Intelligence. Subsistema 3.5 da arquitectura.
+Mantém informação sobre modelos: metadados, requisitos e, nas unidades
+seguintes, compatibilidade, desempenho e adequação às tarefas.
+
+### Resultado
+
+`ModelDefinition` com `ModelKind` (llm/embedding), `ModelMetadata`
+(versão, parâmetros, janela de contexto, licença, arquitectura) e
+`ModelRequirements` quantificados, com referência às capacidades do
+sistema requeridas. `ModelRegistry` com catálogo base (Qwen 2.5 7B,
+Phi-3 Mini, All MiniLM L6 v2). Domínio puro, sem dependências de
+plataforma.
+
+### Validação
+
+```text
+py -3.12 -m pytest -v   →   93 passed (3 fundação + 5 platform + 17 hardware + 24 runtime + 33 capability + 11 model)
+```
+
+### Próximo passo
+
+Continuar a Fase 5 (compatibilidade dos modelos contra o sistema e as
+capacidades requeridas).
+
+---
+
 ## 2026-09-07 — Capability Engine (compatibilidade) — Fase 4
 
 ### Objectivo
