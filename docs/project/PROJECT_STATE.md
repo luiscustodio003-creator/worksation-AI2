@@ -14,19 +14,19 @@ EM PROGRESSO
 
 ## Base actual
 
-Fase 3 — Runtime Intelligence **CONCLUÍDA**: estado de execução (carga de CPU, utilização de memória, processos, uptime) com análise derivada de disponibilidade efectiva por domínio e estado global.
+Fase 4 — Capability Engine **INICIADA**: definições de capacidade (`CapabilityDefinition`, `CapabilityRequirements`) e registo central (`CapabilityRegistry`) com catálogo base.
 
 ## Última unidade concluída
 
-Fase 3 — Runtime Intelligence (conclusão): análise de disponibilidade efectiva (`RuntimeAvailability`, `AvailabilityStatus`, `overall_status`) integrada no `RuntimeProfile` via `analyze_runtime_availability()`.
+Fase 4 — Capability Engine (unidade inicial): contrato declarativo de capacidade e registo central com catálogo base (inferência local, embeddings, ML acelerado, processamento leve).
 
 ## Próxima unidade
 
-Iniciar a Fase 4 — Capability Engine (definições de capacidade, registo, avaliação, compatibilidade, capacidades disponíveis).
+Continuar a Fase 4 — Capability Engine (avaliação das capacidades contra o HardwareProfile e o RuntimeProfile, preparando compatibilidade e capacidades disponíveis).
 
 ## Subsistemas funcionais implementados
 
-Platform Foundation (detecção e abstração de SO), Hardware Intelligence (CPU, memória, GPU, armazenamento, perfil, capacidades), Runtime Intelligence (carga, memória, processos, uptime, disponibilidade).
+Platform Foundation (detecção e abstração de SO), Hardware Intelligence (CPU, memória, GPU, armazenamento, perfil, capacidades), Runtime Intelligence (carga, memória, processos, uptime, disponibilidade), Capability Engine (definições e registo).
 
 ## Testes
 
@@ -36,7 +36,7 @@ Base de testes configurada com `pytest`. Executar:
 py -3.12 -m pytest -v
 ```
 
-Resultado actual: 49 testes aprovados (3 fundação + 5 platform + 17 hardware + 24 runtime).
+Resultado actual: 60 testes aprovados (3 fundação + 5 platform + 17 hardware + 24 runtime + 11 capability).
 
 ## Estado da arquitectura
 
@@ -45,7 +45,7 @@ Foundation             ████████░░ 80%
 Platform               ████████░░ 80%
 Hardware Intelligence  ██████████ 100%
 Runtime Intelligence   ██████████ 100%
-Capability Engine      ░░░░░░░░░░ 0%
+Capability Engine      ████░░░░░░ 40%
 Model Intelligence     ░░░░░░░░░░ 0%
 Provider Layer         ░░░░░░░░░░ 0%
 Task Intelligence      ░░░░░░░░░░ 0%

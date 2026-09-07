@@ -1,5 +1,46 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-07 — Capability Engine (definições e registo) — Fase 4
+
+### Objectivo
+
+Iniciar a Fase 4 — Capability Engine com as definições de capacidade e
+o registo central, base declarativa para a avaliação e para as
+capacidades disponíveis.
+
+### Criado
+
+- `src/wsai2/capability/base.py`
+- `src/wsai2/capability/registry.py`
+- `src/wsai2/capability/__init__.py`
+- `tests/test_capability.py`
+- `docs/capability/BASE-08-capability-engine-definitions.md`
+
+### Arquitectura abrangida
+
+Fase 4 — Capability Engine. Subsistema 3.4 da arquitectura.
+Determina as capacidades reais que o sistema consegue disponibilizar.
+
+### Resultado
+
+`CapabilityDefinition` com `CapabilityRequirements` quantificados e
+`CapabilityRegistry` com catálogo base (inferência local, embeddings,
+ML acelerado, processamento leve). Domínio puro, sem dependências de
+plataforma.
+
+### Validação
+
+```text
+py -3.12 -m pytest -v   →   60 passed (3 fundação + 5 platform + 17 hardware + 24 runtime + 11 capability)
+```
+
+### Próximo passo
+
+Continuar a Fase 4 (avaliação das capacidades contra hardware e runtime,
+compatibilidade, capacidades disponíveis).
+
+---
+
 ## 2026-09-07 — Runtime Intelligence (disponibilidade efectiva) — Fase 3
 
 ### Objectivo
