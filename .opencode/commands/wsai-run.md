@@ -6,6 +6,37 @@ Executar a próxima unidade lógica de desenvolvimento do WorkStation AI 2 de fo
 
 `/wsai-run` é um **orquestrador de execução**, não um comando de consulta. Depois de determinar a próxima unidade válida, deve executar o ciclo completo até concluir a unidade, atingir um bloqueio real ou encontrar uma decisão arquitectural que exija intervenção humana.
 
+## VISIBILIDADE OBRIGATÓRIA DA EXECUÇÃO
+
+A autonomia do `/wsai-run` **não pode eliminar a observabilidade**. O utilizador deve conseguir saber, durante toda a execução, **em que fase está, qual unidade está a ser executada, o que já foi concluído, o que está em curso e qual é o próximo passo**.
+
+No início da execução e sempre que houver mudança de fase ou etapa relevante, apresentar um bloco curto de progresso no fluxo visível do agente, usando este formato:
+
+```text
+╔══════════════════════════════════════════════════╗
+║ WSAI 2 — PROGRESSO                               ║
+╠══════════════════════════════════════════════════╣
+║ Fase:      ...                                   ║
+║ Unidade:   ...                                   ║
+║ Etapa:     ...                                   ║
+║ Progresso: ██████░░░░ ...%                       ║
+║                                                  ║
+║ ✓ concluído                                      ║
+║ ● em execução                                    ║
+║ ○ pendente                                       ║
+║                                                  ║
+║ Próximo: ...                                     ║
+╚══════════════════════════════════════════════════╝
+```
+
+Durante operações demoradas, actualizar o progresso em pontos significativos (por exemplo: início/fim de implementação, testes, correcção, documentação e Git). **Não** produzir mensagens a cada comando trivial nem inundar o terminal; o objectivo é manter orientação contínua sem ruído.
+
+A visibilidade de progresso é obrigatória mesmo quando a unidade é executada autonomamente e mesmo quando a próxima fase já está determinada. O relatório final continua a usar a estrutura da FASE I.
+
+O progresso mostrado deve reflectir o estado real e nunca inventar percentagens. Se uma etapa ainda não puder ser quantificada, usar `EM EXECUÇÃO` em vez de uma percentagem falsa.
+
+> Nota: este requisito garante progresso visível no fluxo do agente. A disposição exacta de painéis laterais é controlada pela interface do OpenCode e não pelo ficheiro de comando.
+
 ## Entrada
 
 Quando o utilizador executar:
@@ -48,6 +79,8 @@ Inspeccionar:
 9. testes existentes.
 
 Se a estrutura mínima ainda não existir, inicializar apenas a unidade necessária para continuar a Fase 0.
+
+Apresentar o primeiro bloco `WSAI 2 — PROGRESSO` depois de identificar o contexto inicial e actualizar esse bloco quando a execução avançar de forma relevante.
 
 ## FASE B — SINCRONIZAÇÃO
 
@@ -151,6 +184,8 @@ Não criar uma estrutura artificialmente complexa.
 
 Se durante a implementação forem encontrados problemas menores e solucionáveis sem alterar a arquitectura, corrigi-los autonomamente e continuar.
 
+Actualizar o bloco de progresso ao entrar na implementação e ao terminar uma alteração relevante.
+
 ## FASE F — VALIDAÇÃO
 
 Executar os testes aplicáveis.
@@ -162,6 +197,8 @@ Não declarar sucesso quando existirem falhas ignoradas.
 Se existirem falhas corrigíveis relacionadas com a unidade, **DEVE tentar corrigi-las e voltar a executar a validação** antes de terminar.
 
 Só parar por falha quando a continuação segura deixar de ser possível.
+
+Actualizar o bloco de progresso ao iniciar os testes, ao corrigir falhas e ao concluir a validação.
 
 ## FASE G — DOCUMENTAÇÃO E ESTADO
 
@@ -196,6 +233,8 @@ Depois da validação:
 6. verificar novamente o estado.
 
 Nunca esconder uma falha de sincronização. Reportar claramente se o push não foi possível.
+
+Actualizar o bloco de progresso antes e depois da sincronização Git.
 
 ## FASE I — RESULTADO FINAL
 
