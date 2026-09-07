@@ -11,20 +11,30 @@ O Runtime Intelligence representa *Runtime State* — distinto de
 *Hardware Capability* (capacidade estrutural do subsistema 3.2).
 """
 
+from .availability import (
+    analyze_runtime_availability,
+)
 from .base import (
+    AvailabilityDomain,
+    AvailabilityStatus,
     CpuLoad,
     MemoryRuntime,
     ProcessInfo,
+    RuntimeAvailability,
     RuntimeProfile,
     SystemUptime,
 )
 from .factory import discover_runtime
 
 __all__ = [
+    "AvailabilityDomain",
+    "AvailabilityStatus",
     "CpuLoad",
     "MemoryRuntime",
     "ProcessInfo",
+    "RuntimeAvailability",
     "RuntimeProfile",
     "SystemUptime",
+    "analyze_runtime_availability",
     "discover_runtime",
 ]

@@ -1,7 +1,8 @@
 """Fábrica de descoberta de runtime.
 
 Selecciona a estratégia de descoberta adequada e agrega o perfil
-completo de runtime (estado de execução actual do sistema).
+completo de runtime (estado de execução actual do sistema) com a
+análise derivada de disponibilidade efectiva.
 """
 
 from __future__ import annotations
@@ -10,6 +11,7 @@ import time
 
 import psutil
 
+from .availability import _overall_status, analyze_runtime_availability
 from .base import RuntimeDiscoverer, RuntimeProfile, SystemUptime
 from .cpu import discover_cpu_load
 from .memory import discover_memory_state
@@ -42,16 +44,19 @@ class _GenericRuntimeDiscoverer:
         return _discover_uptime()
 
     def discover_all(self) -> RuntimeProfile:
-        """Descobre e agrega todo o perfil de runtime."""
+        """Descobre e agrega todo o perfil de runtime com análise de disponibilidade."""
         cpu = self.discover_cpu_load()
         memory = self.discover_memory()
         processes = discover_top_processes(limit=10)
         uptime = self.discover_uptime()
+        availability = analyze_runtime_availability(cpu, memory)
         return RuntimeProfile(
             cpu=cpu,
             memory=memory,
             processes=processes,
             uptime=uptime,
+            availability=availability,
+            overall_status=_overall_status(availability),
         )
 
 

@@ -1,16 +1,25 @@
 """Testes do subsistema Runtime Intelligence.
 
 Valida a descoberta de estado de runtime: carga do CPU, utilização de
-memória, processos activos e tempo de actividade do sistema.
+memória, processos activos, tempo de actividade do sistema e a
+disponibilidade efectiva derivada.
 """
 
 from wsai2.runtime import (
+    AvailabilityDomain,
+    AvailabilityStatus,
     CpuLoad,
     MemoryRuntime,
     ProcessInfo,
+    RuntimeAvailability,
     RuntimeProfile,
     SystemUptime,
+    analyze_runtime_availability,
     discover_runtime,
+)
+from wsai2.runtime.availability import (
+    analyze_cpu_availability,
+    analyze_memory_availability,
 )
 from wsai2.runtime.cpu import discover_cpu_load
 from wsai2.runtime.memory import discover_memory_state
@@ -171,3 +180,155 @@ def test_memoria_runtime_has_swap_active() -> None:
     """A propriedade has_swap_active deve reflectir swap_used_bytes."""
     mem = discover_memory_state()
     assert mem.has_swap_active == (mem.swap_used_bytes > 0)
+
+
+def test_perfil_runtime_tem_disponibilidade_derivada() -> None:
+    """O perfil deve incluir disponibilidades derivadas para cada domínio."""
+    profile = discover_runtime()
+
+    assert isinstance(profile.availability, tuple)
+    assert len(profile.availability) == 2  # cpu, memory
+
+    domains = {avail.domain for avail in profile.availability}
+    expected_domains = {
+        AvailabilityDomain.CPU,
+        AvailabilityDomain.MEMORY,
+    }
+    assert domains == expected_domains
+
+    for avail in profile.availability:
+        assert isinstance(avail, RuntimeAvailability)
+        assert 0.0 <= avail.score <= 1.0
+        assert isinstance(avail.status, AvailabilityStatus)
+        assert isinstance(avail.details, dict)
+
+
+def test_perfil_runtime_estado_global() -> None:
+    """O perfil deve ter um estado global de disponibilidade válido."""
+    profile = discover_runtime()
+
+    assert isinstance(profile.overall_status, AvailabilityStatus)
+
+
+def test_disponibilidade_cpu_valida() -> None:
+    """A disponibilidade de CPU deve ter detalhes relevantes."""
+    profile = discover_runtime()
+    avail = profile.cpu_availability
+
+    assert avail is not None
+    assert avail.domain == AvailabilityDomain.CPU
+    assert "load_percent" in avail.details
+    assert "saturated" in avail.details
+    assert "cores" in avail.details
+
+
+def test_disponibilidade_memoria_valida() -> None:
+    """A disponibilidade de memória deve ter detalhes relevantes."""
+    profile = discover_runtime()
+    avail = profile.memory_availability
+
+    assert avail is not None
+    assert avail.domain == AvailabilityDomain.MEMORY
+    assert "used_percent" in avail.details
+    assert "free_percent" in avail.details
+    assert "available_gb" in avail.details
+    assert avail.details["available_gb"] >= 0
+
+
+def test_resumos_disponibilidade_nao_vazios() -> None:
+    """O resumo textual de disponibilidade deve ser uma string não vazia."""
+    profile = discover_runtime()
+
+    summary = profile.availability_summary
+    assert isinstance(summary, str)
+    assert len(summary) > 0
+    assert "Disponibilidade" in summary
+
+
+def test_analise_disponibilidade_cpu_determinista() -> None:
+    """A análise de CPU deve ser coerente com a carga fornecida."""
+    # CPU com 100% de carga → disponibilidade próxima de 0
+    saturated_cpu = CpuLoad(percent=100.0, per_core=(), count=8)
+    avail = analyze_cpu_availability(saturated_cpu)
+
+    assert avail.domain == AvailabilityDomain.CPU
+    assert avail.score == 0.0
+    assert avail.status == AvailabilityStatus.CRITICAL
+    assert avail.is_available is False
+
+    # CPU ocioso → disponibilidade máxima
+    idle_cpu = CpuLoad(percent=0.0, per_core=(), count=8)
+    avail_idle = analyze_cpu_availability(idle_cpu)
+
+    assert avail_idle.score == 1.0
+    assert avail_idle.status == AvailabilityStatus.HEALTHY
+    assert avail_idle.is_available is True
+
+
+def test_analise_disponibilidade_memoria_determinista() -> None:
+    """A análise de memória deve ser coerente com o estado fornecido."""
+    # Memória totalmente livre → disponibilidade máxima
+    mem_free = MemoryRuntime(
+        total_bytes=16 * 1024**3,
+        available_bytes=16 * 1024**3,
+        used_bytes=0,
+        percent=0.0,
+    )
+    avail = analyze_memory_availability(mem_free)
+
+    assert avail.domain == AvailabilityDomain.MEMORY
+    assert avail.score == 1.0
+    assert avail.status == AvailabilityStatus.HEALTHY
+
+    # Memória quase esgotada → disponibilidade crítica
+    mem_exhausted = MemoryRuntime(
+        total_bytes=16 * 1024**3,
+        available_bytes=1024 * 1024 * 1024,
+        used_bytes=15 * 1024**3,
+        percent=93.75,
+    )
+    avail_exh = analyze_memory_availability(mem_exhausted)
+
+    assert avail_exh.score < 0.5
+    assert avail_exh.status in (AvailabilityStatus.DEGRADED, AvailabilityStatus.CRITICAL)
+
+
+def test_analise_runtime_disponibilidade_global() -> None:
+    """A análise agregada deve produzir disponibilidades para os dois domínios."""
+    cpu = CpuLoad(percent=50.0, per_core=(), count=8)
+    mem = MemoryRuntime(
+        total_bytes=16 * 1024**3,
+        available_bytes=8 * 1024**3,
+        used_bytes=8 * 1024**3,
+        percent=50.0,
+    )
+
+    availability = analyze_runtime_availability(cpu, mem)
+
+    assert len(availability) == 2
+    assert availability[0].domain == AvailabilityDomain.CPU
+    assert availability[1].domain == AvailabilityDomain.MEMORY
+    for avail in availability:
+        assert 0.0 <= avail.score <= 1.0
+        assert isinstance(avail.status, AvailabilityStatus)
+
+
+def test_availability_status_completo() -> None:
+    """Todos os estados de disponibilidade devem estar definidos."""
+    statuses = set(AvailabilityStatus)
+    expected = {
+        AvailabilityStatus.HEALTHY,
+        AvailabilityStatus.DEGRADED,
+        AvailabilityStatus.CRITICAL,
+    }
+    assert statuses == expected
+
+
+def test_availability_domain_completo() -> None:
+    """Todos os domínios de disponibilidade devem estar definidos."""
+    domains = set(AvailabilityDomain)
+    expected = {
+        AvailabilityDomain.CPU,
+        AvailabilityDomain.MEMORY,
+    }
+    assert domains == expected

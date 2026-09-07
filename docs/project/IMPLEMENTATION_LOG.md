@@ -1,5 +1,47 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-07 — Runtime Intelligence (disponibilidade efectiva) — Fase 3
+
+### Objectivo
+
+Concluir a Fase 3 — Runtime Intelligence com a análise derivada de
+disponibilidade efectiva: até que ponto os recursos estão livres para
+trabalho no momento da amostragem.
+
+### Criado
+
+- `src/wsai2/runtime/availability.py`
+- Actualizado `src/wsai2/runtime/base.py` (AvailabilityDomain, AvailabilityStatus, RuntimeAvailability, RuntimeProfile expandido)
+- Actualizado `src/wsai2/runtime/factory.py` (integra analyze_runtime_availability)
+- Actualizado `src/wsai2/runtime/__init__.py` (exporta novos tipos)
+- `tests/test_runtime.py` (expandido com 10 testes)
+- `docs/runtime/BASE-07-runtime-availability.md`
+
+### Arquitectura abrangida
+
+Fase 3 — Runtime Intelligence. Subsistema 3.3 da arquitectura.
+Conclui *Runtime State* com avaliação derivada de disponibilidade,
+distinta de *Hardware Capability* (Artigo 5 da Constituição).
+
+### Resultado
+
+`RuntimeProfile` completo com 2 disponibilidades (cpu, memory), scores
+0.0–1.0, estados HEALTHY–CRITICAL, `overall_status` ponderado,
+acessores de conveniência e resumo textual de disponibilidade.
+
+### Validação
+
+```text
+py -3.12 -m pytest -v   →   49 passed (3 fundação + 5 platform + 17 hardware + 24 runtime)
+```
+
+### Próximo passo
+
+Iniciar Fase 4 — Capability Engine (definições de capacidade, registo,
+avaliação, compatibilidade, capacidades disponíveis).
+
+---
+
 ## 2026-09-07 — Runtime Intelligence (estado de execução) — Fase 3
 
 ### Objectivo

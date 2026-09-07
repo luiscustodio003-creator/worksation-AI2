@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import time
 from dataclasses import dataclass, field
+from enum import Enum
 from typing import Protocol
 
 
@@ -120,6 +121,40 @@ class SystemUptime:
         return self.uptime_seconds / 86400.0
 
 
+class AvailabilityDomain(Enum):
+    """Domínios de disponibilidade de runtime."""
+
+    CPU = "cpu"          # Disponibilidade de processamento
+    MEMORY = "memory"    # Disponibilidade de memória
+
+
+class AvailabilityStatus(Enum):
+    """Estados de disponibilidade efectiva dos recursos."""
+
+    HEALTHY = "healthy"      # Recursos amplamente disponíveis
+    DEGRADED = "degraded"    # Recursos disponíveis com restrições
+    CRITICAL = "critical"    # Recursos escassos / sob pressão
+
+
+@dataclass(frozen=True)
+class RuntimeAvailability:
+    """Disponibilidade efectiva derivada num domínio de runtime.
+
+    Representa a avaliação derivada do estado de execução actual:
+    até que ponto os recursos estão de facto disponíveis para trabalho.
+    """
+
+    domain: AvailabilityDomain
+    score: float  # 0.0 a 1.0 (1.0 = totalmente disponível)
+    status: AvailabilityStatus
+    details: dict[str, str | int | float] = field(default_factory=dict)
+
+    @property
+    def is_available(self) -> bool:
+        """Indica se o recurso está suficientemente disponível."""
+        return self.status != AvailabilityStatus.CRITICAL
+
+
 @dataclass(frozen=True)
 class RuntimeProfile:
     """Perfil completo do estado de runtime do sistema.
@@ -133,6 +168,8 @@ class RuntimeProfile:
     memory: MemoryRuntime
     processes: tuple[ProcessInfo, ...] = field(default_factory=tuple)
     uptime: SystemUptime | None = None
+    availability: tuple[RuntimeAvailability, ...] = field(default_factory=tuple)
+    overall_status: AvailabilityStatus = AvailabilityStatus.HEALTHY
 
     @property
     def cpu_summary(self) -> str:
@@ -162,11 +199,33 @@ class RuntimeProfile:
         return f"{d:.1f} dias"
 
     @property
+    def availability_summary(self) -> str:
+        """Resumo textual da disponibilidade efectiva global."""
+        return f"Disponibilidade {self.overall_status.value.upper()}"
+
+    @property
     def top_process(self) -> ProcessInfo | None:
         """O processo que consome mais memória RSS, se existir."""
         if not self.processes:
             return None
         return max(self.processes, key=lambda p: p.memory_rss_bytes)
+
+    def get_availability(self, domain: AvailabilityDomain) -> RuntimeAvailability | None:
+        """Obtém a disponibilidade para um domínio específico."""
+        for avail in self.availability:
+            if avail.domain == domain:
+                return avail
+        return None
+
+    @property
+    def cpu_availability(self) -> RuntimeAvailability | None:
+        """Disponibilidade efectiva de processamento."""
+        return self.get_availability(AvailabilityDomain.CPU)
+
+    @property
+    def memory_availability(self) -> RuntimeAvailability | None:
+        """Disponibilidade efectiva de memória."""
+        return self.get_availability(AvailabilityDomain.MEMORY)
 
 
 class RuntimeDiscoverer(Protocol):
