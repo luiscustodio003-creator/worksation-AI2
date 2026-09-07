@@ -4,7 +4,34 @@
 
 Esta skill governa o desenvolvimento incremental do WorkStation AI 2.
 
-Não substitui a arquitectura do produto. A sua função é garantir que o trabalho de desenvolvimento permanece coerente, verificável e sincronizado.
+Não substitui a arquitectura do produto. A sua função é garantir que o trabalho de desenvolvimento permanece coerente, verificável, observável e sincronizado.
+
+## Visibilidade obrigatória
+
+A autonomia do agente não pode significar ausência de contexto para o utilizador. Durante qualquer comando de desenvolvimento, deve ser sempre possível identificar no fluxo visível do agente:
+
+- fase actual;
+- unidade actual;
+- etapa em curso;
+- trabalho já concluído;
+- trabalho pendente;
+- próximo passo.
+
+No início do trabalho e em cada mudança relevante de etapa, apresentar um bloco curto de progresso. Em operações demoradas, actualizar em pontos significativos, sem gerar ruído por cada comando trivial.
+
+Formato recomendado:
+
+```text
+WSAI 2 — PROGRESSO
+Fase: ...
+Unidade: ...
+Etapa: ...
+Progresso: ...
+✓ concluído | ● em execução | ○ pendente
+Próximo: ...
+```
+
+As percentagens só devem ser usadas quando forem sustentadas pelo estado real; caso contrário, usar um estado textual.
 
 ## Sequência obrigatória
 
