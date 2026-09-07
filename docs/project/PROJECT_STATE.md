@@ -14,15 +14,15 @@ EM PROGRESSO
 
 ## Base actual
 
-Fase 6 — Provider Layer **INICIADA**: contratos de fornecedor (`ProviderDefinition` com tipo, endpoint base e capacidades disponibilizadas) e registo central (`ProviderRegistry`) com catálogo base (Ollama, llama.cpp, API compatível com OpenAI).
+Fase 6 — Provider Layer **EM PROGRESSO**: contratos, registo e **detecção** de fornecedores no ambiente real (probe injectável; I/O de rede isolado do domínio em `probes.py`).
 
 ## Última unidade concluída
 
-Fase 6 — Provider Layer (unidade inicial): contrato declarativo de fornecedor e registo central com catálogo base, ligado ao Capability Engine por ids de capacidades.
+Fase 6 — Provider Layer (detecção): presença e acessibilidade dos fornecedores via `ProviderProbe` injectável, com latência, erro e filtragem de acessíveis.
 
 ## Próxima unidade
 
-Continuar a Fase 6 — Provider Layer (detecção de fornecedores presentes e acessíveis no ambiente real).
+Continuar a Fase 6 — Provider Layer (adaptadores de runtime: interface estável de comunicação por tipo de fornecedor).
 
 ## Subsistemas funcionais implementados:
 
@@ -31,7 +31,7 @@ Continuar a Fase 6 — Provider Layer (detecção de fornecedores presentes e ac
 - Runtime Intelligence (carga, memória, processos, uptime, disponibilidade)
 - Capability Engine (definições, registo, avaliação, compatibilidade, capacidades disponíveis)
 - Model Intelligence (registo, metadados, requisitos, compatibilidade, classificação, recomendação)
-- Provider Layer (contratos de fornecedor, registo)
+- Provider Layer (contratos de fornecedor, registo, detecção)
 
 ## Testes
 
@@ -41,7 +41,7 @@ Base de testes configurada com `pytest`. Executar:
 py -3.12 -m pytest -v
 ```
 
-Resultado actual: 135 testes aprovados (3 fundação + 5 platform + 17 hardware + 24 runtime + 33 capability + 42 model + 11 provider).
+Resultado actual: 146 testes aprovados (3 fundação + 5 platform + 17 hardware + 24 runtime + 33 capability + 42 model + 22 provider).
 
 ## Estado da arquitectura
 
@@ -52,7 +52,7 @@ Hardware Intelligence  ██████████ 100%
 Runtime Intelligence   ██████████ 100%
 Capability Engine      ██████████ 100%
 Model Intelligence     ██████████ 100%
-Provider Layer         ████░░░░░░ 40%
+Provider Layer         ██████░░░░ 60%
 Task Intelligence      ░░░░░░░░░░ 0%
 Runtime Engine         ░░░░░░░░░░ 0%
 Knowledge Engine       ░░░░░░░░░░ 0%

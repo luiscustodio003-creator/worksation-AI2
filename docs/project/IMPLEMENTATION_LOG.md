@@ -1,5 +1,47 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-07 — Provider Layer (detecção) — Fase 6
+
+### Objectivo
+
+Detectar no ambiente real quais fornecedores do registo estão presentes
+e acessíveis, separando a lógica de domínio do I/O de rede.
+
+### Criado
+
+- `src/wsai2/provider/detection.py`
+- `src/wsai2/provider/probes.py`
+- Actualizado `src/wsai2/provider/__init__.py`
+- `tests/test_provider_detection.py`
+- `docs/provider/BASE-16-provider-layer-detection.md`
+
+### Arquitectura abrangida
+
+Fase 6 — Provider Layer. Subsistema 3.6 da arquitectura.
+A detecção mantém o domínio puro (`detection.py`) e isola o contacto de
+rede em probes injectáveis (`probes.py`), respeitando o artigo 5 da
+constituição (código de I/O separado da lógica de domínio).
+
+### Resultado
+
+`detect_provider` / `detect_providers` devolvem `ProviderDetection`
+(estado, latência, erro, capacidades) usando um `ProviderProbe`
+injectável; `available_providers` filtra os acessíveis. `health_probe`
+é o probe HTTP concreto isolado. Toda a lógica é testável sem rede.
+
+### Validação
+
+```text
+py -3.12 -m pytest -v   →   146 passed (3 fundação + 5 platform + 17 hardware + 24 runtime + 33 capability + 42 model + 22 provider)
+```
+
+### Próximo passo
+
+Continuar a Fase 6 (adaptadores de runtime: interface estável de
+comunicação por tipo de fornecedor).
+
+---
+
 ## 2026-09-07 — Provider Layer (contratos e registo) — Fase 6
 
 ### Objectivo
