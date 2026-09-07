@@ -13,6 +13,7 @@ seguintes a possam avaliar contra o hardware e o runtime reais.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from enum import Enum
 
 
 @dataclass(frozen=True)
@@ -54,3 +55,54 @@ class CapabilityDefinition:
     def summary(self) -> str:
         """Resumo textual da capacidade para apresentação."""
         return f"{self.name} ({self.id})"
+
+
+class CapabilityState(Enum):
+    """Estados de avaliação de uma capacidade contra o sistema."""
+
+    AVAILABLE = "available"      # Requisitos estruturais e runtime satisfeitos
+    RESTRICTED = "restricted"    # Estruturalmente suportada, mas condicionada
+    UNAVAILABLE = "unavailable"  # Requisitos mínimos não satisfeitos
+
+
+@dataclass(frozen=True)
+class RequirementCheck:
+    """Resultado da verificação de um requisito individual.
+
+    Regista o requisito (valor exigido), o que está disponível no
+    sistema e se foi satisfeito, permitindo justificar o veredicto.
+    """
+
+    name: str  # "ram_total", "ram_available", "cpu_cores", "gpu", "disk"
+    required: float | int | bool | None
+    available: float | int | bool | None
+    satisfied: bool
+
+
+@dataclass(frozen=True)
+class CapabilityVerdict:
+    """Veredicto de avaliação de uma capacidade contra o sistema.
+
+    Combina o estado final com as verificações por requisito que o
+    justificam. Distingue implicitamente requisitos estruturais
+    (Hardware Capability) dos requisitos de runtime (Runtime State).
+    """
+
+    capability_id: str
+    state: CapabilityState
+    checks: tuple[RequirementCheck, ...] = field(default_factory=tuple)
+
+    @property
+    def is_available(self) -> bool:
+        """Indica se a capacidade está disponível (não condicionada)."""
+        return self.state == CapabilityState.AVAILABLE
+
+    @property
+    def summary(self) -> str:
+        """Resumo textual do veredicto para apresentação."""
+        labels = {
+            CapabilityState.AVAILABLE: "disponível",
+            CapabilityState.RESTRICTED: "condicionada",
+            CapabilityState.UNAVAILABLE: "indisponível",
+        }
+        return f"{self.capability_id}: {labels[self.state]}"

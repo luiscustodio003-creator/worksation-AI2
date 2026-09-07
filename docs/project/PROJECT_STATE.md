@@ -14,19 +14,22 @@ EM PROGRESSO
 
 ## Base actual
 
-Fase 4 — Capability Engine **INICIADA**: definições de capacidade (`CapabilityDefinition`, `CapabilityRequirements`) e registo central (`CapabilityRegistry`) com catálogo base.
+Fase 4 — Capability Engine **EM PROGRESSO**: definições de capacidade, registo central e **avaliação** das capacidades contra `HardwareProfile` e `RuntimeProfile` (veredictos disponível / condicionada / indisponível com verificações por requisito).
 
 ## Última unidade concluída
 
-Fase 4 — Capability Engine (unidade inicial): contrato declarativo de capacidade e registo central com catálogo base (inferência local, embeddings, ML acelerado, processamento leve).
+Fase 4 — Capability Engine (avaliação): determina o estado de cada capacidade do registo contra o hardware estrutural e o runtime momentâneo, distinguindo requisitos estruturais (Hardware Capability) de requisitos de runtime (Runtime State).
 
 ## Próxima unidade
 
-Continuar a Fase 4 — Capability Engine (avaliação das capacidades contra o HardwareProfile e o RuntimeProfile, preparando compatibilidade e capacidades disponíveis).
+Continuar a Fase 4 — Capability Engine (compatibilidade: relatório consolidado por capacidade com estado, requisitos e justificação, fechando o catálogo de capacidades disponíveis).
 
-## Subsistemas funcionais implementados
+## Subsistemas funcionais implementados:
 
-Platform Foundation (detecção e abstração de SO), Hardware Intelligence (CPU, memória, GPU, armazenamento, perfil, capacidades), Runtime Intelligence (carga, memória, processos, uptime, disponibilidade), Capability Engine (definições e registo).
+- Platform Foundation (detecção e abstração de SO)
+- Hardware Intelligence (CPU, memória, GPU, armazenamento, perfil, capacidades)
+- Runtime Intelligence (carga, memória, processos, uptime, disponibilidade)
+- Capability Engine (definições, registo, avaliação, capacidades disponíveis)
 
 ## Testes
 
@@ -36,7 +39,7 @@ Base de testes configurada com `pytest`. Executar:
 py -3.12 -m pytest -v
 ```
 
-Resultado actual: 60 testes aprovados (3 fundação + 5 platform + 17 hardware + 24 runtime + 11 capability).
+Resultado actual: 70 testes aprovados (3 fundação + 5 platform + 17 hardware + 24 runtime + 21 capability).
 
 ## Estado da arquitectura
 
@@ -45,7 +48,7 @@ Foundation             ████████░░ 80%
 Platform               ████████░░ 80%
 Hardware Intelligence  ██████████ 100%
 Runtime Intelligence   ██████████ 100%
-Capability Engine      ████░░░░░░ 40%
+Capability Engine      ██████░░░░ 60%
 Model Intelligence     ░░░░░░░░░░ 0%
 Provider Layer         ░░░░░░░░░░ 0%
 Task Intelligence      ░░░░░░░░░░ 0%

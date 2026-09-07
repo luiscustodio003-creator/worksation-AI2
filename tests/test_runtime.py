@@ -108,7 +108,9 @@ def test_processos_retornam_tipos_validos() -> None:
         assert isinstance(proc.name, str)
         assert len(proc.name) > 0
         assert isinstance(proc.status, str)
-        assert 0.0 <= proc.cpu_percent <= 100.0 or proc.cpu_percent == 0.0
+        # Em Windows, um processo pode usar mais de 100% ao saturar vários cores
+        # (psutil soma a utilização entre cores). Logo, apenas o limite inferior se aplica.
+        assert proc.cpu_percent >= 0.0
         assert proc.memory_rss_bytes >= 0
         assert proc.memory_percent >= 0.0
 

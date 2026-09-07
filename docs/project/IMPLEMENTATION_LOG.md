@@ -1,5 +1,51 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-07 — Capability Engine (avaliação) — Fase 4
+
+### Objectivo
+
+Implementar a avaliação das capacidades contra o hardware estrutural
+(`HardwareProfile`) e o estado do runtime (`RuntimeProfile`), distinguindo
+*Hardware Capability* de *Runtime State* e preparando a compatibilidade
+e o catálogo de capacidades disponíveis.
+
+### Criado
+
+- `src/wsai2/capability/evaluation.py`
+- Actualizado `src/wsai2/capability/base.py` (CapabilityState, RequirementCheck, CapabilityVerdict)
+- Actualizado `src/wsai2/capability/__init__.py` (exporta novos tipos e funções)
+- `tests/test_capability_evaluation.py`
+- Correggido `tests/test_runtime.py` (cpu_percent de processos pode exceder 100% em Windows)
+- `docs/capability/BASE-09-capability-engine-evaluation.md`
+
+### Arquitectura abrangida
+
+Fase 4 — Capability Engine. Subsistema 3.4 da arquitectura.
+Avaliação com veredictos disponível/condicionada/indisponível e
+verificações por requisito, respeitando a separação entre capacidade de
+hardware e estado do runtime (Artigo 5 da Constituição).
+
+### Resultado
+
+`evaluate_capability`, `evaluate_capabilities` e `available_capabilities`
+devolvem `CapabilityVerdict` com `CapabilityState` e `RequirementCheck`
+por requisito (ram_total, ram_available, cpu_cores, gpu, disk). Falha
+estrutural → UNAVAILABLE; falha de runtime → RESTRICTED; caso contrário
+→ AVAILABLE.
+
+### Validação
+
+```text
+py -3.12 -m pytest -v   →   70 passed (3 fundação + 5 platform + 17 hardware + 24 runtime + 21 capability)
+```
+
+### Próximo passo
+
+Continuar a Fase 4 (compatibilidade: relatório consolidado por
+capacidade, fechando o catálogo de capacidades disponíveis).
+
+---
+
 ## 2026-09-07 — Capability Engine (definições e registo) — Fase 4
 
 ### Objectivo
