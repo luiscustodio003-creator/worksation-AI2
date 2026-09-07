@@ -1,5 +1,48 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-07 — Capability Engine (compatibilidade) — Fase 4
+
+### Objectivo
+
+Concluir a Fase 4 — Capability Engine com o relatório de
+compatibilidade: consolidar a avaliação por capacidade com justificação
+textual e fechar o catálogo de capacidades disponíveis.
+
+### Criado
+
+- `src/wsai2/capability/compatibility.py`
+- Actualizado `src/wsai2/capability/base.py` (CapabilityCompatibility, CompatibilityReport)
+- Actualizado `src/wsai2/capability/__init__.py` (exporta novos tipos e build_compatibility)
+- `tests/test_capability_compatibility.py`
+- `docs/capability/BASE-10-capability-engine-compatibility.md`
+
+### Arquitectura abrangida
+
+Fase 4 — Capability Engine. Subsistema 3.4 da arquitectura.
+Relatório consolidado que fecha todos os itens do roadmap da fase
+(definições, registo, avaliação, compatibilidade, capacidades
+disponíveis).
+
+### Resultado
+
+`build_compatibility` devolve um `CompatibilityReport` com uma
+`CapabilityCompatibility` por capacidade registada: estado,
+`justification` em linguagem natural (exigido vs disponível) e
+agrupamentos available/restricted/unavailable — o catálogo final.
+
+### Validação
+
+```text
+py -3.12 -m pytest -v   →   82 passed (3 fundação + 5 platform + 17 hardware + 24 runtime + 33 capability)
+```
+
+### Próximo passo
+
+Iniciar a Fase 5 — Model Intelligence (subsistema 3.5): registo de
+modelos, metadados, requisitos, classificação e recomendação.
+
+---
+
 ## 2026-09-07 — Capability Engine (avaliação) — Fase 4
 
 ### Objectivo

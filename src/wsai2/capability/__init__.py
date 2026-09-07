@@ -1,23 +1,24 @@
 """Subsistema Capability Engine do WorkStation AI 2.
 
-Responsável por definir, registar e avaliar as capacidades reais que
-o sistema consegue disponibilizar a partir de hardware, runtime,
-software e fornecedores instalados.
+Responsável por definir, registar, avaliar e reportar as capacidades
+reais que o sistema consegue disponibilizar a partir de hardware,
+runtime, software e fornecedores instalados.
 
-Nesta unidade foram adicionadas a **avaliação** das capacidades contra
-o HardwareProfile e o RuntimeProfile (veredictos disponível /
-condicionada / indisponível com verificações por requisito). A
-compatibilidade e o relatório de capacidades disponíveis fazem parte
-das unidades seguintes da Fase 4.
+Nesta unidade foi adicionado o **relatório de compatibilidade**:
+consolida a avaliação por capacidade (estado, requisitos e justificação
+textual) e fecha o catálogo de capacidades disponíveis da Fase 4.
 """
 
 from .base import (
+    CapabilityCompatibility,
     CapabilityDefinition,
     CapabilityRequirements,
     CapabilityState,
     CapabilityVerdict,
+    CompatibilityReport,
     RequirementCheck,
 )
+from .compatibility import build_compatibility
 from .evaluation import (
     available_capabilities,
     evaluate_capabilities,
@@ -26,13 +27,16 @@ from .evaluation import (
 from .registry import CapabilityRegistry, create_default_registry, default_capabilities
 
 __all__ = [
+    "CapabilityCompatibility",
     "CapabilityDefinition",
     "CapabilityRegistry",
     "CapabilityRequirements",
     "CapabilityState",
     "CapabilityVerdict",
+    "CompatibilityReport",
     "RequirementCheck",
     "available_capabilities",
+    "build_compatibility",
     "create_default_registry",
     "default_capabilities",
     "evaluate_capabilities",

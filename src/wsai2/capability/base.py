@@ -106,3 +106,113 @@ class CapabilityVerdict:
             CapabilityState.UNAVAILABLE: "indisponível",
         }
         return f"{self.capability_id}: {labels[self.state]}"
+
+
+# Rótulos em português por requisito, para apresentação em linguagem natural.
+_REQUIREMENT_LABELS = {
+    "ram_total": "RAM total",
+    "ram_available": "RAM disponível",
+    "cpu_cores": "processadores (cores)",
+    "gpu": "GPU/VRAM",
+    "disk": "espaço em disco",
+}
+
+
+def _format_valor(valor: float | int | bool | None) -> str:
+    """Formata um valor de requisito ou recurso para justificação textual."""
+    if isinstance(valor, bool):
+        return "sim" if valor else "não"
+    if valor is None:
+        return "sem informação"
+    return str(valor)
+
+
+@dataclass(frozen=True)
+class CapabilityCompatibility:
+    """Compatibilidade de uma capacidade com o sistema actual.
+
+    Associa a definição estrutural da capacidade ao veredicto da sua
+    avaliação contra o hardware e o runtime, e apresenta uma
+    justificação textual que explica o estado em linguagem natural.
+    """
+
+    definition: CapabilityDefinition
+    verdict: CapabilityVerdict
+
+    @property
+    def state(self) -> CapabilityState:
+        """Estado de compatibilidade da capacidade."""
+        return self.verdict.state
+
+    @property
+    def is_available(self) -> bool:
+        """Indica se a capacidade está disponível no momento."""
+        return self.verdict.is_available
+
+    @property
+    def justification(self) -> str:
+        """Justificação textual do estado de compatibilidade.
+
+        Explica porque a capacidade está disponível, condicionada ou
+        indisponível, enumerando os requisitos não satisfeitos com os
+        valores exigidos e os valores disponíveis no sistema.
+        """
+        if self.verdict.state == CapabilityState.AVAILABLE:
+            return "Capacidade disponível: todos os requisitos estão satisfeitos."
+
+        falhados = [check for check in self.verdict.checks if not check.satisfied]
+        detalhes = [
+            f"{_REQUIREMENT_LABELS.get(check.name, check.name)} — "
+            f"exigido {_format_valor(check.required)}, "
+            f"disponível {_format_valor(check.available)}"
+            for check in falhados
+        ]
+        if self.verdict.state == CapabilityState.RESTRICTED:
+            prefixo = "Capacidade estruturalmente suportada, mas condicionada no momento"
+        else:
+            prefixo = "Requisitos estruturais não satisfeitos"
+        return f"{prefixo}: {'; '.join(detalhes)}."
+
+
+@dataclass(frozen=True)
+class CompatibilityReport:
+    """Relatório consolidado de compatibilidade do sistema.
+
+    Reúne, para cada capacidade conhecida do registo, a sua
+    compatibilidade com o hardware e o runtime actuais. Disponibiliza
+    agrupamentos por estado e o catálogo final de capacidades
+    disponíveis — correspondente ao item "capacidades disponíveis" do
+    roadmap da Fase 4.
+    """
+
+    hardware: "HardwareProfile"
+    runtime: "RuntimeProfile"
+    entries: tuple[CapabilityCompatibility, ...] = field(default_factory=tuple)
+
+    def _by_state(self, state: CapabilityState) -> tuple[CapabilityCompatibility, ...]:
+        """Entradas do relatório num determinado estado."""
+        return tuple(entry for entry in self.entries if entry.state is state)
+
+    @property
+    def available(self) -> tuple[CapabilityCompatibility, ...]:
+        """Capacidades disponíveis (catálogo final)."""
+        return self._by_state(CapabilityState.AVAILABLE)
+
+    @property
+    def restricted(self) -> tuple[CapabilityCompatibility, ...]:
+        """Capacidades estruturalmente suportadas mas condicionadas."""
+        return self._by_state(CapabilityState.RESTRICTED)
+
+    @property
+    def unavailable(self) -> tuple[CapabilityCompatibility, ...]:
+        """Capacidades indisponíveis por requisitos estruturais."""
+        return self._by_state(CapabilityState.UNAVAILABLE)
+
+    @property
+    def summary(self) -> str:
+        """Resumo textual do relatório para apresentação."""
+        return (
+            f"{len(self.available)} capacidades disponíveis, "
+            f"{len(self.restricted)} condicionadas, "
+            f"{len(self.unavailable)} indisponíveis"
+        )
