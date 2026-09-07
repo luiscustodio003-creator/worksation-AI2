@@ -1,5 +1,46 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-07 — Hardware Intelligence (CPU e memória) — Fase 2
+
+### Objectivo
+
+Implementar a unidade inicial do Hardware Intelligence: descoberta de CPU e
+memória com normalização cross-platform, contratos estáveis e testes.
+
+### Criado
+
+- `src/wsai2/hardware/__init__.py`
+- `src/wsai2/hardware/base.py`
+- `src/wsai2/hardware/cpu.py`
+- `src/wsai2/hardware/memory.py`
+- `src/wsai2/hardware/factory.py`
+- `tests/test_hardware.py`
+- `docs/hardware/BASE-03-hardware-cpu-memoria.md`
+- Atualizado `pyproject.toml` (dependência `psutil>=5.9`)
+
+### Arquitectura abrangida
+
+Fase 2 — Hardware Intelligence. Subsistema 3.2 da arquitectura.
+Representa *Hardware Capability* (capacidade estrutural). Isola lógica
+de descoberta concreta (psutil) atrás do protocolo `HardwareDiscoverer`.
+
+### Resultado
+
+CPU e memória descobertos correctamente no Windows actual; estrutura
+extensível para GPU/armazenamento; fábrica agrega `HardwareProfile`.
+
+### Validação
+
+```text
+py -3.12 -m pytest -v   →   15 passed (3 fundação + 5 platform + 7 hardware)
+```
+
+### Próximo passo
+
+Continuar Fase 2 (GPU, armazenamento, perfil completo) ou iniciar Fase 3 — Runtime Intelligence.
+
+---
+
 ## 2026-09-07 — Platform Foundation (Fase 1)
 
 ### Objectivo

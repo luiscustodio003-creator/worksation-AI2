@@ -22,6 +22,9 @@ classifiers = [
     "Operating System :: Microsoft :: Windows",
     "Operating System :: POSIX :: Linux",
 ]
+dependencies = [
+    "psutil>=5.9",
+]
 
 [project.optional-dependencies]
 dev = [

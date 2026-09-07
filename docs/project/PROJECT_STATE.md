@@ -14,19 +14,19 @@ EM PROGRESSO
 
 ## Base actual
 
-Platform Foundation implementada com detecção de SO, abstração de plataforma e adaptadores Windows/Linux.
+Hardware Intelligence (CPU e memória) implementada com descoberta cross-platform e contratos estáveis.
 
 ## Última unidade concluída
 
-Fase 1 — Platform Foundation (unidade inicial): detecção do sistema operativo, abstração de plataforma, adaptadores Windows/Linux, fábrica de selecção e testes.
+Fase 2 — Hardware Intelligence (unidade inicial): descoberta de CPU (vendor, modelo, arquitectura, cores, frequência, cache, features) e memória (total, swap), normalização cross-platform, contratos e testes.
 
 ## Próxima unidade
 
-Iniciar a Fase 2 — Hardware Intelligence (descoberta de CPU, memória, GPU, armazenamento).
+Continuar a Fase 2 — Hardware Intelligence (GPU, armazenamento, perfil de hardware completo) ou iniciar a Fase 3 — Runtime Intelligence (recursos disponíveis, carga, processos, estado de execução).
 
 ## Subsistemas funcionais implementados
 
-Platform Foundation (detecção e abstração de SO).
+Platform Foundation (detecção e abstração de SO), Hardware Intelligence (CPU e memória).
 
 ## Testes
 
@@ -36,14 +36,14 @@ Base de testes configurada com `pytest`. Executar:
 py -3.12 -m pytest -v
 ```
 
-Resultado actual: 8 testes aprovados (3 fundação + 5 platform).
+Resultado actual: 15 testes aprovados (3 fundação + 5 platform + 7 hardware).
 
 ## Estado da arquitectura
 
 ```text
 Foundation             ████████░░ 80%
 Platform               ████████░░ 80%
-Hardware Intelligence  ░░░░░░░░░░ 0%
+Hardware Intelligence  ██████░░░░ 60%
 Runtime Intelligence   ░░░░░░░░░░ 0%
 Capability Engine      ░░░░░░░░░░ 0%
 Model Intelligence     ░░░░░░░░░░ 0%
