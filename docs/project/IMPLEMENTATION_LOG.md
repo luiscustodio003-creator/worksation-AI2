@@ -1,44 +1,45 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
-## 2026-09-07 — Hardware Intelligence (GPU e armazenamento) — Fase 2
+## 2026-09-07 — Hardware Intelligence (perfil e capacidades) — Fase 2
 
 ### Objectivo
 
-Continuar o Hardware Intelligence adicionando descoberta de GPU e
-armazenamento com suporte cross-platform e fallbacks graciosos.
+Concluir a Fase 2 — Hardware Intelligence com perfil de hardware agregado
+e capacidades estruturais derivadas (scoring, níveis, nível global).
 
 ### Criado
 
-- `src/wsai2/hardware/gpu.py`
-- `src/wsai2/hardware/storage.py`
-- Actualizado `src/wsai2/hardware/factory.py`
-- Actualizado `src/wsai2/hardware/__init__.py`
-- `tests/test_hardware.py` (expandido)
-- `docs/hardware/BASE-04-hardware-gpu-storage.md`
+- `src/wsai2/hardware/profile.py`
+- Actualizado `src/wsai2/hardware/base.py` (CapabilityLevel, CapabilityDomain, HardwareCapability, HardwareProfile expandido)
+- Actualizado `src/wsai2/hardware/factory.py` (integra analyze_hardware_profile)
+- Actualizado `src/wsai2/hardware/__init__.py` (exporta novos tipos)
+- `tests/test_hardware.py` (expandido com 9 testes)
+- `docs/hardware/BASE-05-hardware-profile-capabilities.md`
 
 ### Arquitectura abrangida
 
 Fase 2 — Hardware Intelligence. Subsistema 3.2 da arquitectura.
-Completa *Hardware Capability*: CPU, memória, GPU, armazenamento.
+Conclui *Hardware Capability* com análise derivada quantificada.
 
 ### Resultado
 
-GPU detectada via WMI (Windows) / lspci (Linux); armazenamento via psutil
-com heurísticas de tipo (SSD/HDD/NVMe); integrados no HardwareProfile.
+`HardwareProfile` completo com 4 capacidades (compute, memory, graphics, storage),
+scores 0.0–1.0, níveis MINIMAL–HIGH_END, `overall_level` ponderado,
+acessores de conveniência, resumos textuais para todos os domínios.
 
 ### Validação
 
 ```text
-py -3.12 -m pytest -v   →   17 passed (3 fundação + 5 platform + 9 hardware)
+py -3.12 -m pytest -v   →   25 passed (3 fundação + 5 platform + 17 hardware)
 ```
 
 ### Próximo passo
 
-Completar Fase 2 (perfil hardware, capacidades derivadas) ou iniciar Fase 3 — Runtime Intelligence.
+Iniciar Fase 3 — Runtime Intelligence (recursos disponíveis, carga, processos, estado de execução).
 
 ---
 
-## 2026-09-07 — Hardware Intelligence (CPU e memória) — Fase 2
+## 2026-09-07 — Hardware Intelligence (GPU e armazenamento) — Fase 2
 
 ### Objectivo
 

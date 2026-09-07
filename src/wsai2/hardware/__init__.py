@@ -10,9 +10,12 @@ resto da aplicação.
 
 from .base import (
     Architecture,
+    CapabilityDomain,
+    CapabilityLevel,
     CpuInfo,
     CpuVendor,
     GpuInfo,
+    HardwareCapability,
     HardwareProfile,
     MemoryInfo,
     StorageInfo,
@@ -23,9 +26,12 @@ from .storage import discover_storage
 
 __all__ = [
     "Architecture",
+    "CapabilityDomain",
+    "CapabilityLevel",
     "CpuInfo",
     "CpuVendor",
     "GpuInfo",
+    "HardwareCapability",
     "HardwareProfile",
     "MemoryInfo",
     "StorageInfo",

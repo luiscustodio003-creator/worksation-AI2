@@ -33,6 +33,49 @@ class CpuVendor(Enum):
     UNKNOWN = "unknown"
 
 
+class CapabilityLevel(Enum):
+    """Níveis de capacidade de hardware para classificação."""
+
+    MINIMAL = "minimal"      # Apenas funcionalidade básica
+    BASIC = "basic"          # Adequado para tarefas leves
+    INTERMEDIATE = "intermediate"  # Adequado para tarefas médias
+    ADVANCED = "advanced"    # Adequado para tarefas exigentes
+    HIGH_END = "high_end"    # Topo de gama
+
+
+class CapabilityDomain(Enum):
+    """Domínios de capacidade de hardware."""
+
+    COMPUTE = "compute"      # Processamento (CPU)
+    MEMORY = "memory"        # Memória RAM
+    GRAPHICS = "graphics"    # Gráficos (GPU)
+    STORAGE = "storage"      # Armazenamento
+
+
+@dataclass(frozen=True)
+class HardwareCapability:
+    """Capacidade estrutural derivada num domínio específico.
+
+    Representa uma avaliação quantitativa e qualitativa da capacidade
+    de hardware num domínio (compute, memory, graphics, storage).
+    """
+
+    domain: CapabilityDomain
+    score: float  # 0.0 a 1.0
+    level: CapabilityLevel
+    details: dict[str, str | int | float] = field(default_factory=dict)
+
+    @property
+    def is_sufficient_for_basic(self) -> bool:
+        """Indica se a capacidade é suficiente para tarefas básicas."""
+        return self.level.value != "minimal"
+
+    @property
+    def is_sufficient_for_advanced(self) -> bool:
+        """Indica se a capacidade é suficiente para tarefas avançadas."""
+        return self.level in (CapabilityLevel.ADVANCED, CapabilityLevel.HIGH_END)
+
+
 @dataclass(frozen=True)
 class CpuInfo:
     """Descrição neutral de um processador.
@@ -109,15 +152,17 @@ class StorageInfo:
 class HardwareProfile:
     """Perfil completo de capacidades de hardware do sistema.
 
-    Agrega toda a informação estrutural descoberta. Representa
-    *Hardware Capability* (capacidade estrutural) — distinto de
-    *Runtime State* (estado momentâneo de execução).
+    Agrega toda a informação estrutural descoberta e capacidades
+    derivadas. Representa *Hardware Capability* (capacidade estrutural)
+    — distinto de *Runtime State* (estado momentâneo de execução).
     """
 
     cpu: CpuInfo
     memory: MemoryInfo
     gpus: tuple[GpuInfo, ...] = field(default_factory=tuple)
     storage: tuple[StorageInfo, ...] = field(default_factory=tuple)
+    capabilities: tuple[HardwareCapability, ...] = field(default_factory=tuple)
+    overall_level: CapabilityLevel = CapabilityLevel.MINIMAL
 
     @property
     def cpu_summary(self) -> str:
@@ -130,6 +175,49 @@ class HardwareProfile:
         """Resumo textual da memória para apresentação."""
         swap = f" + {self.memory.swap_total_gb:.1f}GB swap" if self.memory.has_swap else ""
         return f"{self.memory.total_gb:.1f}GB RAM{swap}"
+
+    @property
+    def gpu_summary(self) -> str:
+        """Resumo textual das GPUs para apresentação."""
+        if not self.gpus:
+            return "Sem GPU dedicada"
+        return "; ".join(f"{g.vendor.upper()} {g.name}" for g in self.gpus)
+
+    @property
+    def storage_summary(self) -> str:
+        """Resumo textual do armazenamento para apresentação."""
+        if not self.storage:
+            return "Sem armazenamento detectado"
+        total_gb = sum(s.total_bytes for s in self.storage) / (1024 ** 3)
+        types = ", ".join(set(s.type for s in self.storage))
+        return f"{total_gb:.1f}GB total ({types})"
+
+    def get_capability(self, domain: CapabilityDomain) -> HardwareCapability | None:
+        """Obtém a capacidade para um domínio específico."""
+        for cap in self.capabilities:
+            if cap.domain == domain:
+                return cap
+        return None
+
+    @property
+    def compute_capability(self) -> HardwareCapability | None:
+        """Capacidade de computação (CPU)."""
+        return self.get_capability(CapabilityDomain.COMPUTE)
+
+    @property
+    def memory_capability(self) -> HardwareCapability | None:
+        """Capacidade de memória."""
+        return self.get_capability(CapabilityDomain.MEMORY)
+
+    @property
+    def graphics_capability(self) -> HardwareCapability | None:
+        """Capacidade gráfica (GPU)."""
+        return self.get_capability(CapabilityDomain.GRAPHICS)
+
+    @property
+    def storage_capability(self) -> HardwareCapability | None:
+        """Capacidade de armazenamento."""
+        return self.get_capability(CapabilityDomain.STORAGE)
 
 
 class HardwareDiscoverer(Protocol):
