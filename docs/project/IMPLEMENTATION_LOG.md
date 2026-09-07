@@ -1,5 +1,44 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-08 — Task Intelligence (classificação de tarefas) — Fase 7
+
+### Objectivo
+
+Classificar cada tarefa quanto à categoria de modelo mais adequada,
+ligando o Task Intelligence ao Model Intelligence de forma
+determinística.
+
+### Criado
+
+- `src/wsai2/task/classification.py`
+- Actualizado `src/wsai2/task/__init__.py`
+- `tests/test_task_classification.py`
+- `docs/task/BASE-21-task-intelligence-classification.md`
+
+### Arquitectura abrangida
+
+Fase 7 — Task Intelligence. Subsistema 3.7 da arquitectura.
+`TaskClassification` mapeia o tipo funcional (TaskKind) para a
+categoria de modelo (ModelCategory); a selecção de modelo e de
+fornecedor permanece separada (constituição, artigo 13).
+
+### Resultado
+
+`classify_task` / `classify_tasks` devolvem a categoria adequada por
+tarefa, com mapa determinístico documentado e ordem preservada.
+
+### Validação
+
+```text
+py -3.12 -m pytest -v   →   186 passed (3 fundação + 5 platform + 17 hardware + 24 runtime + 33 capability + 42 model + 46 provider + 16 task)
+```
+
+### Próximo passo
+
+Continuar a Fase 7 (requisitos de tarefa).
+
+---
+
 ## 2026-09-08 — Task Intelligence (contrato de tarefa) — Fase 7
 
 ### Objectivo

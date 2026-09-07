@@ -4,13 +4,26 @@ Responsável por definir e analisar o que o sistema tem de fazer —
 tarefas, requisitos, capacidades e plano de execução (subsistema 3.7
 da arquitectura).
 
-Nesta unidade inicial é implementado o **contrato de tarefa**
-(`TaskKind`, `Task`): a representação do pedido de trabalho, alinhada
-com as categorias de modelo e independente de fornecedores. As unidades
-seguintes classificam tarefas, mapeiam requisitos/capacidades e
-constroem o plano de execução.
+Nesta unidade é implementada a **classificação de tarefas**: a
+categoria de modelo mais adequada a cada tarefa, derivada
+deterministicamente do seu tipo funcional. A classificação liga o
+contrato de tarefa ao Model Intelligence. As unidades seguintes mapeiam
+requisitos/capacidades e constroem o plano de execução.
 """
 
 from .base import Task, TaskKind
+from .classification import (
+    TaskClassification,
+    category_for_task,
+    classify_task,
+    classify_tasks,
+)
 
-__all__ = ["Task", "TaskKind"]
+__all__ = [
+    "Task",
+    "TaskClassification",
+    "TaskKind",
+    "category_for_task",
+    "classify_task",
+    "classify_tasks",
+]

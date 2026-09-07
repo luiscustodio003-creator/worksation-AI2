@@ -14,15 +14,15 @@ EM PROGRESSO
 
 ## Base actual
 
-Fase 7 — Task Intelligence **INICIADA**: contrato de tarefa (`TaskKind` chat/completion/embedding e `Task` imutável com capacidades exigidas e metadados opacos), independente de modelos e fornecedores (Artigo 13).
+Fase 7 — Task Intelligence **EM PROGRESSO**: contrato de tarefa e **classificação** (categoria de modelo mais adequada por tarefa), ligando o Task Intelligence ao Model Intelligence (Artigo 13).
 
 ## Última unidade concluída
 
-Fase 7 — Task Intelligence (contrato de tarefa): representação uniforme do pedido de trabalho, alinhada com as categorias de modelo.
+Fase 7 — Task Intelligence (classificação de tarefas): mapeamento determinístico tipo funcional → categoria de modelo (chat/completion/embedding).
 
 ## Próxima unidade
 
-Continuar a Fase 7 — Task Intelligence (classificação de tarefas: categoria funcional de modelo mais adequada por tarefa).
+Continuar a Fase 7 — Task Intelligence (requisitos de tarefa: capacidades e categoria num contrato de requisitos consumível).
 
 ## Subsistemas funcionais implementados:
 
@@ -32,7 +32,7 @@ Continuar a Fase 7 — Task Intelligence (classificação de tarefas: categoria 
 - Capability Engine (definições, registo, avaliação, compatibilidade, capacidades disponíveis)
 - Model Intelligence (registo, metadados, requisitos, compatibilidade, classificação, recomendação)
 - Provider Layer (contratos, registo, detecção, adaptadores de runtime, health checks)
-- Task Intelligence (contrato de tarefa)
+- Task Intelligence (contrato de tarefa, classificação de tarefas)
 
 ## Testes
 
@@ -42,7 +42,7 @@ Base de testes configurada com `pytest`. Executar:
 py -3.12 -m pytest -v
 ```
 
-Resultado actual: 179 testes aprovados (3 fundação + 5 platform + 17 hardware + 24 runtime + 33 capability + 42 model + 46 provider + 9 task).
+Resultado actual: 186 testes aprovados (3 fundação + 5 platform + 17 hardware + 24 runtime + 33 capability + 42 model + 46 provider + 16 task).
 
 ## Estado da arquitectura
 
@@ -54,7 +54,7 @@ Runtime Intelligence   ██████████ 100%
 Capability Engine      ██████████ 100%
 Model Intelligence     ██████████ 100%
 Provider Layer         ██████████ 100%
-Task Intelligence      ████░░░░░░ 20%
+Task Intelligence      ████░░░░░░ 40%
 Runtime Engine         ░░░░░░░░░░ 0%
 Knowledge Engine       ░░░░░░░░░░ 0%
 API                    ░░░░░░░░░░ 0%
