@@ -1,5 +1,42 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-08 — Task Intelligence (contrato de tarefa) — Fase 7
+
+### Objectivo
+
+Iniciar a Fase 7 — Task Intelligence com o contrato de tarefa e a sua
+representação, como definido na auditoria BASE-19.
+
+### Criado
+
+- `src/wsai2/task/base.py`
+- `src/wsai2/task/__init__.py`
+- `tests/test_task.py`
+- `docs/task/BASE-20-task-intelligence-contract.md`
+
+### Arquitectura abrangida
+
+Fase 7 — Task Intelligence. Subsistema 3.7 da arquitectura.
+A tarefa declara o que fazer (tipo funcional, texto, capacidades) sem
+depender de modelos ou fornecedores (constituição, artigo 13).
+
+### Resultado
+
+`TaskKind` (chat / completion / embedding) e `Task` imutável com
+`required_capabilities` e `metadata` opaca; valida prompt e max_tokens.
+
+### Validação
+
+```text
+py -3.12 -m pytest -v   →   179 passed (3 fundação + 5 platform + 17 hardware + 24 runtime + 33 capability + 42 model + 46 provider + 9 task)
+```
+
+### Próximo passo
+
+Continuar a Fase 7 (classificação de tarefas).
+
+---
+
 ## 2026-09-07 — Provider Layer (health checks) — Fase 6
 
 ### Objectivo
