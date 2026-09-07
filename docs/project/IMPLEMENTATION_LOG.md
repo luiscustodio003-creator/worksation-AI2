@@ -1,5 +1,47 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-07 — Platform Foundation (Fase 1)
+
+### Objectivo
+
+Implementar a camada de abstração de plataforma (Platform Foundation) com
+detecção de sistema operativo, adaptadores Windows/Linux e fábrica de
+seleção, conforme Fase 1 do roadmap.
+
+### Criado
+
+- `src/wsai2/platform/__init__.py`
+- `src/wsai2/platform/base.py`
+- `src/wsai2/platform/windows.py`
+- `src/wsai2/platform/linux.py`
+- `src/wsai2/platform/factory.py`
+- `tests/test_platform.py`
+- `docs/platform/BASE-02-platform-foundation.md`
+
+### Arquitectura abrangida
+
+Fase 1 — Platform Foundation. Subsistema 3.1 da arquitectura. Isola
+código específico de SO e expõe interface uniforme via `get_platform()`.
+
+### Resultado
+
+Plataforma detectada correctamente no Windows actual; adaptador Linux
+presente e testável; fábrica selecciona adaptador adequado ao SO
+corrente.
+
+### Validação
+
+```text
+py -3.12 -m pytest -v   →   8 passed (3 fundação + 5 platform)
+```
+
+### Próximo passo
+
+Iniciar Fase 2 — Hardware Intelligence (descoberta de CPU, memória,
+GPU, armazenamento).
+
+---
+
 ## 2026-09-07 — Fundação Python e base de testes
 
 ### Objectivo
