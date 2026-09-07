@@ -4,14 +4,14 @@ Responsável por definir e analisar o que o sistema tem de fazer —
 tarefas, requisitos, capacidades e plano de execução (subsistema 3.7
 da arquitectura).
 
-Nesta unidade são implementados os **requisitos de tarefa**: a
-materialização das exigências de uma tarefa (categoria de modelo e
-capacidades únicas) num contrato consumível pelo Model Intelligence.
-As unidades seguintes seleccionam capacidades e constroem o plano de
-execução.
+Nesta unidade é implementada a **selecção de capacidades**: a
+verificação, contra o Capability Engine, de quais capacidades exigidas
+pela tarefa estão disponíveis, determinando a viabilidade da execução.
+A unidade final constrói o plano de execução.
 """
 
 from .base import Task, TaskKind
+from .capability_selection import TaskCapabilitySelection, select_capabilities
 from .classification import (
     TaskClassification,
     category_for_task,
@@ -27,6 +27,7 @@ from .requirements import (
 
 __all__ = [
     "Task",
+    "TaskCapabilitySelection",
     "TaskClassification",
     "TaskKind",
     "TaskRequirements",
@@ -36,4 +37,5 @@ __all__ = [
     "classify_tasks",
     "requirements_for",
     "requirements_for_many",
+    "select_capabilities",
 ]

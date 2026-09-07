@@ -1,5 +1,44 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-08 — Task Intelligence (selecção de capacidades) — Fase 7
+
+### Objectivo
+
+Verificar, contra o Capability Engine, quais das capacidades exigidas
+por uma tarefa estão disponíveis, determinando a viabilidade da
+execução.
+
+### Criado
+
+- `src/wsai2/task/capability_selection.py`
+- Actualizado `src/wsai2/task/__init__.py`
+- `tests/test_task_capability_selection.py`
+- `docs/task/BASE-23-task-intelligence-capability-selection.md`
+
+### Arquitectura abrangida
+
+Fase 7 — Task Intelligence. Subsistema 3.7 da arquitectura.
+A selecção delega a avaliação ao Capability Engine (Fase 4); o Task
+Intelligence separa capacidades satisfeitas e em falta e decide a
+viabilidade, sem duplicar lógica.
+
+### Resultado
+
+`select_capabilities` devolve `TaskCapabilitySelection` (required /
+available / missing / is_viable), preservando a ordem de declaração.
+
+### Validação
+
+```text
+py -3.12 -m pytest -v   →   201 passed (3 fundação + 5 platform + 17 hardware + 24 runtime + 33 capability + 42 model + 46 provider + 31 task)
+```
+
+### Próximo passo
+
+Concluir a Fase 7 (plano de execução).
+
+---
+
 ## 2026-09-08 — Task Intelligence (requisitos de tarefa) — Fase 7
 
 ### Objectivo
