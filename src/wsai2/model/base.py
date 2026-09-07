@@ -81,9 +81,64 @@ class ModelDefinition:
         return f"{self.name} ({self.id})"
 
 
+class ModelState(Enum):
+    """Estados de compatibilidade de um modelo contra o sistema."""
+
+    AVAILABLE = "available"      # Requisitos do modelo e capacidades satisfeitos
+    RESTRICTED = "restricted"    # Executável, mas condicionado pelas capacidades/runtime
+    UNAVAILABLE = "unavailable"  # Requisitos mínimos não satisfeitos
+
+
+@dataclass(frozen=True)
+class ModelCheck:
+    """Resultado da verificação de um requisito de modelo individual.
+
+    Regista o requisito (valor exigido), o que está disponível no
+    sistema e se foi satisfeito, permitindo justificar o veredicto.
+    """
+
+    name: str  # "capabilities", "ram_total", "ram_available", "cpu_cores", "gpu", "disk"
+    required: float | int | bool | tuple[str, ...] | None
+    available: float | int | bool | tuple[str, ...] | None
+    satisfied: bool
+
+
+@dataclass(frozen=True)
+class ModelVerdict:
+    """Veredicto de compatibilidade de um modelo contra o sistema.
+
+    Combina o estado final com as verificações por requisito que o
+    justificam e com as capacidades do sistema que faltam, quando
+    aplicável.
+    """
+
+    model_id: str
+    state: ModelState
+    checks: tuple[ModelCheck, ...] = field(default_factory=tuple)
+    missing_capabilities: tuple[str, ...] = field(default_factory=tuple)
+
+    @property
+    def is_available(self) -> bool:
+        """Indica se o modelo está disponível (não condicionado)."""
+        return self.state == ModelState.AVAILABLE
+
+    @property
+    def summary(self) -> str:
+        """Resumo textual do veredicto para apresentação."""
+        labels = {
+            ModelState.AVAILABLE: "disponível",
+            ModelState.RESTRICTED: "condicionado",
+            ModelState.UNAVAILABLE: "indisponível",
+        }
+        return f"{self.model_id}: {labels[self.state]}"
+
+
 __all__ = [
+    "ModelCheck",
     "ModelDefinition",
     "ModelKind",
     "ModelMetadata",
     "ModelRequirements",
+    "ModelState",
+    "ModelVerdict",
 ]

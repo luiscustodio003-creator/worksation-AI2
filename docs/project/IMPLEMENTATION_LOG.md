@@ -1,5 +1,49 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-07 — Model Intelligence (compatibilidade) — Fase 5
+
+### Objectivo
+
+Implementar a compatibilidade dos modelos contra o hardware
+estrutural, o estado do runtime e as capacidades requeridas do
+Capability Engine, preparando a classificação e a recomendação.
+
+### Criado
+
+- `src/wsai2/model/compatibility.py`
+- Actualizado `src/wsai2/model/base.py` (ModelState, ModelCheck, ModelVerdict)
+- Actualizado `src/wsai2/model/__init__.py` (exporta novos tipos e funções)
+- `tests/test_model_compatibility.py`
+- `docs/model/BASE-12-model-intelligence-compatibility.md`
+
+### Arquitectura abrangida
+
+Fase 5 — Model Intelligence. Subsistema 3.5 da arquitectura.
+Compatibilidade com tripla dimensão: capacidades requeridas (Capability
+Engine), requisitos estruturais (*Hardware Capability*) e requisitos de
+runtime (*Runtime State*) — Artigo 5 da Constituição.
+
+### Resultado
+
+`evaluate_model`, `evaluate_models` e `compatible_models` devolvem
+`ModelVerdict` com `ModelState`, verificações por requisito e
+capacidades em falta. Capacidade em falta ou requisito estrutural
+falhado → UNAVAILABLE; capacidade condicionada ou runtime insuficiente
+→ RESTRICTED; caso contrário → AVAILABLE.
+
+### Validação
+
+```text
+py -3.12 -m pytest -v   →   105 passed (3 fundação + 5 platform + 17 hardware + 24 runtime + 33 capability + 23 model)
+```
+
+### Próximo passo
+
+Continuar a Fase 5 (classificação dos modelos e score de adequação para
+recomendação).
+
+---
+
 ## 2026-09-07 — Model Intelligence (registo e metadados) — Fase 5
 
 ### Objectivo
