@@ -126,6 +126,6 @@ Resultado
 
 ## 7. Estado actual da arquitectura
 
-O projecto encontra-se actualmente na **Fase 7 — Task Intelligence**, após conclusão das fases Platform Foundation, Hardware Intelligence, Runtime Intelligence, Capability Engine, Model Intelligence e Provider Layer.
+As fases Platform Foundation, Hardware Intelligence, Runtime Intelligence, Capability Engine, Model Intelligence e Provider Layer encontram-se concluídas. A próxima fase a iniciar é a **Fase 7 — Task Intelligence**.
 
 A fonte de verdade para o progresso e a próxima unidade é `docs/project/PROJECT_STATE.md`.
