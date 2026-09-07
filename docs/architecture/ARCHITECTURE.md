@@ -2,7 +2,7 @@
 
 ## 1. Objectivo arquitectural
 
-O WorkStation AI 2 será construído como uma plataforma local de inteligência artificial capaz de compreender o ambiente onde está a executar e tomar decisões sobre capacidades, modelos e execução.
+O WorkStation AI 2 será construído como uma plataforma local e multiplataforma de inteligência artificial capaz de compreender o ambiente onde está a executar e tomar decisões sobre capacidades, modelos e execução.
 
 A arquitectura deve permitir evolução em Windows e Linux sem misturar responsabilidades.
 
@@ -42,11 +42,11 @@ Determina as capacidades reais que o sistema consegue disponibilizar a partir de
 
 ### 3.5 Model Intelligence
 
-Mantém informação sobre modelos, requisitos, compatibilidade, desempenho e adequação às tarefas.
+Mantém informação sobre modelos, requisitos, compatibilidade, desempenho e adequação às tarefas. A selecção de modelo é independente da escolha do fornecedor.
 
 ### 3.6 Provider Layer
 
-Isola os fornecedores e motores concretos, como runtimes locais e APIs compatíveis.
+Isola os fornecedores e motores concretos, como runtimes locais e APIs compatíveis. O subsistema possui contratos, registo, detecção, adaptadores e health checks. A comunicação externa é feita através de adaptadores e transportes injectáveis.
 
 ### 3.7 Task Intelligence
 
@@ -80,7 +80,29 @@ Descreve os recursos realmente disponíveis no momento da execução.
 
 Estas duas entidades devem permanecer separadas.
 
-## 5. Fluxo de decisão futuro
+## 5. Independência de modelos e fornecedores
+
+O WSAI 2 não deve depender de um modelo, fabricante, repositório, runtime de inferência ou fornecedor específico.
+
+A decisão de **qual modelo usar** e a decisão de **através de que fornecedor o executar** são responsabilidades separadas.
+
+```text
+Tarefa
+  ↓
+Model Intelligence
+  ↓
+Modelo recomendado
+  ↓
+Provider Layer
+  ↓
+Fornecedor compatível e saudável
+  ↓
+Runtime Engine
+```
+
+Um fornecedor concreto deve ser substituível por outro que implemente o contrato adequado sem exigir alterações no domínio central.
+
+## 6. Fluxo de decisão futuro
 
 ```text
 Pedido
@@ -93,6 +115,8 @@ Capability Engine
   ↓
 Model Intelligence
   ↓
+Provider Layer
+  ↓
 Execution Plan
   ↓
 Runtime Engine
@@ -100,6 +124,8 @@ Runtime Engine
 Resultado
 ```
 
-## 6. Estado da arquitectura
+## 7. Estado actual da arquitectura
 
-A arquitectura encontra-se na **Fase 0 — Fundação**. Os módulos funcionais ainda não foram implementados.
+O projecto encontra-se actualmente na **Fase 7 — Task Intelligence**, após conclusão das fases Platform Foundation, Hardware Intelligence, Runtime Intelligence, Capability Engine, Model Intelligence e Provider Layer.
+
+A fonte de verdade para o progresso e a próxima unidade é `docs/project/PROJECT_STATE.md`.
