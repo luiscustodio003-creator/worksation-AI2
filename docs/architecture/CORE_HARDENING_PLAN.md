@@ -4,7 +4,7 @@
 
 Preparar a base do WSAI 2 para receber addons sem criar uma arquitectura paralela nem alterar destrutivamente os subsistemas já concluídos.
 
-Este documento é um **plano de evolução**. Não declara estes componentes como implementados.
+Este documento é um **plano de evolução**. Cada ponto deve ser lido em conjunto com o estado real do código, testes e `PROJECT_STATE.md`.
 
 ## Regra de entrada
 
@@ -66,7 +66,7 @@ Exemplos: Validation, Capability, Model, Provider, Resource, Timeout, Cancellati
 
 > **Estado: IMPLEMENTADO na Fase 8.2.** `wsai2.core.errors` com `WsaiError`
 > (code + details) e 10 categorias. O alinhamento aditivo do
-> `AdapterError`/`ProviderProbeError` sobre a taxaonomia fica para unidade
+> `AdapterError`/`ProviderProbeError` sobre a taxonomia fica para unidade
 > posterior, após regressão validada (regra de não destruição).
 
 ## Hardening 04 — Execution Context
@@ -92,25 +92,17 @@ Evoluir a gestão de memória existente para governação de recursos, sem dupli
 
 > **Estado: IMPLEMENTADO na Fase 8.3.** `wsai2.resource` com
 > `ResourceGovernor`: normalização por dimensão (RAM, CPU, VRAM, disco),
-> validação de folga (`required <= min(capacity, available_now) −
-> committed`) e accounting por instância (`allocate`/`release`).
-> Dimensões sem leitura de runtime (VRAM em uso, espaço livre de disco)
-> governadas pela capacidade estrutural. Nomes não reconhecidos →
-> `UNRECOGNIZED`. Gestão de tempo (8.4) e scheduling (8.5) permanecem em
-> unidades posteriores.
+> validação de folga e accounting por instância (`allocate`/`release`).
+> Dimensões sem leitura de runtime são governadas pela capacidade estrutural.
+> Nomes não reconhecidos → `UNRECOGNIZED`.
 
 ## Hardening 06 — Timeout / Cancellation / Recovery
 
 Centralizar políticas no Runtime Engine. Addons não devem inventar mecanismos incompatíveis.
 
 > **Estado: IMPLEMENTADO na Fase 8.4.** `wsai2.execution` com política de
-> timeout (`TimeoutPolicy`, `DeadlineGuard`, `run_with_timeout` em thread
-> daemon), checkpoints de cancelamento/deadline sobre o
-> `ExecutionContext` e recuperação (`RecoveryPolicy`, `run_with_recovery`
-> com retry opt-in e backoff); `execute_with_policies` compõe
-> checkpoint → timeout → recuperação → reserva/libertação de orçamento
-> (`ResourceGovernor`, 8.3). Agendamento/filas e gestor de execução
-> pertencem ao 8.5.
+> timeout, checkpoints de cancelamento/deadline, recuperação com retry opt-in
+> e composição das políticas com reserva/libertação de orçamento.
 
 ## Hardening 07 — Scheduler / Runtime Manager
 
@@ -130,69 +122,61 @@ Provider / Model Runtime
 Execution Result
 ```
 
-> **Estado: IMPLEMENTADO na Fase 8.5.** `wsai2.runtime_engine` com
-> `RuntimeManager` (executa o `ExecutionPlan` do Task Intelligence como
-> unidade de políticas — `execute_with_policies` da 8.4 + `ResourceGovernor`
-> da 8.3 — devolvendo `ExecutionReport` por passo) e `Scheduler`
-> (agendamento determinístico por prioridade com `stop_on_failure`).
-> **Residual 1 (monitorização contínua) implementado**: `ExecutionMonitor`
-> observa em curso execuções e agendamentos, aditivo e reversível
-> (BASE-34). **Residual 2 (concorrência entre planos) implementado**:
-> `Scheduler.run` executa em paralelo com `concurrency > 1` (aditivo;
-> sequencial por omissão) e o `ResourceGovernor` é thread-safe para
-> partilha segura entre planos (BASE-35). Filas multicamadas ficam para a
-> unidade posterior; o passo concreto (contacto
-> modelo/fornecedor) é um `step_runner` injectado.
+> **Estado: IMPLEMENTADO E COMPLETADO NA Fase 8.** `wsai2.runtime_engine`
+> fornece `RuntimeManager` e `Scheduler`. Sobre a implementação base foram
+> concluídos os três residuais Via B:
+>
+> 1. **Monitorização contínua** — `ExecutionMonitor`, thread-safe, com
+>    `snapshot()` e integração aditiva/reversível (BASE-34).
+> 2. **Concorrência entre planos** — `Scheduler.run(concurrency=...)`, com
+>    caminho sequencial preservado por omissão, execução paralela opcional e
+>    `ResourceGovernor` thread-safe (BASE-35).
+> 3. **Filas multicamadas** — `MultilayerExecutionQueue`, com prioridades
+>    `CRITICAL/HIGH/NORMAL/LOW`, backlog, capacidade opcional, preempção apenas
+>    de trabalho pendente, promoção do backlog, ordenação determinística,
+>    `snapshot()`/`pending()`/`clear()` e integração opt-in em
+>    `Scheduler.run(queue=...)` (BASE-36).
+>
+> A fila é uma camada aditiva: `queue=None` mantém o caminho directo histórico.
+> Nenhum trabalho já iniciado é interrompido por preempção.
 
 ## Hardening 08 — Versioning / Compatibility
 
 Introduzir apenas as versões necessárias para Core/API/Capability/Provider/Extension contracts e rejeitar incompatibilidades antes da execução.
 
 > **Estado: IMPLEMENTADO na Fase 8.6 (extensões).** `wsai2.extension.versioning`
-> com `ContractVersion` (`major.minor`, a `version` do addon permanece
-> opaca) e `SUPPORTED_CONTRACT_VERSION = "1.0"`; compatibilidade = mesmo
-> major. `ExtensionRegistry.register` rejeita antes de registar
-> (`wsai.extension.contract_version` / `wsai.extension.contract_incompatible`).
-> Core/API/Capability/Provider acumulam evolução de unidades passadas e
-> futuras de cada subsistema.
+> com `ContractVersion` (`major.minor`), compatibilidade por major e rejeição
+> antes do registo/execução. Core/API/Capability/Provider acumulam evolução
+> futura conforme cada subsistema avançar.
 
 ## Hardening 09 — Security / Policy
 
 Antes de Code, GitHub, Agents ou MCP, definir principal → project → capability → resource → action → policy → decision.
 
 > **Estado: NÚCLEO IMPLEMENTADO na Fase 8.8; PONTE no Gate (8.9).**
-> `wsai2.security` com `Principal`/`PolicyDecision`, `PolicyEngine` de
-> decisão **exact-match por acção** (negação por omissão, sem RBAC) e
-> `denied_decision` (converte a negação no `PermissionError` da 8.2).
-> Enforcement no `RuntimeManager.execute_plan` antes do passo 1 e, desde
-> o Gate, **propagado pelo `Scheduler`** (política injectada; sem motor,
-> comportamento preservado). No Gate (8.9), `ExtensionRegistry.register`
-> materializa `permissions` do contrato como **grants por id de
-> extensão**, ligando o vocabulário declarativo ao motor.
+> `wsai2.security` implementa `PolicyEngine` exact-match por acção,
+> `denied_decision`, enforcement no `RuntimeManager` e propagação pelo
+> `Scheduler`. O `ExtensionRegistry` materializa `permissions` como grants
+> por id de extensão.
 
 ## Hardening 10 — Project Isolation
 
 Propagar `project_id` pelas fronteiras relevantes e impedir acesso cruzado sem autorização explícita.
 
 > **Estado: NÚCLEO IMPLEMENTADO na Fase 8.8.** `wsai2.security.isolation`
-> com `require_project` (project_id obrigatório na fronteira) e
-> `assert_same_project` (acesso cruzado → `ProjectIsolationError` da
-> 8.2, com esperado/actual em `details`). O `ExecutionContext` (8.2) já
-> transportava `project_id`; passa também a transportar `principal`
-> (aditivo, default vazio) para a política.
+> fornece `require_project` e `assert_same_project`, com
+> `ProjectIsolationError`. O `ExecutionContext` transporta `project_id` e,
+> de forma aditiva, `principal`.
 
 ## Hardening 11 — Architecture Contract Tests
 
 Transformar regras da Constituição em testes executáveis: dependências, isolamento, compatibilidade, recursos, timeout, cancellation, permissões e falha isolada de addons.
 
-> **Estado: NÚCLEO IMPLEMENTADO na Fase 8.7.** `tests/test_architecture_contract.py`
-> executa as regras de dependências (fronteiras autorizadas entre
-> subsistemas), isolamento do código de SO, ausência de ciclos em runtime,
-> documentação por subsistema e crescimento controlado. As restantes
-> regras (compatibilidade, recursos, timeout, cancellation, permissões e
-> falha isolada de addons) são já cobertas pelos testes funcionais das
-> unidades 8.1–8.6; o Security/Policy (hardening 09) dará origem aos
-> testes de permissões antes do Gate de addons.
+> **Estado: IMPLEMENTADO na Fase 8.7 e reforçado nas unidades posteriores.**
+> `tests/test_architecture_contract.py` executa as regras de dependências,
+> isolamento do código de SO, ausência de ciclos de import e documentação por
+> subsistema. As restantes regras são cobertas pelos testes funcionais das
+> unidades 8.1–8.9 e pelos residuais Via B.
 
 ## Ordem recomendada
 
@@ -213,8 +197,22 @@ Fase 8.6 — lifecycle + compatibility
        ↓
 Fase 8.7 — testes de contrato arquitectural
        ↓
-Gate — Core pronto para addons
+Fase 8.8 — Security / Project Isolation
+       ↓
+Fase 8.9 — Gate — Core pronto para addons
+       ↓
+Residual Via B 1 — monitorização
+       ↓
+Residual Via B 2 — concorrência
+       ↓
+Residual Via B 3 — filas multicamadas
+       ↓
+Validação final da Fundação
+       ↓
+Fase 9 — Knowledge Engine
 ```
+
+A ordem concreta dos residuais Via B é governada por `PROJECT_STATE.md` e deve ser alterada apenas perante uma nova decisão arquitectural explícita. Não se deve reimplementar uma responsabilidade já concluída.
 
 Security e Project Isolation devem ser concluídos antes de activar addons com acesso a código, ficheiros externos, GitHub, agentes ou MCP.
 
@@ -224,12 +222,7 @@ Nenhum addon de grande impacto deve ser considerado pronto apenas porque o seu m
 
 > **Estado: GATE APROVADO na Fase 8.9.** O marco foi formalizado com um
 > critério executável — `tests/test_gate_addons.py`: fotografia dos
-> pré-requisitos públicos (contratos, lifecycle, recursos, timeout/
-> cancelamento/recuperação, compatibilidade, segurança, isolamento e
-> contrato arquitectural) e das integrações de instituição (política
-> propagada pelo `Scheduler`; `permissions` → grants por id de extensão
-> no `ExtensionRegistry`). Contrato de composição: quem cria o runtime
-> fornece o motor; quem executa trabalho de uma extensão leva
-> `principal` = `id` da extensão. Concorrência, filas multicamadas e
-> monitorização contínua permanecem unidades posteriores da Fase 8 —
-> não são pré-requisitos do Gate.
+> pré-requisitos públicos e das integrações de instituição. O Gate foi
+> seguido, por decisão Via B documentada, pelos residuais de monitorização,
+> concorrência e filas multicamadas. Esses residuais completam o Runtime
+> Engine, mas não alteram retroactivamente o critério do Gate 8.9.
