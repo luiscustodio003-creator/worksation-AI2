@@ -58,7 +58,7 @@ Executa planos, gere recursos, concorrência, cancelamento, timeouts, streaming 
 
 ### 3.9 Knowledge Engine
 
-Trata a gestão de conhecimento: ingestão de ficheiros, extracção, metadados, indexação, recuperação e construção de contexto. Na unidade 9.1 foi criado o contrato declarativo do subsistema (`wsai2.knowledge`): `KnowledgeKind` (document/extract/note), `KnowledgeMetadata` (fonte, idioma, autor, etiquetas) e `KnowledgeRecord` (imutável, validado à criação), além da versão de contrato `KNOWLEDGE_CONTRACT_VERSION = "1.0"`. O subsistema é **folha** — depende apenas de stdlib; a ingestão e a extracção reais consumirão extensões, fornecedores e o Runtime em unidades posteriores, sem antecipar I/O nem motores de embeddings neste contrato.
+Trata a gestão de conhecimento: ingestão de ficheiros, extracção, metadados, indexação, recuperação e construção de contexto. Na unidade 9.1 foi criado o contrato declarativo do subsistema (`wsai2.knowledge`): `KnowledgeKind` (document/extract/note), `KnowledgeMetadata` (fonte, idioma, autor, etiquetas) e `KnowledgeRecord` (imutável, validado à criação), além da versão de contrato `KNOWLEDGE_CONTRACT_VERSION = "1.0"`. Na unidade 9.2 foi criado o `KnowledgeRegistry` (catálogo de admissão por id único, padrão dos registos das Fases 4–8), dependente apenas de `wsai2.core`. A ingestão e a extracção reais consumirão extensões, fornecedores e o Runtime em unidades posteriores, sem antecipar I/O nem motores de embeddings neste contrato.
 
 ### 3.10 API
 

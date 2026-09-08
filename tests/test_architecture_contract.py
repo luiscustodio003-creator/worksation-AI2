@@ -40,6 +40,7 @@ FRONTEIRAS: frozenset[tuple[str, str]] = frozenset(
         ("execution", "resource"),
         ("extension", "core"),
         ("extension", "security"),
+        ("knowledge", "core"),
         ("model", "capability"),
         ("model", "hardware"),
         ("model", "runtime"),

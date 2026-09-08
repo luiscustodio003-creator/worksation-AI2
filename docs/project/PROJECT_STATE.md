@@ -10,11 +10,11 @@
 
 ## Estado da fase
 
-**FASE 9 INICIADA** após o fecho formal da Fase 8 (gate de fundação `APPROVED WITH WARNINGS`). A unidade 9.1 — **Knowledge Contract** — está concluída: contrato declarativo e imutável do subsistema (`wsai2.knowledge`), autorizando `knowledge` no teste de contrato arquitectural. A decisão de fronteira foi documentada (subsistema folha, sem arestas novas em `FRONTEIRAS`). Suíte completa: **433 testes aprovados, 0 falhas**.
+**FASE 9 INICIADA** após o fecho formal da Fase 8 (gate de fundação `APPROVED WITH WARNINGS`). Unidades **9.1 — Knowledge Contract** e **9.2 — Knowledge Registry** concluídas: contrato declarativo e imutável (`wsai2.knowledge`) e registo central de admissão por id único (padrão dos registos F4–8). Decisões de fronteira documentadas (`knowledge` autorizado; aresta `knowledge→core`). Suíte completa: **441 testes aprovados, 0 falhas**.
 
 ## Última unidade implementada
 
-Fase 9 — unidade 9.1: **Knowledge Contract** (`docs/knowledge/BASE-37-knowledge-engine-contract.md`). Criado `wsai2.knowledge` com `KnowledgeKind` (document/extract/note), `KnowledgeMetadata` (fonte, idioma, autor, etiquetas, extras), `KnowledgeRecord` (frozen, validado à criação) e `KNOWLEDGE_CONTRACT_VERSION = "1.0"`. Subsistema folha (só stdlib). O teste de contrato arquitectural passou a autorizar `knowledge` (fica `SUBSISTEMAS_FUTUROS = ("api", "ui")`). 10 novos testes.
+Fase 9 — unidade 9.2: **Knowledge Registry** (`docs/knowledge/BASE-38-knowledge-registry.md`). Criado `KnowledgeRegistry` (admissão com id único, duplicações rejeitadas com `wsai.knowledge.duplicate`, `get`/`has`/`all`/`len`/`unregister`, `supported_contract_version = "1.0"`), no padrão dos registos das Fases 4–8. Nova aresta `FRONTEIRAS`: `knowledge→core` (justificação documental em BASE-38). 8 novos testes.
 
 ## Estado dos residuais Via B
 
@@ -43,6 +43,7 @@ Fase 9 — unidade 9.1: **Knowledge Contract** (`docs/knowledge/BASE-37-knowledg
 - Security / Policy + Project Isolation
 - Gate — Core pronto para addons
 - Knowledge Contract (Fase 9, subsistema 3.9 — contrato declarativo)
+- Knowledge Registry (Fase 9, subsistema 3.9 — admissão por id único)
 
 ## Filas multicamadas — contrato
 
@@ -93,7 +94,7 @@ A documentação está alinhada com o estado funcional conhecido. A Fase 8 está
 
 Baseline do fecho da Fase 8: **423 testes**.
 
-Foram adicionados **10 testes** em `tests/test_knowledge.py`, cobrindo o contrato do Knowledge Engine (construção, validação à criação, imutabilidade, defaults, enums e resumo textual). A execução registou **433/433 testes aprovados**.
+Foram adicionados **10 testes** em `tests/test_knowledge.py` (contrato 9.1) e **8 testes** em `tests/test_knowledge_registry.py` (registo 9.2). A execução registou **441/441 testes aprovados**.
 
 Foi também criado `.github/workflows/tests.yml` para executar a suíte em Python 3.12 no GitHub Actions. O estado remoto continua tratado como evidência P3 até existir confirmação de uma execução.
 
@@ -109,7 +110,7 @@ Model Intelligence     ██████████ 100%
 Provider Layer         ██████████ 100%
 Task Intelligence      ██████████ 100%
 Runtime Engine         ██████████ 100% (implementação)
-Knowledge Engine       █░░░░░░░░░ 10%  (contrato 9.1 — em curso)
+Knowledge Engine       ██░░░░░░░░ 20%  (contrato 9.1 + registo 9.2)
 API                    ░░░░░░░░░░ 0%   (não iniciado)
 UI                     ░░░░░░░░░░ 0%   (não iniciado)
 ```
@@ -118,30 +119,29 @@ Estas barras não representam progresso global do projecto; representam maturida
 
 ## Estado Git
 
-A unidade 9.1 (contrato do Knowledge Engine) foi registada em `main` num commit coerente: módulo `knowledge` (base + init), testes, BASE-37 e documentação arquitectural/estado alinhados.
+As unidades 9.1 e 9.2 (contrato e registo do Knowledge Engine) foram registadas em `main` em commits coerentes: módulo `knowledge` (base, init, registry), testes, BASE-37/BASE-38 e documentação arquitectural/estado alinhados.
 
 ## Regra de continuação
 
-**Fase 9 — Knowledge Engine EM CURSO.** A próxima unidade é a **9.2 — registo de conhecimento (ingestão/admissão)**:
+**Fase 9 — Knowledge Engine EM CURSO.** A próxima unidade é a **9.3 — extracção de metadados**:
 
 ```text
-9.1 contrato do subsistema ✓ (esta unidade)
+9.1 contrato do subsistema ✓
+9.2 registo central — Knowledge Registry ✓ (esta unidade)
     ↓
-9.2 KnowledgeRegistry — registo central de KnowledgeRecord
-   (admissão por id, duplicações rejeitadas, padrão dos registos
-    das Fases 4–8)
+9.3 extracção de metadados — derivar KnowledgeMetadata a partir de
+   conteúdo/fonte (idioma, etiquetas, proveniência) — semântica via
+   Model/Provider fica para unidade posterior com decisão própria
     ↓
-9.3 extracção / metadados
 9.4 indexação
 9.5 recuperação
 9.6 construção de contexto
 ```
 
-A unidade 9.2 segue o padrão já autorizado dos `Registry` das Fases 4, 5,
-6 e 8 (sem decisão arquitectural material nova) e pode ser executada de
-forma autónoma. As unidades de indexação/recuperação (9.4/9.5) e a
-estratégia de armazenamento exigirão decisão documentada antes de I/O;
-essas decisões serão tratadas no devido ritmo, uma unidade de cada vez,
+As unidades 9.3–9.6 mantêm-se no âmbito autorizado da Fase 9. As de
+indexação/recuperação (9.4/9.5), que podem envolver I/O de armazenamento
+ou motores de embeddings, **exigirão decisão documentada antes de
+qualquer persistência**; essa decisão será tratada na unidade original,
 mantendo sempre a reversibilidade.
 
 Nenhum I/O, motor de embeddings ou armazenamento persistente é criado

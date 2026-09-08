@@ -1,5 +1,49 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-09 — Knowledge Registry — Fase 9.2
+
+### Objectivo
+
+Dar ao Knowledge Engine o registo central de `KnowledgeRecord` (admissão
+por id único, duplicações rejeitadas), seguindo o padrão dos registos das
+Fases 4–8, sem I/O, indexação ou persistência.
+
+### Realizado
+
+- `src/wsai2/knowledge/registry.py` (novo): `KnowledgeRegistry` —
+  catálogo com `register` (unicidade de id, `wsai.knowledge.duplicate`),
+  `unregister`/`get`/`has`/`all`/`len` e `supported_contract_version`
+  (ancorado a `KNOWLEDGE_CONTRACT_VERSION = "1.0"`);
+- `src/wsai2/knowledge/__init__.py` — exporta `KnowledgeRegistry`;
+- `tests/test_knowledge_registry.py` (novo, **8 testes**) — admissão,
+  duplicação, consultas, ordem, remoção e tipos distintos;
+- `tests/test_architecture_contract.py` — nova aresta `FRONTEIRAS`:
+  `("knowledge", "core")` (justificação documental em BASE-38);
+- `ARCHITECTURE.md` — secção 3.9 actualizada com o registo;
+- `docs/knowledge/BASE-38-knowledge-registry.md` — relatório da base.
+
+### Arquitectura abrangida
+
+Fase 9 — Knowledge Engine (subsistema 3.9). `knowledge` consume a
+taxonomia `wsai2.core.errors` (`ValidationError`), padrão de todos os
+registos das Fases 4–8; aresta nova autorizada `knowledge→core`, para
+dentro, sem ciclos. Nenhum módulo das Fases 1–9.1 foi alterado.
+
+### Validação
+
+```text
+py -3.12 -m pytest   →   441 passed (433 bases anteriores + 8 registo)
+```
+
+### Próximo passo
+
+Fase 9.3 — extracção de metadados: derivar `KnowledgeMetadata` a partir
+de conteúdo/fonte (idioma, etiquetas, proveniência), preparando a
+indexação. Semântica via Model/Provider fica para unidade posterior com
+decisão própria.
+
+---
+
 ## 2026-09-09 — Knowledge Contract — Fase 9.1
 
 ### Objectivo
