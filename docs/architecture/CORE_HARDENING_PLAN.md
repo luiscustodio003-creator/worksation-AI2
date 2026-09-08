@@ -124,6 +124,15 @@ Provider / Model Runtime
 Execution Result
 ```
 
+> **Estado: IMPLEMENTADO na Fase 8.5.** `wsai2.runtime_engine` com
+> `RuntimeManager` (executa o `ExecutionPlan` do Task Intelligence como
+> unidade de políticas — `execute_with_policies` da 8.4 + `ResourceGovernor`
+> da 8.3 — devolvendo `ExecutionReport` por passo) e `Scheduler`
+> (agendamento determinístico por prioridade com `stop_on_failure`).
+> Concorrência entre planos, filas multicamadas e monitorização contínua
+> ficam para unidades posteriores; o passo concreto (contacto
+> modelo/fornecedor) é um `step_runner` injectado.
+
 ## Hardening 08 — Versioning / Compatibility
 
 Introduzir apenas as versões necessárias para Core/API/Capability/Provider/Extension contracts e rejeitar incompatibilidades antes da execução.

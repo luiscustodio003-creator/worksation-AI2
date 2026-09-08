@@ -10,19 +10,19 @@
 
 ## Estado da fase
 
-EM CURSO (Fase 8.1, 8.2, 8.3 e 8.4 concluídas)
+EM CURSO (Fase 8.1, 8.2, 8.3, 8.4 e 8.5 concluídas)
 
 ## Base actual
 
-Fase 8.4 — Execution Policies **CONCLUÍDA**: subsistema `wsai2.execution` com políticas centrais de timeout (`TimeoutPolicy`+`DeadlineGuard`+`run_with_timeout`), cancelamento cooperativo (checkpoints sobre `ExecutionContext`/`CancellationToken`) e recuperação (`RecoveryPolicy`+`run_with_recovery`), compostas em `execute_with_policies` com reserva/libertação de recursos no `ResourceGovernor`.
+Fase 8.5 — Runtime Engine **CONCLUÍDA**: subsistema `wsai2.runtime_engine` com `RuntimeManager` (consome o `ExecutionPlan` da Fase 7, executa-o com `execute_with_policies` da 8.4 e a governação de recursos da 8.3, devolvendo um `ExecutionReport` com observabilidade por passo) e `Scheduler` (agendamento determinístico por prioridade, estável, com relatório agregado).
 
 ## Última unidade concluída
 
-Fase 8.4 — Execution Policies: política de timeout com deadline efectiva = a mais curta (política vs contexto), guard monotónico injectável e thread worker daemon; checkpoints de cancelamento/deadline; retry opt-in com backoff e último erro preservado; `execute_with_policies` compõe checkpoint→timeout→recuperação→orçamento (libertação em `finally`).
+Fase 8.5 — Runtime Engine: `RuntimeManager` valida a executabilidade do plano, constrói o contexto por omissão, executa o plano como unidade de políticas (checkpoint → timeout → recuperação → orçamento) e devolve `ExecutionReport` mesmo em falha (estado global + `StepOutcome` por passo, com `SKIPPED` após a primeira falha e erros normalizados na taxonomia 8.2); `Scheduler` ordena por prioridade (crítica→baixa, estável) e suporta `stop_on_failure`.
 
 ## Próxima unidade
 
-Iniciar a **Fase 8.5 — Runtime Manager + Scheduler**: consumir o `ExecutionPlan` (Fase 7), lançar execuções com `execute_with_policies`, gerir filas, prioridades e o ciclo de vida das execuções — passo que introduz uma decisão arquitectural material (gestor central de execução) e requer planeamento dedicado.
+Iniciar a **Fase 8.6 — Lifecycle + Compatibility** (hardening 02 e 08): auditá-la e evoluir `wsai2.extension.lifecycle` existente, amarrando o estado de execução das extensões (`ExtensionLifecycleState` da 8.1) ao `RuntimeStatus` do registo (8.1) e adicionando versioning/compatibilidade de contratos antes da execução. Concorrência entre planos, filas multicamadas e monitorização contínua permanecem para unidades posteriores.
 
 ## Subsistemas funcionais implementados:
 
@@ -36,7 +36,7 @@ Iniciar a **Fase 8.5 — Runtime Manager + Scheduler**: consumir o `ExecutionPla
 - Extension Contract (contrato mínimo declarativo de extensões — Fase 8.1)
 - Execution Context + Error Model (camada transversal `wsai2.core` — Fase 8.2)
 - Resource Governance (governador de orçamento e accounting `wsai2.resource` — Fase 8.3)
-- Execution Policies (timeout, cancelamento cooperativo e recuperação `wsai2.execution` — Fase 8.4)
+- Runtime Engine (gestor de execução e scheduler `wsai2.runtime_engine` — Fase 8.5)
 
 ## Desenvolvimento controlado
 
@@ -63,7 +63,7 @@ Base de testes configurada com `pytest`. Executar:
 py -3.12 -m pytest -v
 ```
 
-Baseline registada: 292 testes aprovados (3 fundação + 5 platform + 17 hardware + 24 runtime + 33 capability + 42 model + 46 provider + 39 task + 12 extension + 22 core + 21 resource + 28 execution).
+Baseline registada: 314 testes aprovados (3 fundação + 5 platform + 17 hardware + 24 runtime + 33 capability + 42 model + 46 provider + 39 task + 12 extension + 22 core + 21 resource + 28 execution + 22 runtime_engine).
 
 ## Estado da arquitectura
 
@@ -76,7 +76,7 @@ Capability Engine      ██████████ 100%
 Model Intelligence     ██████████ 100%
 Provider Layer         ██████████ 100%
 Task Intelligence      ██████████ 100%
-Runtime Engine         ░░░░░░░░░░ 0%
+Runtime Engine         █████░░░░░ 50%
 Knowledge Engine       ░░░░░░░░░░ 0%
 API                    ░░░░░░░░░░ 0%
 UI                     ░░░░░░░░░░ 0%
@@ -84,8 +84,8 @@ UI                     ░░░░░░░░░░ 0%
 
 ## Estado Git
 
-Repositório remoto inicializado. A Fase 8 avançou nas unidades 8.1 (Extension Contract), 8.2 (Execution Context + Error Model), 8.3 (Resource Governance) e 8.4 (Execution Policies), aditivas e reversíveis. A próxima unidade (8.5) introduz o gestor de execução e o scheduler — decisão arquitectural material a planear dedicadamente.
+Repositório remoto inicializado. A Fase 8 avançou nas unidades 8.1 (Extension Contract), 8.2 (Execution Context + Error Model), 8.3 (Resource Governance), 8.4 (Execution Policies) e 8.5 (Runtime Engine), aditivas e reversíveis. A próxima unidade (8.6) trata domínio de lifecycle e compatibilidade, já esboçado na 8.1/8.2.
 
 ## Regra de continuação
 
-A próxima execução deve ler este ficheiro antes de seleccionar trabalho novo. A próxima unidade da Fase 8 é a **Fase 8.5 — Runtime Manager + Scheduler**.
+A próxima execução deve ler este ficheiro antes de seleccionar trabalho novo. A próxima unidade da Fase 8 é a **Fase 8.6 — Lifecycle + Compatibility**.

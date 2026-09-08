@@ -1,5 +1,69 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-08 — Runtime Engine — Fase 8.5
+
+### Objectivo
+
+Fechar o hardening 07 do CORE_HARDENING_PLAN: o Runtime Engine consome o
+`ExecutionPlan` (Fase 7) e executa-o com as políticas centralizadas (8.4)
+e a governação de recursos (8.3), produzindo um Execution Result com
+observabilidade; e agenda múltiplos planos por prioridade de forma
+determinística. Unidade puramente aditiva sobre 8.1–8.4.
+
+### Criado
+
+- `src/wsai2/runtime_engine/base.py`
+- `src/wsai2/runtime_engine/manager.py`
+- `src/wsai2/runtime_engine/scheduler.py`
+- `src/wsai2/runtime_engine/__init__.py`
+- `tests/test_runtime_engine.py`
+- `docs/runtime_engine/BASE-29-runtime-engine.md`
+
+### Arquitectura abrangida
+
+Fase 8 — Runtime Engine. Subsistema 3.8 da arquitectura.
+`wsai2.runtime_engine` consome `wsai2.task` (`ExecutionPlan`),
+`wsai2.execution` (`execute_with_policies`, 8.4), `wsai2.resource`
+(`ResourceGovernor`, 8.3, injectado) e `wsai2.core` (contexto, prioridade,
+erros). Nomenclatura `runtime_engine` distingue-se de `wsai2.runtime`
+(Runtime Intelligence, Fase 3 — medição). Decisões registadas: o plano é
+a unidade de políticas e o passo a unidade de observação; recuperação por
+plano inteiro (registo limpo por tentativa); `step_runner` injectado
+(opaco, sem conhecimento de fornecedores); erros normalizados na
+taxonomia 8.2 (`wsai.execution.not_executable`,
+`wsai.execution.step_failed`, `wsai.execution.task_mismatch`); o gestor
+devolve relatório mesmo em falha; scheduler sequencial determinístico com
+ordenação estável por prioridade.
+
+### Resultado
+
+`RuntimeManager.execute_plan` valida o plano e a coerência do contexto,
+constrói o contexto por omissão, executa o plano com
+`execute_with_policies` e devolve `ExecutionReport` (estados
+SUCCESS/FAILED/CANCELLED/TIMEOUT, `StepOutcome` por passo com `SKIPPED`
+após a primeira falha, erro taxonómico, duração). `Scheduler.run` ordena
+por prioridade (CRITICAL > HIGH > NORMAL > LOW, estável) e devolve
+`SchedulerReport` (contagens, ordem efectiva, duração), com
+`stop_on_failure` opcional. Alteração 100% aditiva — os 292 testes da base
+permanecem aprovados.
+
+### Validação
+
+```text
+py -3.12 -m pytest -v   →   314 passed (3 fundação + 5 platform + 17 hardware + 24 runtime + 33 capability + 42 model + 46 provider + 39 task + 12 extension + 22 core + 21 resource + 28 execution + 22 runtime_engine)
+```
+
+### Próximo passo
+
+Fase 8.6 — Lifecycle + Compatibility (hardening 02 e 08): evoluir
+`wsai2.extension.lifecycle` existente, amarrar o estado de execução das
+extensões ao `RuntimeStatus` do registo (8.1) e adicionar
+versioning/compatibilidade de contratos antes da execução. Concorrência
+entre planos, filas multicamadas e monitorização contínua ficam para
+unidades posteriores (fora do âmbito da 8.5).
+
+---
+
 ## 2026-09-08 — Execution Policies — Fase 8.4
 
 ### Objectivo
