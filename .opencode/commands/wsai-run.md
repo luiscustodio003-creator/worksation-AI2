@@ -32,13 +32,11 @@ No início da execução e sempre que houver mudança de fase ou etapa relevante
 ╚══════════════════════════════════════════════════╝
 ```
 
-Durante operações demoradas, actualizar o progresso em pontos significativos (por exemplo: início/fim de implementação, testes, correcção, documentação e Git). **Não** produzir mensagens a cada comando trivial nem inundar o terminal; o objectivo é manter orientação contínua sem ruído.
+Durante operações demoradas, actualizar o progresso em pontos significativos. Não produzir mensagens a cada comando trivial.
 
 A visibilidade de progresso é obrigatória mesmo quando a unidade é executada autonomamente e mesmo quando a próxima fase já está determinada. O relatório final continua a usar a estrutura da FASE I.
 
-O progresso mostrado deve reflectir o estado real e nunca inventar percentagens. Se uma etapa ainda não puder ser quantificada, usar `EM EXECUÇÃO` em vez de uma percentagem falsa.
-
-> Nota: este requisito garante progresso visível no fluxo do agente. A disposição exacta de painéis laterais é controlada pela interface do OpenCode e não pelo ficheiro de comando.
+O progresso mostrado deve reflectir o estado real e nunca inventar percentagens. Se uma etapa ainda não puder ser quantificada, usar `EM EXECUÇÃO`.
 
 ## FAMÍLIA DE COMANDOS WSAI
 
@@ -54,9 +52,24 @@ O progresso mostrado deve reflectir o estado real e nunca inventar percentagens.
 /wsai-git
 ```
 
-Quando `/wsai-run` executa autonomamente, deve seguir as mesmas regras e critérios definidos para essa família. Não deve saltar a auditoria de responsabilidades existentes só porque a próxima unidade aparece no estado persistente.
+Quando `/wsai-run` executa autonomamente, deve seguir as mesmas regras e critérios definidos para essa família.
 
-`/wsai-validate` é um gate de consolidação e não substitui a validação normal de cada unidade. Quando a documentação do projecto definir um marco formal de validação — por exemplo, após concluir os núcleos fundamentais — o `/wsai-run` deve respeitar esse gate e não avançar para uma nova camada bloqueada antes de existir uma decisão de aprovação ou um plano de correcção.
+## AUTORIDADE DE EXECUÇÃO E APROVAÇÃO
+
+`/wsai-run` é responsável por executar o ciclo quando a unidade já está autorizada pelo `PROJECT_STATE.md`/`ROADMAP.md` e não existe uma nova decisão arquitectural material.
+
+Uma saída `READY TO IMPLEMENT` de `/wsai-plan` é suficiente para o `/wsai-run` prosseguir quando:
+
+- a unidade já está prevista no estado/roadmap;
+- o plano não introduz uma decisão arquitectural material;
+- não existe P0/P1/P2 funcional que exija redefinição do âmbito;
+- a implementação é reversível e verificável.
+
+**Não solicitar aprovação humana adicional para um plano interno que cumpra estes critérios.**
+
+Se `/wsai-validate` devolver `NOT APPROVED` por uma lacuna **documental ou processual P2** que seja inequívoca, localizada e sem impacto funcional/arquitectural, `/wsai-run` deve tratar essa lacuna como uma unidade correctiva do mesmo gate: planear, corrigir, testar quando aplicável, revalidar e continuar. Não deve ficar preso num ciclo de aprovação humana.
+
+Só uma decisão arquitectural material, mudança de requisitos fundamentais, risco de perda de dados, conflito Git não resolvível ou falha técnica sem solução segura constitui motivo para pedir intervenção humana.
 
 ## Entrada
 
@@ -74,14 +87,13 @@ Depois de determinar a próxima unidade lógica em `PROJECT_STATE.md`/`ROADMAP.m
 
 **NÃO deve parar apenas porque conseguiu identificar ou apresentar a "PRÓXIMA UNIDADE".**
 
-O texto "PRÓXIMA UNIDADE" é informação para o processo interno e/ou para o relatório final; não é um ponto de paragem.
-
 O ciclo só pode terminar quando ocorrer uma destas condições:
 
 1. a unidade foi concluída, validada, documentada e sincronizada;
 2. existe uma falha técnica real que não pode ser resolvida autonomamente com segurança;
 3. existe conflito/divergência Git que não pode ser resolvido com segurança;
-4. é necessária uma decisão arquitectural nova e material que não esteja definida na documentação existente.
+4. é necessária uma decisão arquitectural nova e material que não esteja definida na documentação existente;
+5. existe alteração de requisitos fundamentais ou risco significativo que exija decisão humana.
 
 Uma unidade claramente definida no estado persistente **não requer confirmação do utilizador para começar**.
 
@@ -99,9 +111,7 @@ Inspeccionar:
 8. estado Git;
 9. testes existentes.
 
-Se a estrutura mínima ainda não existir, inicializar apenas a unidade necessária para continuar a Fase 0.
-
-Apresentar o primeiro bloco `WSAI 2 — PROGRESSO` depois de identificar o contexto inicial e actualizar esse bloco quando a execução avançar de forma relevante.
+Apresentar o primeiro bloco `WSAI 2 — PROGRESSO` depois de identificar o contexto inicial.
 
 ## FASE B — SINCRONIZAÇÃO
 
@@ -118,8 +128,6 @@ git fetch --all --prune
 
 Não sobrescrever alterações locais ou remotas sem compreender a situação.
 
-Se existir conflito ou divergência que não possa ser resolvida com segurança, parar e reportar.
-
 ## FASE C — DETERMINAÇÃO DA PRÓXIMA UNIDADE
 
 A decisão deve basear-se em:
@@ -135,43 +143,23 @@ Nunca seleccionar uma unidade que dependa de uma base ainda inexistente.
 
 Depois de determinar a unidade, **a execução deve prosseguir imediatamente para a FASE D**. Não produzir um relatório final nesta fase.
 
-### Exemplo obrigatório de continuidade
+### Regra de transição de gate
 
-Se `PROJECT_STATE.md` indicar:
-
-```text
-Fase 5 — Model Intelligence
-Última unidade: registo, metadados e requisitos
-Próxima unidade: compatibilidade
-```
-
-`/wsai-run` deve interpretar isso como:
+Quando uma fase formal for aprovada, a transição é determinística:
 
 ```text
-DETERMINADA → Fase 5 / Compatibilidade
+FOUNDATION APPROVED
 ↓
-PLANEAR
+actualizar PROJECT_STATE.md
 ↓
-IMPLEMENTAR
+consultar ROADMAP.md
 ↓
-TESTAR
+determinar próxima unidade
 ↓
-DOCUMENTAR
-↓
-GIT
-↓
-ACTUALIZAR ESTADO
-↓
-RESULTADO
+executar automaticamente a próxima unidade
 ```
 
-e **não** como:
-
-```text
-DETERMINADA → Fase 5 / Compatibilidade
-↓
-PARAR
-```
+`APPROVED`, `APPROVED WITH WARNINGS` e uma decisão de fecho de fase documentada **não são pedidos de confirmação ao utilizador**. São estados de governação consumidos pelo orquestrador.
 
 ## FASE D — PLANEAMENTO INTERNO
 
@@ -185,25 +173,15 @@ Antes de modificar código, identificar:
 - documentação;
 - riscos.
 
-Manter o planeamento proporcional à dimensão da unidade.
-
 O planeamento é interno e serve para iniciar a execução. Não deve ser tratado como resultado final nem como motivo para parar.
+
+Se a unidade for apenas uma correcção documental/processual necessária para fechar um gate, o plano deve permanecer mínimo e não criar componentes funcionais.
 
 ## FASE E — IMPLEMENTAÇÃO
 
-Implementar de acordo com:
+Implementar de acordo com `AGENTS.md`, constituição arquitectural, skill `wsai-development`, responsabilidade única e compatibilidade Windows/Linux quando aplicável.
 
-- `AGENTS.md`;
-- constituição arquitectural;
-- skill `wsai-development`;
-- responsabilidade única;
-- compatibilidade Windows/Linux quando aplicável.
-
-O código deve possuir documentação técnica detalhada e comentários úteis em português de Portugal.
-
-Não criar uma estrutura artificialmente complexa.
-
-Antes de criar uma nova responsabilidade, verificar se já existe uma implementação equivalente. Se existir, integrar ou evoluir essa implementação em vez de duplicá-la.
+Não criar uma estrutura artificialmente complexa. Antes de criar uma nova responsabilidade, verificar se já existe uma implementação equivalente.
 
 Se durante a implementação forem encontrados problemas menores e solucionáveis sem alterar a arquitectura, corrigi-los autonomamente e continuar.
 
@@ -213,13 +191,9 @@ Actualizar o bloco de progresso ao entrar na implementação e ao terminar uma a
 
 Executar os testes aplicáveis.
 
-Se a base de testes ainda não existir, criar primeiro a configuração mínima necessária e validar essa fundação.
-
-Não declarar sucesso quando existirem falhas ignoradas.
-
 Se existirem falhas corrigíveis relacionadas com a unidade, **DEVE tentar corrigi-las e voltar a executar a validação** antes de terminar.
 
-Só parar por falha quando a continuação segura deixar de ser possível.
+Se um gate formal devolver `NOT APPROVED`, classificar cada bloqueio. P0/P1, decisão arquitectural material ou ambiguidade de requisitos interrompem o ciclo. P2 documental/processual inequívoco deve regressar ao ciclo correctivo e ser resolvido autonomamente quando estiver dentro do âmbito já autorizado.
 
 Actualizar o bloco de progresso ao iniciar os testes, ao corrigir falhas e ao concluir a validação.
 
@@ -232,15 +206,7 @@ Actualizar, conforme aplicável:
 - `IMPLEMENTATION_LOG.md`;
 - relatório específico da base concluída.
 
-O relatório deve explicar:
-
-- o que foi feito;
-- onde se encaixa na arquitectura;
-- para que serve;
-- dependências;
-- testes;
-- estado da fase;
-- próximo passo.
+O relatório deve explicar o que foi feito, enquadramento arquitectural, dependências, testes, estado da fase e próximo passo.
 
 **`PROJECT_STATE.md` deve ser actualizado para reflectir a unidade realmente concluída antes do relatório final.**
 
@@ -255,13 +221,9 @@ Depois da validação:
 5. efectuar push para o remoto quando as credenciais e o ambiente o permitirem;
 6. verificar novamente o estado.
 
-Nunca esconder uma falha de sincronização. Reportar claramente se o push não foi possível.
-
-Actualizar o bloco de progresso antes e depois da sincronização Git.
+Nunca esconder uma falha de sincronização.
 
 ## FASE I — RESULTADO FINAL
-
-Apresentar apenas progresso relevante durante a execução.
 
 No final produzir:
 
@@ -285,14 +247,12 @@ PRÓXIMA UNIDADE
 ...
 ```
 
-A secção `PRÓXIMA UNIDADE` deve ser calculada **depois** de actualizar `PROJECT_STATE.md`. Ela serve para informar qual será o próximo trabalho, não para interromper a unidade actual.
+A secção `PRÓXIMA UNIDADE` é calculada **depois** de actualizar `PROJECT_STATE.md`. Serve para informar e orientar a continuação do ciclo.
 
 ## REGRA DE CONTINUIDADE ENTRE UNIDADES
 
-Depois de concluir, validar, documentar e sincronizar uma unidade, o agente deve avaliar se existe uma próxima unidade claramente definida e directamente dependente da anterior.
+Depois de concluir, validar, documentar e sincronizar uma unidade, o agente deve avaliar a próxima unidade.
 
-Se a próxima unidade for pequena, bem especificada e não introduzir uma decisão arquitectural de grande impacto, **pode continuar automaticamente no mesmo `/wsai-run`**.
+Se estiver claramente definida, directamente dependente, pequena ou suficientemente especificada e não introduzir decisão arquitectural material, **DEVE continuar automaticamente no mesmo `/wsai-run`**, em vez de terminar apenas com "PRÓXIMA UNIDADE".
 
 Se a próxima unidade introduzir uma decisão arquitectural material, deve concluir a unidade actual, actualizar toda a documentação e parar com um relatório claro indicando a decisão necessária.
-
-A regra de continuidade entre unidades **não substitui** a regra fundamental: a unidade já determinada no início desta execução deve ser executada; nunca deve ser apenas identificada e apresentada.
