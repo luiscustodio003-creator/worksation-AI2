@@ -84,6 +84,15 @@ Evoluir a gestão de memória existente para governação de recursos, sem dupli
 - contexto/KV cache quando aplicável;
 - tempo de execução.
 
+> **Estado: IMPLEMENTADO na Fase 8.3.** `wsai2.resource` com
+> `ResourceGovernor`: normalização por dimensão (RAM, CPU, VRAM, disco),
+> validação de folga (`required <= min(capacity, available_now) −
+> committed`) e accounting por instância (`allocate`/`release`).
+> Dimensões sem leitura de runtime (VRAM em uso, espaço livre de disco)
+> governadas pela capacidade estrutural. Nomes não reconhecidos →
+> `UNRECOGNIZED`. Gestão de tempo (8.4) e scheduling (8.5) permanecem em
+> unidades posteriores.
+
 ## Hardening 06 — Timeout / Cancellation / Recovery
 
 Centralizar políticas no Runtime Engine. Addons não devem inventar mecanismos incompatíveis.

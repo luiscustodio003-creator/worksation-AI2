@@ -10,19 +10,19 @@
 
 ## Estado da fase
 
-EM CURSO (Fase 8.1 e 8.2 concluídas)
+EM CURSO (Fase 8.1, 8.2 e 8.3 concluídas)
 
 ## Base actual
 
-Fase 8.2 — Execution Context + Error Model **CONCLUÍDA**: camada transversal `wsai2.core` com a taxonomia unificada de erros (10 categorias) e o `ExecutionContext` (execution_id, task_id, project_id, deadline, cancellation token cooperativo, budget, prioridade).
+Fase 8.3 — Resource Governance **CONCLUÍDA**: subsistema `wsai2.resource` com `ResourceGovernor` que normaliza limites declarativos (`ResourceLimit`), valida a folga efectiva contra os perfis de hardware e runtime e contabiliza alocações/reservas (accounting), sem duplicar a medição existente.
 
 ## Última unidade concluída
 
-Fase 8.2 — Execution Context + Error Model: taxonomia transversal (`WsaiError` + 10 categorias) e `ExecutionContext` com `CancellationToken` cooperativo e `ExecutionPriority`; núcleo folha em runtime (`TYPE_CHECKING` para `ResourceLimit` da 8.1).
+Fase 8.3 — Resource Governance: subsistema `wsai2.resource` com normalização por dimensão (RAM, CPU, VRAM, disco), validação `required <= min(capacity, available_now) − committed`, veredictos por dimensão (`AVAILABLE`/`UNAVAILABLE`/`UNRECOGNIZED`) e accounting por instância (`allocate`/`release`, `outstanding`, `committed_for`), reutilizando `ResourceError` da taxaonomia 8.2.
 
 ## Próxima unidade
 
-Iniciar a **Fase 8.3 — Resource Governance**: evoluir a gestão de memória existente (Runtime Intelligence) para governação de recursos (CPU, RAM, GPU/VRAM, armazenamento/I/O, tempo), sem duplicar mecanismos.
+Iniciar a **Fase 8.4 — Timeout + Cancellation + Recovery**: centralizar no Runtime Engine as políticas de limite temporal, cancelamento efectivo e recuperação, sobre o `ExecutionContext` e o modelo de erros já existentes.
 
 ## Subsistemas funcionais implementados:
 
@@ -35,6 +35,7 @@ Iniciar a **Fase 8.3 — Resource Governance**: evoluir a gestão de memória ex
 - Task Intelligence (contrato, classificação, requisitos, selecção de capacidades, plano de execução)
 - Extension Contract (contrato mínimo declarativo de extensões — Fase 8.1)
 - Execution Context + Error Model (camada transversal `wsai2.core` — Fase 8.2)
+- Resource Governance (governador de orçamento e accounting `wsai2.resource` — Fase 8.3)
 
 ## Desenvolvimento controlado
 
@@ -61,7 +62,7 @@ Base de testes configurada com `pytest`. Executar:
 py -3.12 -m pytest -v
 ```
 
-Baseline registada: 243 testes aprovados (3 fundação + 5 platform + 17 hardware + 24 runtime + 33 capability + 42 model + 46 provider + 39 task + 12 extension + 22 core).
+Baseline registada: 264 testes aprovados (3 fundação + 5 platform + 17 hardware + 24 runtime + 33 capability + 42 model + 46 provider + 39 task + 12 extension + 22 core + 21 resource).
 
 ## Estado da arquitectura
 
@@ -82,8 +83,8 @@ UI                     ░░░░░░░░░░ 0%
 
 ## Estado Git
 
-Repositório remoto inicializado. A Fase 8 avançou nas unidades 8.1 (Extension Contract) e 8.2 (Execution Context + Error Model), aditivas e reversíveis. A próxima unidade (8.3) é preparada de forma controlada antes de integrar novas responsabilidades de execução.
+Repositório remoto inicializado. A Fase 8 avançou nas unidades 8.1 (Extension Contract), 8.2 (Execution Context + Error Model) e 8.3 (Resource Governance), aditivas e reversíveis. A próxima unidade (8.4) é preparada de forma controlada antes de integrar as políticas de timeout/cancelamento/recuperação.
 
 ## Regra de continuação
 
-A próxima execução deve ler este ficheiro antes de seleccionar trabalho novo. A próxima unidade da Fase 8 é a **Fase 8.3 — Resource Governance**.
+A próxima execução deve ler este ficheiro antes de seleccionar trabalho novo. A próxima unidade da Fase 8 é a **Fase 8.4 — Timeout + Cancellation + Recovery**.

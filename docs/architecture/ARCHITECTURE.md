@@ -126,6 +126,6 @@ Resultado
 
 ## 7. Estado actual da arquitectura
 
-As fases Platform Foundation, Hardware Intelligence, Runtime Intelligence, Capability Engine, Model Intelligence, Provider Layer e Task Intelligence encontram-se concluídas. A **Fase 8 — Runtime Engine** está em curso: concluídas as unidades 8.1 (Extension Contract, contrato mínimo declarativo de extensões) e 8.2 (Execution Context + Error Model, camada transversal `wsai2.core`).
+As fases Platform Foundation, Hardware Intelligence, Runtime Intelligence, Capability Engine, Model Intelligence, Provider Layer e Task Intelligence encontram-se concluídas. A **Fase 8 — Runtime Engine** está em curso: concluídas as unidades 8.1 (Extension Contract, contrato mínimo declarativo de extensões), 8.2 (Execution Context + Error Model, camada transversal `wsai2.core`) e 8.3 (Resource Governance, subsistema `wsai2.resource` com governador de orçamento e accounting de recursos).
 
 A fonte de verdade para o progresso e a próxima unidade é `docs/project/PROJECT_STATE.md`.

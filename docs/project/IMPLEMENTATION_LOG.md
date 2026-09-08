@@ -1,5 +1,56 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-08 — Resource Governance — Fase 8.3
+
+### Objectivo
+
+Evoluir a gestão de memória existente para governação de recursos
+(hardening 05 do CORE_HARDENING_PLAN): normalizar limites declarativos
+(`ResourceLimit`), validar folga efectiva contra os perfis de hardware e
+runtime e contabilizar alocações/reservas (accounting) — sem duplicar
+mecanismos de medição das Fases 2/3.
+
+### Criado
+
+- `src/wsai2/resource/base.py`
+- `src/wsai2/resource/governor.py`
+- `src/wsai2/resource/__init__.py`
+- `tests/test_resource_governor.py`
+- `docs/resource/BASE-27-resource-governance.md`
+
+### Arquitectura abrangida
+
+Fase 8 — Runtime Engine. Subsistema 3.8 da arquitectura.
+`wsai2.resource` é um subsistema folha que consome os perfis existentes
+(`HardwareProfile`, `RuntimeProfile`), a taxonomia `wsai2.core.errors`
+(`ResourceError`) e o contrato `ResourceLimit` (8.1, por `TYPE_CHECKING`).
+Distinção mantida: `capacity` estrutural vs `available_now` de runtime;
+VRAM em uso e espaço livre de disco sem leitura runtime — governados pela
+capacidade estrutural (limitação documentada). Dimensões desconhecidas →
+`UNRECOGNIZED` explícito, nunca silêncio. Accounting por instância, sem
+estado global; `release` idempotente.
+
+### Resultado
+
+`ResourceGovernor` com `evaluate` (consulta), `allocate`/`release`
+(reserva e libertação), `outstanding` e `committed_for`. Códigos de erro
+`wsai.resource.insufficient|duplicate|unknown`. Alteração 100% aditiva —
+os 243 testes da base permanecem aprovados.
+
+### Validação
+
+```text
+py -3.12 -m pytest -v   →   264 passed (3 fundação + 5 platform + 17 hardware + 24 runtime + 33 capability + 42 model + 46 provider + 39 task + 12 extension + 22 core + 21 resource)
+```
+
+### Próximo passo
+
+Fase 8.4 — Timeout + Cancellation + Recovery (políticas de limite
+temporal, cancelamento efectivo e recuperação sobre o `ExecutionContext`
+e o modelo de erros existentes).
+
+---
+
 ## 2026-09-08 — Execution Context + Error Model — Fase 8.2
 
 ### Objectivo
