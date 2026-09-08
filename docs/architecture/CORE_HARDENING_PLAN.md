@@ -31,6 +31,11 @@ Definir o contrato mínimo comum para extensões/addons: identidade, versão, ve
 
 Não criar um Plugin Manager pesado sem necessidade. O contrato deve integrar-se com Capability Engine, Provider Layer e Runtime Engine.
 
+> **Estado: IMPLEMENTADO na Fase 8.1** (passo 8.1 da ordem recomendada).
+> `src/wsai2/extension/base.py` (ExtensionContract, ExtensionKind,
+> ExtensionLifecycleState, ResourceLimit), imutável e validado à criação.
+> Registo, gestão e lifecycle de execução permanecem em unidades posteriores.
+
 ## Hardening 02 — Lifecycle
 
 Estados previstos:

@@ -1,5 +1,51 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-08 — Extension Contract — Fase 8.1
+
+### Objectivo
+
+Definir o contrato mínimo declarativo para extensões (addons) do
+WorkStation AI 2, iniciando a Fase 8 — Runtime Engine conforme o
+CORE_HARDENING_PLAN (hardening 01). Unidade puramente declarativa, sem
+lógica de execução, registo ou scheduler.
+
+### Criado
+
+- `src/wsai2/extension/base.py`
+- `src/wsai2/extension/__init__.py`
+- `tests/test_extension.py`
+- `docs/extension/BASE-25-extension-contract.md`
+
+### Arquitectura abrangida
+
+Fase 8 — Runtime Engine. Subsistema 3.8 da arquitectura.
+`ExtensionContract` declara identidade, versões (do contrato e da
+extensão), tipo funcional (`ExtensionKind`), capacidades, dependências,
+recursos, permissões e lifecycle (`ExtensionLifecycleState`, sequência do
+hardening 02). O módulo é folha: depende apenas de stdlib e não acopla à
+Capability/Provider/Model Intelligence (constituição, artigos 2 e 8).
+
+### Resultado
+
+Contrato imutável (`frozen`) validado à criação; enums de tipo
+(analyst/code/agent/github_tool/mcp/utility) e de lifecycle (10 estados);
+`ResourceLimit` declarativo. Os 209 testes da base permanecem intactos —
+a alteração é aditiva, sem tocar em módulos das Fases 1–7.
+
+### Validação
+
+```text
+py -3.12 -m pytest -v   →   221 passed (3 fundação + 5 platform + 17 hardware + 24 runtime + 33 capability + 42 model + 46 provider + 39 task + 12 extension)
+```
+
+### Próximo passo
+
+Fase 8.2 — Execution Context + Error Model (transporte de execution_id,
+task_id, deadline, cancellation, resource budget, prioridade; taxonomia
+de erros transversal).
+
+---
+
 ## 2026-09-08 — Task Intelligence (plano de execução) — Fase 7
 
 ### Objectivo
