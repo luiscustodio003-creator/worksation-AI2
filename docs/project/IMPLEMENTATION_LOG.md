@@ -1,5 +1,48 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-09 — Knowledge Metadata Extraction — Fase 9.3
+
+### Objectivo
+
+Derivar `KnowledgeMetadata` estruturado (idioma, etiquetas, proveniência)
+a partir do conteúdo/fonte de um `KnowledgeRecord`, de forma heurística e
+determinista, sem I/O, sem modelos e sem decisão arquitectural material.
+
+### Realizado
+
+- `src/wsai2/knowledge/metadata.py` (novo): `KnowledgeMetadataExtractor`
+  (completa idioma e etiquetas em falta; preserva `source`/`author`/
+  `extras`), `detect_language` (marcadores por idioma, `"und"` no
+  indeciso) e `derive_tags` (termos frequentes, excluindo palavras de
+  ligação, respeitando limite);
+- `src/wsai2/knowledge/__init__.py` — exporta `KnowledgeMetadataExtractor`,
+  `detect_language` e `derive_tags`;
+- `tests/test_knowledge_metadata.py` (novo, **14 testes**);
+- `ARCHITECTURE.md` — secção 3.9 actualizada com a extracção;
+- `docs/knowledge/BASE-39-knowledge-metadata-extraction.md` — relatório
+  da base.
+
+### Arquitectura abrangida
+
+Fase 9 — Knowledge Engine (subsistema 3.9). `metadata.py` depende apenas
+de `knowledge.base`; **nenhuma aresta nova** em `FRONTEIRAS`. Não foi
+abordada extracção semântica via Model/Provider nem indexação — ficam
+para unidades posteriores com decisão própria.
+
+### Validação
+
+```text
+py -3.12 -m pytest   →   455 passed (441 anteriores + 14 extracção)
+```
+
+### Próximo passo
+
+Fase 9.4 — indexação: **exigirá decisão documentada** sobre estratégia de
+armazenamento/embeddings antes de qualquer persistência
+(`PROJECT_STATE.md`, regra de continuação). Paragem para decisão.
+
+---
+
 ## 2026-09-09 — Knowledge Registry — Fase 9.2
 
 ### Objectivo
