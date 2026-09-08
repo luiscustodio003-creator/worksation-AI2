@@ -49,11 +49,14 @@ O progresso mostrado deve reflectir o estado real e nunca inventar percentagens.
 /wsai-plan
 /wsai-implement
 /wsai-test
+/wsai-validate
 /wsai-doc
 /wsai-git
 ```
 
 Quando `/wsai-run` executa autonomamente, deve seguir as mesmas regras e critérios definidos para essa família. Não deve saltar a auditoria de responsabilidades existentes só porque a próxima unidade aparece no estado persistente.
+
+`/wsai-validate` é um gate de consolidação e não substitui a validação normal de cada unidade. Quando a documentação do projecto definir um marco formal de validação — por exemplo, após concluir os núcleos fundamentais — o `/wsai-run` deve respeitar esse gate e não avançar para uma nova camada bloqueada antes de existir uma decisão de aprovação ou um plano de correcção.
 
 ## Entrada
 
