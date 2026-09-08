@@ -73,7 +73,7 @@
 
 ## Fase 8 — Runtime Engine
 
-A Fase 8 começa pela **baseline e auditoria**, não por uma reescrita. O Runtime deve consumir o `ExecutionPlan` já produzido pelo Task Intelligence.
+A Fase 8 começou pela **baseline e auditoria**, não por uma reescrita. O Runtime consome o `ExecutionPlan` já produzido pelo Task Intelligence.
 
 ### Preparação e hardening controlado
 
@@ -89,7 +89,10 @@ A Fase 8 começa pela **baseline e auditoria**, não por uma reescrita. O Runtim
 - gestor de execução;
 - monitorização;
 - lifecycle e compatibilidade;
-- testes de contrato arquitectural.
+- testes de contrato arquitectural;
+- Security / Policy;
+- Project Isolation;
+- Gate — Core pronto para addons.
 
 ### Runtime funcional
 
@@ -99,9 +102,13 @@ A Fase 8 começa pela **baseline e auditoria**, não por uma reescrita. O Runtim
 - memória;
 - cancelamento;
 - timeout;
-- monitorização.
+- monitorização;
+- concorrência opcional entre planos;
+- filas multicamadas com prioridade, backlog e preempção de trabalho pendente.
 
-A ordem concreta das unidades é determinada pelo `PROJECT_STATE.md` e pelo plano de hardening, após auditoria de cada responsabilidade já existente.
+A ordem concreta das unidades e dos residuais é determinada pelo `PROJECT_STATE.md` e pelo plano de hardening, após auditoria de cada responsabilidade já existente.
+
+**Estado actual:** implementação funcional da Fase 8 concluída, incluindo os três residuais Via B (monitorização, concorrência e filas multicamadas). O fecho formal depende da validação final da fundação e do respectivo relatório persistente.
 
 ## Fase 9 — Knowledge Engine
 
@@ -111,6 +118,8 @@ A ordem concreta das unidades é determinada pelo `PROJECT_STATE.md` e pelo plan
 - indexação;
 - recuperação;
 - contexto.
+
+**Entrada condicionada:** só iniciar depois de a Fase 8 estar formalmente aprovada pelo `/wsai-validate foundation`.
 
 ## Fase 10 — API
 
@@ -137,6 +146,24 @@ A ordem concreta das unidades é determinada pelo `PROJECT_STATE.md` e pelo plan
 
 Cada fase será dividida em unidades pequenas e verificáveis. O comando `/wsai-run` executa autonomamente uma unidade já determinada, passando por pre-flight, planeamento, implementação, validação, documentação e Git.
 
-Os comandos `/wsai-audit`, `/wsai-plan`, `/wsai-implement`, `/wsai-test`, `/wsai-doc` e `/wsai-git` permitem executar essas etapas individualmente.
+Os comandos `/wsai-audit`, `/wsai-plan`, `/wsai-implement`, `/wsai-test`, `/wsai-validate`, `/wsai-doc` e `/wsai-git` permitem executar essas etapas individualmente.
 
 Nenhuma nova responsabilidade deve ser criada sem primeiro verificar se já existe um componente responsável. Alterações estruturais devem ser incrementais e reversíveis.
+
+### Regra de transição entre fases
+
+```text
+ROADMAP — fase macro
+      ↓
+PROJECT_STATE — unidade concreta / estado real
+      ↓
+Código + testes + documentação
+      ↓
+/wsai-validate foundation
+      ↓
+FOUNDATION APPROVED
+      ↓
+próxima fase
+```
+
+O Roadmap define as fases macro. O `PROJECT_STATE.md` define a unidade concreta e a ordem operacional dentro de uma fase. Esta separação evita que uma alteração incremental e previamente decidida dentro da Fase 8 seja confundida com avanço prematuro para a Fase 9.
