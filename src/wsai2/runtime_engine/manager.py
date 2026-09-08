@@ -39,6 +39,7 @@ from wsai2.core.errors import (
     WsaiError,
 )
 from wsai2.execution import execute_with_policies
+from wsai2.security import PolicyEngine, denied_decision
 from wsai2.task import ExecutionPlan
 
 from .base import ExecutionReport, ExecutionStatus, StepOutcome, StepRunner, StepStatus
@@ -46,6 +47,7 @@ from .base import ExecutionReport, ExecutionStatus, StepOutcome, StepRunner, Ste
 if TYPE_CHECKING:
     from wsai2.execution import RecoveryPolicy, TimeoutPolicy
     from wsai2.resource import ResourceGovernor
+    from wsai2.security import PolicyDecision
 
 
 def _passo_vazio(indice: int, passo: str) -> None:
@@ -108,6 +110,7 @@ class RuntimeManager:
         step_runner: StepRunner | None = None,
         timeout: TimeoutPolicy | None = None,
         recovery: RecoveryPolicy | None = None,
+        policy: PolicyEngine | None = None,
     ) -> ExecutionReport:
         """Executa um plano de execução e devolve o relatório.
 
@@ -119,16 +122,20 @@ class RuntimeManager:
                 omissão, sem operação.
             timeout: política de timeout adicional à deadline do contexto.
             recovery: política de recuperação (retry) do plano.
+            policy: motor de política (8.8) aplicado **antes do passo 1**;
+                sem motor, nenhuma autorização é aplicada (comportamento
+                preservado).
 
         Returns:
-            O relatório da execução, sempre (mesmo em falha, timeout ou
-            cancelamento — a inspecção usa ``report.status`` e
-            ``report.error``).
+            O relatório da execução, sempre (mesmo em falha, timeout,
+            cancelamento ou negação de política — a inspecção usa
+            ``report.status`` e ``report.error``).
 
         Raises:
             ExecutionError: se o plano não for executável.
-            ValidationError: se o argumento não for um plano ou o contexto
-                referir outra tarefa.
+            ValidationError: se o argumento não for um plano, o contexto
+                referir outra tarefa ou, com ``policy`` fornecida, faltar
+                principal/projecto no contexto.
         """
         if not isinstance(plan, ExecutionPlan):
             raise ValidationError(
@@ -156,7 +163,39 @@ class RuntimeManager:
         passos: list[StepOutcome] = []
         inicio = self._clock()
 
+        decisao: PolicyDecision | None = None
+        if policy is not None:
+            if not contexto.principal:
+                raise ValidationError(
+                    "política fornecida exige um principal no contexto",
+                    code="wsai.security.principal",
+                    details={"execution_id": contexto.execution_id},
+                )
+            if not contexto.project_id:
+                raise ValidationError(
+                    "política fornecida exige um project_id no contexto",
+                    code="wsai.security.project",
+                    details={"execution_id": contexto.execution_id},
+                )
+            decisao = policy.decide(
+                principal=contexto.principal,
+                project_id=contexto.project_id,
+                action="execute",
+            )
+
         try:
+            if decisao is not None and not decisao.allowed:
+                posicoes = range(len(plan.steps))
+                passos.extend(
+                    StepOutcome(
+                        index=indice,
+                        step=plan.steps[indice],
+                        status=StepStatus.SKIPPED,
+                        duration=0.0,
+                    )
+                    for indice in posicoes
+                )
+                raise denied_decision(decisao)
             execute_with_policies(
                 functools.partial(self._executar_passos, plan, runner, passos),
                 context=contexto,

@@ -155,9 +155,25 @@ Introduzir apenas as versões necessárias para Core/API/Capability/Provider/Ext
 
 Antes de Code, GitHub, Agents ou MCP, definir principal → project → capability → resource → action → policy → decision.
 
+> **Estado: NÚCLEO IMPLEMENTADO na Fase 8.8.** `wsai2.security` com
+> `Principal`/`PolicyDecision`, `PolicyEngine` de decisão **exact-match
+> por acção** (negação por omissão, sem RBAC) e `denied_decision`
+> (converte a negação no `PermissionError` da 8.2). Enforcement no
+> `RuntimeManager.execute_plan` antes do passo 1 (política injectada;
+> sem motor, comportamento preservado). A ligação de
+> `permissions` do `ExtensionContract` aos grants do motor fica para a
+> instituição da política no Gate.
+
 ## Hardening 10 — Project Isolation
 
 Propagar `project_id` pelas fronteiras relevantes e impedir acesso cruzado sem autorização explícita.
+
+> **Estado: NÚCLEO IMPLEMENTADO na Fase 8.8.** `wsai2.security.isolation`
+> com `require_project` (project_id obrigatório na fronteira) e
+> `assert_same_project` (acesso cruzado → `ProjectIsolationError` da
+> 8.2, com esperado/actual em `details`). O `ExecutionContext` (8.2) já
+> transportava `project_id`; passa também a transportar `principal`
+> (aditivo, default vazio) para a política.
 
 ## Hardening 11 — Architecture Contract Tests
 

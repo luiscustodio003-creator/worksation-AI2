@@ -66,15 +66,17 @@ class ExecutionContext:
     """Contexto imutável de uma execução.
 
     Reúne a identidade da execução (execution_id), a tarefa (task_id), o
-    projecto (project_id), o limite temporal (deadline em time.monotonic),
-    o token de cancelamento, o budget declarativo de recursos e a
-    prioridade. O token de cancelamento é mutável por referência — o
-    contexto apenas o transporta.
+    projecto (project_id), o principal que solicita (principal, para a
+    camada de política da 8.8), o limite temporal (deadline em
+    time.monotonic), o token de cancelamento, o budget declarativo de
+    recursos e a prioridade. O token de cancelamento é mutável por
+    referência — o contexto apenas o transporta.
     """
 
     execution_id: str
     task_id: str
     project_id: str = ""
+    principal: str = ""
     deadline: float | None = None
     cancellation: CancellationToken | None = None
     budget: tuple[ResourceLimit, ...] = field(default_factory=tuple)

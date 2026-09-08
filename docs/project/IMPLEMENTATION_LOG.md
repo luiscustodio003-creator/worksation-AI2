@@ -1,5 +1,64 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-08 — Security/Policy + Project Isolation — Fase 8.8
+
+### Objectivo
+
+Cumprir os hardening 09 (Security/Policy) e 10 (Project Isolation) do
+CORE_HARDENING_PLAN, pré-requisitos do Gate de addons: novo subsistema
+folha `wsai2.security` com decisão exact-match por acção e fronteira de
+projectos, mais o enforcement no Runtime Engine antes do passo 1.
+
+### Criado
+
+- `src/wsai2/security/base.py`
+- `src/wsai2/security/policy.py`
+- `src/wsai2/security/isolation.py`
+- `src/wsai2/security/__init__.py`
+- Actualizado `src/wsai2/core/context.py` (campo aditivo `principal`)
+- Actualizado `src/wsai2/runtime_engine/manager.py` (`policy` opcional)
+- Actualizado `tests/test_architecture_contract.py` (FRONTEIRAS +2)
+- `tests/test_security_policy.py`, `tests/test_security_isolation.py`,
+  `tests/test_security_integration.py`
+- `docs/security/BASE-32-security-policy-isolation.md`
+
+### Arquitectura abrangida
+
+Fase 8 — Runtime Engine (hardening 09 + 10). `wsai2.security` é folha:
+depende só de `wsai2.core` (erros e contexto); `runtime_engine` passa a
+depender de `security` (sem ciclo). Decisões registadas: uma unidade para
+09+10; exact-match por acção (negação por omissão, sem RBAC); enforcement
+antes do passo 1 no `execute_plan` (negação = report FAILED com
+`PermissionError`, passos SKIPPED, runner nunca chamado); principal
+aditivo no `ExecutionContext` (exigido apenas quando há política);
+política injectada (sem motor, comportamento 8.5 preservado). A taxonomia
+`PermissionError`/`ProjectIsolationError` da 8.2 ganha emissores reais.
+
+### Resultado
+
+`PolicyEngine.decide(principal, project_id, action)` devolve
+`PolicyDecision` pura; `denied_decision` converte a negação no erro
+taxonómico; `require_project`/`assert_same_project` impõem a fronteira de
+projecto com `ProjectIsolationError`. O `RuntimeManager` aplica a política
+antes do passo 1 quando fornecida. Alteração 100% aditiva — os 364 testes
+da base permanecem aprovados.
+
+### Validação
+
+```text
+py -3.12 -m pytest   →   387 passed (364 bases anteriores + 23 security/isolamento)
+```
+
+### Próximo passo
+
+Gate — Core pronto para addons (formalização): validar a base completa,
+confirmar os pré-requisitos com a cobertura existente e decidir onde a
+política real é instituída (e como `permissions` do `ExtensionContract`
+alimentam o `PolicyEngine`). Concorrência e monitorização permanecem
+unidades posteriores; a Fase 9 — Knowledge Engine arranca depois do Gate.
+
+---
+
 ## 2026-09-08 — Architecture Contract Tests — Fase 8.7
 
 ### Objectivo

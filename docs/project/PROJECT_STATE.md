@@ -10,19 +10,19 @@
 
 ## Estado da fase
 
-EM CURSO (Fase 8.1 a 8.7 concluídas — falta decisão do Gate de addons)
+EM CURSO (Fase 8.1 a 8.8 concluídas — pré-requisitos do Gate cumpridos)
 
 ## Base actual
 
-Fase 8.7 — Architecture Contract Tests **CONCLUÍDA**: `tests/test_architecture_contract.py` (10 testes) que executam as regras da CONSTITUTION/AGENTS sobre o repositório — docstrings e bases documentais por subsistema, fronteiras de import autorizadas (`FRONTEIRAS`), isolamento dos adaptadores de SO (acesso só via `get_platform`), ausência de ciclos de import em runtime e proibição de subsistemas/squatters antecipados (api, ui, knowledge). Unidade 100% aditiva, sem tocar em código de produção.
+Fase 8.8 — Security/Policy + Project Isolation **CONCLUÍDA**: novo subsistema folha `wsai2.security` (hardening 09 + 10) — `PolicyEngine` com decisão **exact-match por acção** sobre `Principal`/`PolicyDecision`, guardas `require_project`/`assert_same_project` com emissão de `PermissionError`/`ProjectIsolationError`, e enforcement opcional no `RuntimeManager.execute_plan` (decisão antes do passo 1; negação = report `FAILED` com os passos `SKIPPED`). `ExecutionContext.principal` aditivo (default `""`). `FRONTEIRAS` da 8.7 cresceram com (`security`,`core`) e (`runtime_engine`,`security`).
 
 ## Última unidade concluída
 
-Fase 8.7 — Architecture Contract Tests: `FRONTEIRAS` (21 arestas autorizadas entre subsistemas, fotografadas por auditoria), parser AST com exclusão de imports tipográficos `TYPE_CHECKING`, detecção de ciclos em runtime, e 10 verificações executáveis (Artigo 2, 4, 8, 10, 13 da Constituição). Baseline de testes sobe para 364.
+Fase 8.8 — Security/Policy + Project Isolation: a cadeia `principal -> project -> action -> policy -> decision` com negação por omissão; a taxonomia `PermissionError`/`ProjectIsolationError` da 8.2 ganha emissores reais; sem política fornecida o gestor preserva o comportamento anterior (regressão intacta). Baseline de testes sobe para 387.
 
 ## Próxima unidade
 
-**Decisão arquitectural material — Security / Policy (hardening 09) e Project Isolation (hardening 10)**, pré-requisitos do Gate de addons: modelar `principal → project → capability → resource → action → policy → decision` e a propagação/preservação de `project_id` nas fronteiras. São responsabilidades ainda sem módulo próprio na Fase 8 — exigem auditoria e planeamento dedicados. Concorrência entre planos, filas multicamadas e monitorização contínua permanecem para unidades posteriores.
+**Gate — Core pronto para addons** (formalização): validar a base completa, confirmar os pré-requisitos (contratos, lifecycle, recursos, cancelamento, compatibilidade, segurança, isolamento) com a cobertura de testes existente, e decidir onde a política real é instituída e como `permissions` do `ExtensionContract` alimentam o `PolicyEngine`. Concorrência entre planos, filas multicamadas e monitorização contínua permanecem para unidades posteriores; a Fase 9 — Knowledge Engine arranca depois do Gate.
 
 ## Subsistemas funcionais implementados:
 
@@ -39,6 +39,7 @@ Fase 8.7 — Architecture Contract Tests: `FRONTEIRAS` (21 arestas autorizadas e
 - Runtime Engine (gestor de execução e scheduler `wsai2.runtime_engine` — Fase 8.5)
 - Extension Lifecycle + Compatibility (máquina de lifecycle, registo e versioning de contratos `wsai2.extension` — Fase 8.6)
 - Architecture Contract Tests (regras da Constituição executáveis — Fase 8.7)
+- Security / Policy + Project Isolation (política exact-match e fronteira de projectos `wsai2.security` — Fase 8.8)
 
 ## Desenvolvimento controlado
 
@@ -65,7 +66,7 @@ Base de testes configurada com `pytest`. Executar:
 py -3.12 -m pytest -v
 ```
 
-Baseline registada: 364 testes aprovados (3 fundação + 5 platform + 17 hardware + 24 runtime + 33 capability + 42 model + 46 provider + 39 task + 12 extension + 22 core + 21 resource + 28 execution + 22 runtime_engine + 40 lifecycle/compatibilidade + 10 contrato arquitectural).
+Baseline registada: 387 testes aprovados (3 fundação + 5 platform + 17 hardware + 24 runtime + 33 capability + 42 model + 46 provider + 39 task + 12 extension + 22 core + 21 resource + 28 execution + 22 runtime_engine + 40 lifecycle/compatibilidade + 10 contrato arquitectural + 23 security/isolamento).
 
 ## Estado da arquitectura
 
@@ -78,7 +79,7 @@ Capability Engine      ██████████ 100%
 Model Intelligence     ██████████ 100%
 Provider Layer         ██████████ 100%
 Task Intelligence      ██████████ 100%
-Runtime Engine         █████████░ 90%
+Runtime Engine         █████████░ 95%
 Knowledge Engine       ░░░░░░░░░░ 0%
 API                    ░░░░░░░░░░ 0%
 UI                     ░░░░░░░░░░ 0%
@@ -86,8 +87,8 @@ UI                     ░░░░░░░░░░ 0%
 
 ## Estado Git
 
-Repositório remoto inicializado. A Fase 8 avançou nas unidades 8.1 (Extension Contract), 8.2 (Execution Context + Error Model), 8.3 (Resource Governance), 8.4 (Execution Policies), 8.5 (Runtime Engine), 8.6 (Lifecycle + Compatibility) e 8.7 (Architecture Contract Tests), aditivas e reversíveis. Falta decidir o Security/Policy (hardening 09) e o Project Isolation (hardening 10) antes do Gate de addons.
+Repositório remoto inicializado. A Fase 8 avançou nas unidades 8.1 (Extension Contract), 8.2 (Execution Context + Error Model), 8.3 (Resource Governance), 8.4 (Execution Policies), 8.5 (Runtime Engine), 8.6 (Lifecycle + Compatibility), 8.7 (Architecture Contract Tests) e 8.8 (Security/Policy + Project Isolation), aditivas e reversíveis. Todos os pré-requisitos do Gate de addons têm cobertura de testes.
 
 ## Regra de continuação
 
-A próxima execução deve ler este ficheiro antes de seleccionar trabalho novo. A próxima unidade da Fase 8 é a **decisão arquitectural material — Security / Policy (hardening 09) e Project Isolation (hardening 10)**, pré-requisitos do Gate de addons.
+A próxima execução deve ler este ficheiro antes de seleccionar trabalho novo. A próxima unidade da Fase 8 é o **Gate — Core pronto para addons** (formalização da base + decisão de instituição da política real).
