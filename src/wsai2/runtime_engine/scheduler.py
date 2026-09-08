@@ -9,6 +9,11 @@ O scheduler distingue-se do gestor: o gestor executa um plano; o
 scheduler decide **a ordem** e percorre os planos. A concorrência entre
 planos e filas de espera multicamadas pertencem a uma unidade posterior —
 esta unidade mantém um agendamento simples, sequencial e verificável.
+
+Na Fase 8.9 (Gate de addons), o scheduler passa a propagar o motor de
+política (8.8) ao gestor: o contrato de composição estabelece que quem
+cria o ``RuntimeManager``/``Scheduler`` fornece o ``PolicyEngine`` real,
+sendo o scheduler o ponto de instituição junto da fila de agendamento.
 """
 
 from __future__ import annotations
@@ -17,6 +22,7 @@ import time
 from typing import TYPE_CHECKING, Any, Callable, Mapping, Sequence
 
 from wsai2.core.context import ExecutionContext, ExecutionPriority
+from wsai2.security import PolicyEngine
 
 from .base import ExecutionReport, ScheduleOutcome, SchedulerReport
 from .manager import RuntimeManager
@@ -65,6 +71,7 @@ class Scheduler:
         context_factory: Callable[[ExecutionPlan], ExecutionContext] | None = None,
         timeout: TimeoutPolicy | None = None,
         recovery: RecoveryPolicy | None = None,
+        policy: PolicyEngine | None = None,
         stop_on_failure: bool = False,
     ) -> SchedulerReport:
         """Executa os planos na ordem determinada por prioridade.
@@ -80,6 +87,10 @@ class Scheduler:
             timeout: política de timeout aplicada a cada plano (opcional).
             recovery: política de recuperação aplicada a cada plano
                 (opcional).
+            policy: motor de política (8.8) propagado ao gestor — a
+                autorização aplica-se a cada plano **antes do passo 1**
+                (Gate de addons, 8.9). Sem motor, nenhuma autorização é
+                aplicada (comportamento preservado).
             stop_on_failure: interrompe o agendamento na primeira falha.
 
         Returns:
@@ -107,6 +118,7 @@ class Scheduler:
                 contexto,
                 timeout=timeout,
                 recovery=recovery,
+                policy=policy,
             )
             prioridade = prioridades.get(plano.task_id, ExecutionPriority.NORMAL)
             resultados.append(

@@ -9,11 +9,19 @@ identidade. Mantém o **estado de lifecycle no próprio contrato** (o
 O registo não executa addons nem lança trabalho: apenas regista,
 valida versões de contrato (hardening 08) e responde a consultas. As
 transições de estado são delegadas na máquina de lifecycle (``lifecycle``).
+
+Na Fase 8.9 (Gate de addons), o registo materializa a ponte entre o
+vocabulário declarativo ``permissions`` do contrato (hardening 01) e a
+política de segurança (hardening 09): quando um motor de política é
+fornecido à entrada, cada permissão declarada é concedida **como acção
+exacta** ao principal identificado pelo ``id`` da extensão. Sem motor, o
+registo comporta-se exactamente como antes.
 """
 
 from __future__ import annotations
 
 from wsai2.core.errors import ValidationError
+from wsai2.security import PolicyEngine
 
 from .base import ExtensionContract, ExtensionLifecycleState
 from .lifecycle import transition
@@ -48,15 +56,30 @@ class ExtensionRegistry:
         """Versão do contrato de extensão suportada pelo registo."""
         return str(self._supported)
 
-    def register(self, contrato: ExtensionContract) -> ExtensionContract:
+    def register(
+        self,
+        contrato: ExtensionContract,
+        *,
+        policy: PolicyEngine | None = None,
+    ) -> ExtensionContract:
         """Regista uma extensão já validada, movendo-a para ``REGISTERED``.
 
         Valida a unicidade da identidade, a compatibilidade da
         ``contract_version`` com o núcleo (hardening 08) e o estado
         (deve estar ``VALIDATED``, seguindo o fluxo do hardening 02).
 
+        Quando ``policy`` é fornecida (Gate de addons, 8.9), o registo
+        concede as ``permissions`` declaradas como **acções exactas** ao
+        principal com o ``id`` da extensão — a ponte entre o vocabulário
+        declarativo do contrato e o ``PolicyEngine`` da 8.8. Apenas
+        procede após o registo ser aceite; uma negação de política não
+        impede o registo (o catálogo e a política são entidades
+        distintas).
+
         Args:
             contrato: extensão no estado ``VALIDATED``.
+            policy: motor de política opcional que recebe os grants
+                derivados das permissões declaradas.
 
         Returns:
             O contrato registado, no estado ``REGISTERED``.
@@ -91,6 +114,8 @@ class ExtensionRegistry:
             )
         registado = transition(contrato, ExtensionLifecycleState.REGISTERED)
         self._extensions[contrato.id] = registado
+        if policy is not None and contrato.permissions:
+            policy.grant(contrato.id, contrato.permissions)
         return registado
 
     def unregister(self, extension_id: str) -> bool:

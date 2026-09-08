@@ -155,14 +155,15 @@ Introduzir apenas as versões necessárias para Core/API/Capability/Provider/Ext
 
 Antes de Code, GitHub, Agents ou MCP, definir principal → project → capability → resource → action → policy → decision.
 
-> **Estado: NÚCLEO IMPLEMENTADO na Fase 8.8.** `wsai2.security` com
-> `Principal`/`PolicyDecision`, `PolicyEngine` de decisão **exact-match
-> por acção** (negação por omissão, sem RBAC) e `denied_decision`
-> (converte a negação no `PermissionError` da 8.2). Enforcement no
-> `RuntimeManager.execute_plan` antes do passo 1 (política injectada;
-> sem motor, comportamento preservado). A ligação de
-> `permissions` do `ExtensionContract` aos grants do motor fica para a
-> instituição da política no Gate.
+> **Estado: NÚCLEO IMPLEMENTADO na Fase 8.8; PONTE no Gate (8.9).**
+> `wsai2.security` com `Principal`/`PolicyDecision`, `PolicyEngine` de
+> decisão **exact-match por acção** (negação por omissão, sem RBAC) e
+> `denied_decision` (converte a negação no `PermissionError` da 8.2).
+> Enforcement no `RuntimeManager.execute_plan` antes do passo 1 e, desde
+> o Gate, **propagado pelo `Scheduler`** (política injectada; sem motor,
+> comportamento preservado). No Gate (8.9), `ExtensionRegistry.register`
+> materializa `permissions` do contrato como **grants por id de
+> extensão**, ligando o vocabulário declarativo ao motor.
 
 ## Hardening 10 — Project Isolation
 
@@ -215,3 +216,15 @@ Security e Project Isolation devem ser concluídos antes de activar addons com a
 ## Gate de addons
 
 Nenhum addon de grande impacto deve ser considerado pronto apenas porque o seu módulo funciona isoladamente. O Core deve primeiro garantir contratos, lifecycle, execução, recursos, cancelamento, compatibilidade, segurança e isolamento suficientes para o tipo de addon.
+
+> **Estado: GATE APROVADO na Fase 8.9.** O marco foi formalizado com um
+> critério executável — `tests/test_gate_addons.py`: fotografia dos
+> pré-requisitos públicos (contratos, lifecycle, recursos, timeout/
+> cancelamento/recuperação, compatibilidade, segurança, isolamento e
+> contrato arquitectural) e das integrações de instituição (política
+> propagada pelo `Scheduler`; `permissions` → grants por id de extensão
+> no `ExtensionRegistry`). Contrato de composição: quem cria o runtime
+> fornece o motor; quem executa trabalho de uma extensão leva
+> `principal` = `id` da extensão. Concorrência, filas multicamadas e
+> monitorização contínua permanecem unidades posteriores da Fase 8 —
+> não são pré-requisitos do Gate.

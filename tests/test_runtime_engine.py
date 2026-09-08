@@ -476,6 +476,7 @@ def test_scheduler_report_contagens_com_falha() -> None:
             step_runner: object | None = None,
             timeout: object | None = None,
             recovery: object | None = None,
+            policy: object | None = None,
         ) -> ExecutionReport:
             self.execucoes.append(plan.task_id)
             if plan.task_id == "falha":
@@ -523,6 +524,7 @@ def test_scheduler_continua_apos_falha_por_omissao() -> None:
             step_runner: object | None = None,
             timeout: object | None = None,
             recovery: object | None = None,
+            policy: object | None = None,
         ) -> ExecutionReport:
             self.execucoes.append(plan.task_id)
             falhou = plan.task_id == "primeiro"
@@ -566,6 +568,7 @@ def test_scheduler_para_em_falha() -> None:
             step_runner: object | None = None,
             timeout: object | None = None,
             recovery: object | None = None,
+            policy: object | None = None,
         ) -> ExecutionReport:
             self.execucoes.append(plan.task_id)
             return ExecutionReport(
@@ -607,6 +610,7 @@ def test_scheduler_relatorio_tipos_e_desenho() -> None:
             step_runner: object | None = None,
             timeout: object | None = None,
             recovery: object | None = None,
+            policy: object | None = None,
         ) -> ExecutionReport:
             return ExecutionReport(
                 execution_id=f"exec-{plan.task_id}",

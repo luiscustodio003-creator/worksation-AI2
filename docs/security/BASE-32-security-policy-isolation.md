@@ -79,6 +79,17 @@ negada, devolve `ExecutionReport` `FAILED` com `PermissionError` (passos
 - `tests/test_architecture_contract.py` — `FRONTEIRAS` +2 arestas
 - `docs/security/BASE-32-security-policy-isolation.md` — este relatório
 
+## Integração posterior (Gate de addons — Fase 8.9)
+
+No Gate, a política passa a ser instituída na fila e ligada ao contrato:
+`Scheduler.run` propaga `policy` ao `RuntimeManager`, e o
+`ExtensionRegistry.register` materializa `permissions` como **grants por
+id de extensão** (acções exactas, já do lado do `PolicyEngine`). O
+`wsai2.security` continua folha — a ponte vive no registo, numa aresta
+nova (`extension`, `security`) autorizada nas `FRONTEIRAS`. Convenção:
+quem executa trabalho de uma extensão leva `principal` = `id` da
+extensão no `ExecutionContext`.
+
 ## Dependências
 
 - `security` → `wsai2.core` (errors, context) apenas.

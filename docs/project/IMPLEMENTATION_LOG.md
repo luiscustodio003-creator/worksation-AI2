@@ -1,5 +1,57 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-08 — Gate — Core pronto para addons — Fase 8.9
+
+### Objectivo
+
+Formalizar o marco de addons do CORE_HARDENING_PLAN sem criar módulo
+novo: instituir a política na fila (propagação no `Scheduler`), ligar o
+contrato à segurança (ponte `permissions`→grants no `ExtensionRegistry`)
+e dar ao Gate um critério executável (`tests/test_gate_addons.py`).
+
+### Realizado
+
+- `Scheduler.run` aceita `policy: PolicyEngine | None = None` e propaga-o
+  ao `RuntimeManager` (autorização antes do passo 1, junto da fila);
+- `ExtensionRegistry.register` aceita `policy` (opt-in) e concede as
+  `permissions` declaradas como acções exactas ao principal = id da
+  extensão (apenas após o registo ser aceite; sem policy, nada muda);
+- `FRONTEIRAS` da 8.7 actualizadas com a aresta (`extension`,`security`);
+- `tests/test_gate_addons.py` — fotografia executável do Gate (7 testes);
+- 3 testes da ponte no `test_extension_registry.py`; mocks do scheduler
+  actualizados no `test_runtime_engine.py`.
+
+### Arquitectura abrangida
+
+Fase 8 — Runtime Engine (marco do Gate). `wsai2.security` permanece
+**folha**: a ponte vive no lado do registo (aresta nova `extension` ->
+`security`, autorizada). Contrato de composição documentado: quem cria o
+runtime passa o motor; quem executa trabalho de uma extensão leva
+`principal` = `id` da extensão. Concorrência, filas multicamadas e
+monitorização contínua permanecem unidades posteriores (não são
+pré-requisitos do Gate).
+
+### Resultado
+
+A política passa a ser instituída na fila e ligada ao contrato; o Gate
+tem critério executável (se os testes do Gate falharem, a base deixou de
+satisfazer o marco). Alteração 100% aditiva — os 387 testes da base
+permanecem aprovados.
+
+### Validação
+
+```text
+py -3.12 -m pytest   →   397 passed (387 bases anteriores + 10 gate/ponte)
+```
+
+### Próximo passo
+
+Decisão material pós-Gate: Fase 9 — Knowledge Engine (ingestão,
+extracção, metadados) ou fechar primeiro a monitorização contínua e,
+depois, concorrência/filas do Runtime. A registar no `PROJECT_STATE`.
+
+---
+
 ## 2026-09-08 — Security/Policy + Project Isolation — Fase 8.8
 
 ### Objectivo

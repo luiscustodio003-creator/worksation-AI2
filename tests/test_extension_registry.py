@@ -15,6 +15,7 @@ from wsai2.extension import (
     ExtensionLifecycleState,
     ExtensionRegistry,
 )
+from wsai2.security import PolicyEngine
 
 
 def _contrato(
@@ -22,6 +23,7 @@ def _contrato(
     *,
     contract_version: str = "1.0",
     lifecycle: ExtensionLifecycleState = ExtensionLifecycleState.VALIDATED,
+    permissions: tuple[str, ...] = (),
 ) -> ExtensionContract:
     """Constrói um contrato de teste pronto para registo."""
     return ExtensionContract(
@@ -32,6 +34,7 @@ def _contrato(
         version="1.0.0",
         contract_version=contract_version,
         lifecycle=lifecycle,
+        permissions=permissions,
     )
 
 
@@ -143,6 +146,39 @@ def test_transition_state_levanta_para_extensao_desconhecida() -> None:
     with pytest.raises(ValidationError) as erro:
         registo.transition_state("wsai.ausente", ExtensionLifecycleState.REGISTERED)
     assert erro.value.code == "wsai.extension.unknown"
+
+
+def test_registrar_concede_permissions_como_grants_exactos() -> None:
+    """As permissões declaradas devem tornar-se acções concedidas à extensão."""
+    motor = PolicyEngine()
+    registo = ExtensionRegistry()
+    registo.register(
+        _contrato(permissions=("execute", "code.run")),
+        policy=motor,
+    )
+    decisao = motor.decide("wsai.teste", "proj-1", "execute")
+    assert decisao.allowed is True
+    assert motor.decide("wsai.teste", "proj-1", "code.run").allowed is True
+    assert motor.decide("wsai.teste", "proj-1", "não_declarada").allowed is False
+    assert motor.decide("outra.extensao", "proj-1", "execute").allowed is False
+
+
+def test_registrar_sem_policy_nao_concede_nada() -> None:
+    """Sem motor, o registo não deve materializar permissões na política."""
+    motor = PolicyEngine()
+    ExtensionRegistry().register(_contrato(permissions=("execute",)))
+    assert motor.decide("wsai.teste", "proj-1", "execute").allowed is False
+
+
+def test_registrar_aceite_nao_depende_de_policy() -> None:
+    """A política é uma entidade distinta: registrar não é autorizar."""
+    registo = ExtensionRegistry()
+    contrato = registo.register(
+        _contrato(permissions=("execute",)),
+        policy=PolicyEngine(),
+    )
+    assert contrato.lifecycle is ExtensionLifecycleState.REGISTERED
+    assert registo.has("wsai.teste")
 
 
 def test_registo_nao_sai_do_estado_activo_por_transicao_invalida() -> None:
