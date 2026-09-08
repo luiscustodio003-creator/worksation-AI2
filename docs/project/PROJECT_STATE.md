@@ -10,19 +10,19 @@
 
 ## Estado da fase
 
-EM CURSO (Fase 8.1, 8.2 e 8.3 concluídas)
+EM CURSO (Fase 8.1, 8.2, 8.3 e 8.4 concluídas)
 
 ## Base actual
 
-Fase 8.3 — Resource Governance **CONCLUÍDA**: subsistema `wsai2.resource` com `ResourceGovernor` que normaliza limites declarativos (`ResourceLimit`), valida a folga efectiva contra os perfis de hardware e runtime e contabiliza alocações/reservas (accounting), sem duplicar a medição existente.
+Fase 8.4 — Execution Policies **CONCLUÍDA**: subsistema `wsai2.execution` com políticas centrais de timeout (`TimeoutPolicy`+`DeadlineGuard`+`run_with_timeout`), cancelamento cooperativo (checkpoints sobre `ExecutionContext`/`CancellationToken`) e recuperação (`RecoveryPolicy`+`run_with_recovery`), compostas em `execute_with_policies` com reserva/libertação de recursos no `ResourceGovernor`.
 
 ## Última unidade concluída
 
-Fase 8.3 — Resource Governance: subsistema `wsai2.resource` com normalização por dimensão (RAM, CPU, VRAM, disco), validação `required <= min(capacity, available_now) − committed`, veredictos por dimensão (`AVAILABLE`/`UNAVAILABLE`/`UNRECOGNIZED`) e accounting por instância (`allocate`/`release`, `outstanding`, `committed_for`), reutilizando `ResourceError` da taxaonomia 8.2.
+Fase 8.4 — Execution Policies: política de timeout com deadline efectiva = a mais curta (política vs contexto), guard monotónico injectável e thread worker daemon; checkpoints de cancelamento/deadline; retry opt-in com backoff e último erro preservado; `execute_with_policies` compõe checkpoint→timeout→recuperação→orçamento (libertação em `finally`).
 
 ## Próxima unidade
 
-Iniciar a **Fase 8.4 — Timeout + Cancellation + Recovery**: centralizar no Runtime Engine as políticas de limite temporal, cancelamento efectivo e recuperação, sobre o `ExecutionContext` e o modelo de erros já existentes.
+Iniciar a **Fase 8.5 — Runtime Manager + Scheduler**: consumir o `ExecutionPlan` (Fase 7), lançar execuções com `execute_with_policies`, gerir filas, prioridades e o ciclo de vida das execuções — passo que introduz uma decisão arquitectural material (gestor central de execução) e requer planeamento dedicado.
 
 ## Subsistemas funcionais implementados:
 
@@ -36,6 +36,7 @@ Iniciar a **Fase 8.4 — Timeout + Cancellation + Recovery**: centralizar no Run
 - Extension Contract (contrato mínimo declarativo de extensões — Fase 8.1)
 - Execution Context + Error Model (camada transversal `wsai2.core` — Fase 8.2)
 - Resource Governance (governador de orçamento e accounting `wsai2.resource` — Fase 8.3)
+- Execution Policies (timeout, cancelamento cooperativo e recuperação `wsai2.execution` — Fase 8.4)
 
 ## Desenvolvimento controlado
 
@@ -62,7 +63,7 @@ Base de testes configurada com `pytest`. Executar:
 py -3.12 -m pytest -v
 ```
 
-Baseline registada: 264 testes aprovados (3 fundação + 5 platform + 17 hardware + 24 runtime + 33 capability + 42 model + 46 provider + 39 task + 12 extension + 22 core + 21 resource).
+Baseline registada: 292 testes aprovados (3 fundação + 5 platform + 17 hardware + 24 runtime + 33 capability + 42 model + 46 provider + 39 task + 12 extension + 22 core + 21 resource + 28 execution).
 
 ## Estado da arquitectura
 
@@ -83,8 +84,8 @@ UI                     ░░░░░░░░░░ 0%
 
 ## Estado Git
 
-Repositório remoto inicializado. A Fase 8 avançou nas unidades 8.1 (Extension Contract), 8.2 (Execution Context + Error Model) e 8.3 (Resource Governance), aditivas e reversíveis. A próxima unidade (8.4) é preparada de forma controlada antes de integrar as políticas de timeout/cancelamento/recuperação.
+Repositório remoto inicializado. A Fase 8 avançou nas unidades 8.1 (Extension Contract), 8.2 (Execution Context + Error Model), 8.3 (Resource Governance) e 8.4 (Execution Policies), aditivas e reversíveis. A próxima unidade (8.5) introduz o gestor de execução e o scheduler — decisão arquitectural material a planear dedicadamente.
 
 ## Regra de continuação
 
-A próxima execução deve ler este ficheiro antes de seleccionar trabalho novo. A próxima unidade da Fase 8 é a **Fase 8.4 — Timeout + Cancellation + Recovery**.
+A próxima execução deve ler este ficheiro antes de seleccionar trabalho novo. A próxima unidade da Fase 8 é a **Fase 8.5 — Runtime Manager + Scheduler**.

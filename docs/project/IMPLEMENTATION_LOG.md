@@ -1,5 +1,57 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-08 — Execution Policies — Fase 8.4
+
+### Objectivo
+
+Centralizar no Runtime Engine as políticas de execução (hardening 06 do
+CORE_HARDENING_PLAN): enforcement de timeout, cancelamento cooperativo
+(checkpoints) e recuperação (retry), para que os addons não inventem
+mecanismos incompatíveis. Unidade puramente aditiva sobre 8.1–8.3.
+
+### Criado
+
+- `src/wsai2/execution/base.py`
+- `src/wsai2/execution/runner.py`
+- `src/wsai2/execution/__init__.py`
+- `tests/test_execution_policies.py`
+- `docs/execution/BASE-28-execution-policies.md`
+
+### Arquitectura abrangida
+
+Fase 8 — Runtime Engine. Subsistema 3.8 da arquitectura.
+`wsai2.execution` é um subsistema folha que compõe o `ExecutionContext`/
+`CancellationToken` (8.2), a taxonomia de erros (8.2) e o
+`ResourceGovernor` (8.3, via `TYPE_CHECKING`). Decisões registadas:
+políticas fora do núcleo (o token continua thread-agnostic); thread worker
+daemon nunca morta à força; último erro preservado no retry; retry
+opt-in (tipos declarados); deadline efectiva = a mais curta; relógios e
+`sleep` injectáveis; orçamento libertado em `finally`.
+
+### Resultado
+
+`TimeoutPolicy`/`DeadlineGuard`/`run_with_timeout` (enforce), checkpoints
+de cancelamento/deadline, `RecoveryPolicy`/`run_with_recovery` (backoff
+opcional) e `execute_with_policies` (checkpoint → timeout → recuperação →
+reserva/libertação de recursos). Código de timeout estável
+`wsai.timeout.exceeded`. Alteração 100% aditiva — os 264 testes da base
+permanecem aprovados.
+
+### Validação
+
+```text
+py -3.12 -m pytest -v   →   292 passed (3 fundação + 5 platform + 17 hardware + 24 runtime + 33 capability + 42 model + 46 provider + 39 task + 12 extension + 22 core + 21 resource + 28 execution)
+```
+
+### Próximo passo
+
+Fase 8.5 — Runtime Manager + Scheduler (consumir o `ExecutionPlan` da
+Fase 7, lançar execuções com `execute_with_policies`, gerir filas,
+prioridades e o ciclo de vida) — decisão arquitectural material a planejar
+dedicadamente.
+
+---
+
 ## 2026-09-08 — Resource Governance — Fase 8.3
 
 ### Objectivo

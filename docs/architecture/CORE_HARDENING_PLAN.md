@@ -97,6 +97,15 @@ Evoluir a gestão de memória existente para governação de recursos, sem dupli
 
 Centralizar políticas no Runtime Engine. Addons não devem inventar mecanismos incompatíveis.
 
+> **Estado: IMPLEMENTADO na Fase 8.4.** `wsai2.execution` com política de
+> timeout (`TimeoutPolicy`, `DeadlineGuard`, `run_with_timeout` em thread
+> daemon), checkpoints de cancelamento/deadline sobre o
+> `ExecutionContext` e recuperação (`RecoveryPolicy`, `run_with_recovery`
+> com retry opt-in e backoff); `execute_with_policies` compõe
+> checkpoint → timeout → recuperação → reserva/libertação de orçamento
+> (`ResourceGovernor`, 8.3). Agendamento/filas e gestor de execução
+> pertencem ao 8.5.
+
 ## Hardening 07 — Scheduler / Runtime Manager
 
 Implementar a Fase 8 sobre o plano de execução já produzido pela Fase 7:
