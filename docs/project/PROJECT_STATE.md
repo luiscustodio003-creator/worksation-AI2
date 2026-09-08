@@ -46,9 +46,9 @@ Implementar a **unidade 3 dos residuais da Fase 8 — Filas multicamadas**: fila
 
 ## Desenvolvimento controlado
 
-A base de desenvolvimento está agora formalizada em `docs/project/CONTROLLED_DEVELOPMENT.md` e `docs/architecture/CORE_HARDENING_PLAN.md`.
+A base de desenvolvimento está formalizada em `docs/project/CONTROLLED_DEVELOPMENT.md` e `docs/architecture/CORE_HARDENING_PLAN.md`.
 
-A família de comandos OpenCode disponível no projecto é:
+A família oficial de comandos OpenCode do projecto é:
 
 - `/wsai`
 - `/wsai-run`
@@ -56,10 +56,23 @@ A família de comandos OpenCode disponível no projecto é:
 - `/wsai-plan`
 - `/wsai-implement`
 - `/wsai-test`
+- `/wsai-validate`
 - `/wsai-doc`
 - `/wsai-git`
 
-`/wsai-run` permanece o orquestrador autónomo. Os restantes comandos permitem executar cada etapa individualmente.
+Papéis:
+
+- `/wsai` — entrada/orientação do sistema de desenvolvimento.
+- `/wsai-run` — orquestrador autónomo do ciclo completo de uma unidade.
+- `/wsai-audit` — fotografia do estado real, sem implementação funcional.
+- `/wsai-plan` — plano executável da unidade, sem implementação.
+- `/wsai-implement` — implementação da unidade aprovada.
+- `/wsai-test` — execução/criação de testes e correcção de falhas dentro do âmbito aprovado.
+- `/wsai-validate` — gate independente de consolidação; valida sem alterar código funcional.
+- `/wsai-doc` — documentação e estado persistente.
+- `/wsai-git` — revisão, commit e sincronização.
+
+Regra: `/wsai-run` usa esta mesma família e não pode contornar os gates definidos por `/wsai-validate`. A arquitectura real do código, testes e contratos é a fonte primária; documentação serve para declarar intenção e estado, não para provar implementação.
 
 ## Testes
 
@@ -69,7 +82,7 @@ Base de testes configurada com `pytest`. Executar:
 py -3.12 -m pytest -v
 ```
 
-Baseline registada: 415 testes aprovados (3 fundação + 5 platform + 17 hardware + 24 runtime + 33 capability + 42 model + 46 provider + 39 task + 12 extension + 22 core + 21 resource + 28 execution + 22 runtime_engine + 40 lifecycle/compatibilidade + 10 contrato arquitectural + 23 security/isolamento + 7 gate + 3 ponte no registo + 8 monitorização do runtime + 10 concorrência entre planos).
+Baseline registada antes desta auditoria: 415 testes aprovados. A alteração de qualidade do Gate deve ser validada novamente no ambiente local antes de aumentar a baseline; o número remoto permanece 415 até essa execução.
 
 ## Estado da arquitectura
 
@@ -90,8 +103,8 @@ UI                     ░░░░░░░░░░ 0%
 
 ## Estado Git
 
-Repositório remoto inicializado. A Fase 8 avançou nas unidades 8.1 (Extension Contract), 8.2 (Execution Context + Error Model), 8.3 (Resource Governance), 8.4 (Execution Policies), 8.5 (Runtime Engine), 8.6 (Lifecycle + Compatibility), 8.7 (Architecture Contract Tests), 8.8 (Security/Policy + Project Isolation), 8.9 (Gate — Core pronto para addons) e nos residuais Via B 1 (Monitorização contínua — BASE-34) e 2 (Concorrência entre planos — BASE-35). O Gate está aprovado com critério executável; os pré-requisitos de addons têm cobertura de testes. A unidade da concorrência está implementada, validada (415) e documentada; o fecho do commit é consolidado nesta corrente de trabalho.
+Repositório remoto inicializado. A Fase 8 avançou nas unidades 8.1 (Extension Contract), 8.2 (Execution Context + Error Model), 8.3 (Resource Governance), 8.4 (Execution Policies), 8.5 (Runtime Engine), 8.6 (Lifecycle + Compatibility), 8.7 (Architecture Contract Tests), 8.8 (Security/Policy + Project Isolation), 8.9 (Gate — Core pronto para addons) e nos residuais Via B 1 (Monitorização contínua — BASE-34) e 2 (Concorrência entre planos — BASE-35). A auditoria actual detectou uma fragilidade de qualidade no teste de negação do Gate e corrigiu-a para injectar efectivamente o `step_runner`, tornando a asserção `executado == []` observável. Esta correcção ainda requer execução local da suíte para fechar a validação final.
 
 ## Regra de continuação
 
-A próxima execução deve ler este ficheiro antes de seleccionar trabalho novo. A **decisão material pós-Gate** está registada: **Via B** — fechar primeiro os residuais da Fase 8 (monitorização ✓; concorrência ✓; filas multicamadas) e só depois iniciar a Fase 9 — Knowledge Engine. A próxima unidade de código é a **filas multicamadas** (residual 3, o último da Fase 8).
+A próxima execução deve ler este ficheiro antes de seleccionar trabalho novo. A **decisão material pós-Gate** está registada: **Via B** — fechar primeiro os residuais da Fase 8 (monitorização ✓; concorrência ✓; filas multicamadas) e só depois iniciar a Fase 9 — Knowledge Engine. A próxima unidade de código é a **filas multicamadas** (residual 3, o último da Fase 8), mas deve passar pelo ciclo audit → plan → implement → test → validate → doc → git.
