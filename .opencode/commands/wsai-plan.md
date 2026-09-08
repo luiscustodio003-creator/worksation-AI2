@@ -4,13 +4,23 @@ agent: plan
 ---
 # /wsai-plan — PLANEAMENTO CONTROLADO
 
-Planear a unidade `$ARGUMENTS` sem implementar código funcional.
+Planear a unidade `$ARGUMENTS` sem implementar código funcional quando executado isoladamente.
 
 ## Pré-condição
 
 Usar a auditoria disponível. Se a unidade não estiver auditada, executar primeiro uma análise equivalente e registar as lacunas.
 
 O plano deve ser baseado no **estado real do código e dos testes**, usando `PROJECT_STATE.md`, `ROADMAP.md` e a arquitectura como contexto e contrato. Não planear a partir de componentes que existem apenas na documentação.
+
+## MODO ISOLADO VS. MODO /WSAI-RUN
+
+Quando `/wsai-plan` for executado directamente pelo utilizador, permanece um comando de planeamento: **não implementa** e termina com `READY TO IMPLEMENT` ou `BLOCKED`.
+
+Quando o planeamento for uma etapa interna de `/wsai-run`, o resultado `READY TO IMPLEMENT` é uma autorização operacional suficiente para o orquestrador prosseguir, desde que a unidade já esteja autorizada pelo `PROJECT_STATE.md`/`ROADMAP.md` e não introduza decisão arquitectural material.
+
+**Não existe uma segunda aprovação humana implícita entre `READY TO IMPLEMENT` e `/wsai-implement` dentro de `/wsai-run`.** Pedir confirmação apenas por existir um plano interno contradiz a missão autónoma do orquestrador.
+
+Se o plano detectar uma decisão arquitectural material nova, deve terminar em `BLOCKED` e identificar exactamente a decisão necessária.
 
 ## Plano obrigatório
 
@@ -37,6 +47,12 @@ O plano deve ser baseado no **estado real do código e dos testes**, usando `PRO
 Não propor a criação de um novo módulo quando uma responsabilidade equivalente já existir. Preferir extensão, adapter ou integração sobre a substituição.
 
 Não transformar uma lacuna documental num novo componente funcional sem confirmar a necessidade no código e na arquitectura.
+
+## Correcções de gate
+
+Se o `/wsai-run` receber um `NOT APPROVED` causado exclusivamente por uma lacuna documental/processual P2 inequívoca, localizada e sem impacto funcional ou arquitectural, pode criar uma unidade correctiva mínima para fechar o gap. Essa unidade deve incluir apenas os ficheiros necessários à evidência do gate e deve ser revalidada.
+
+Um P0/P1, uma decisão arquitectural material, alteração de requisitos fundamentais ou risco de perda de dados não pode ser convertido artificialmente em correcção autónoma.
 
 ## Resultado
 
