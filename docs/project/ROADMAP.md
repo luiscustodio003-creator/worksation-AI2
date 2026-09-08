@@ -108,7 +108,7 @@ A Fase 8 começou pela **baseline e auditoria**, não por uma reescrita. O Runti
 
 A ordem concreta das unidades e dos residuais é determinada pelo `PROJECT_STATE.md` e pelo plano de hardening, após auditoria de cada responsabilidade já existente.
 
-**Estado actual:** implementação funcional da Fase 8 concluída, incluindo os três residuais Via B (monitorização, concorrência e filas multicamadas). O fecho formal depende da validação final da fundação e do respectivo relatório persistente.
+**Estado actual:** implementação funcional da Fase 8 concluída, incluindo os três residuais Via B (monitorização, concorrência e filas multicamadas). Gate de fundação executado com **🟡 APPROVED WITH WARNINGS** (2026-09-09) — a Fase 8 está **formalmente fechada** e o relatório persistente existe em `docs/validation/FOUNDATION_VALIDATION_REPORT.md`.
 
 ## Fase 9 — Knowledge Engine
 

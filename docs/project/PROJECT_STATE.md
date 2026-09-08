@@ -6,15 +6,15 @@
 
 ## Fase actual
 
-**FASE 8 — Runtime Engine**
+**FASE 8 — Runtime Engine — CONCLUÍDA**
 
 ## Estado da fase
 
-**IMPLEMENTAÇÃO CONCLUÍDA — validação formal final pendente.** As unidades 8.1–8.9 e os três residuais Via B estão implementados. O residual 3 — filas multicamadas — foi implementado como camada aditiva sobre o Scheduler. A auditoria `/wsai-validate foundation` fornecida para a baseline actual registou **423 testes aprovados, 0 falhas**, sem blockers funcionais ou arquitecturais; o único blocker encontrado (FV-01, documentação P2) foi corrigido nos documentos de arquitectura e roadmap. O fecho formal requer nova execução da suíte completa e `/wsai-validate foundation` após estas correcções documentais.
+**FASE 8 CONCLUÍDA.** As unidades 8.1–8.9 e os três residuais Via B estão implementados, testados e documentados. O gate `/wsai-validate foundation` foi executado sobre o estado real do repositório (2026-09-09): **423 testes aprovados, 0 falhas**, sem blockers funcionais ou arquitecturais, com decisão **🟡 APPROVED WITH WARNINGS** (apenas avisos P3 documentados). O closing documental foi completado neste fecho formal (relatório persistente integral e `PROJECT_STATE.md` alinhado — resolução do P2 documental W-01). A Fase 9 — Knowledge Engine fica autorizada a iniciar, sujeita ao planeamento do subsistema 3.9.
 
 ## Última unidade implementada
 
-Fase 8 — residual 3: **Filas multicamadas** (`BASE-36-runtime-engine-queues.md`). Foi criado `MultilayerExecutionQueue`, com camada pronta por prioridade, backlog, capacidade opcional, preempção apenas de trabalho pendente, promoção do backlog, snapshot/pending/clear e integração opt-in no `Scheduler.run(queue=...)`. A via directa (`queue=None`) mantém o comportamento histórico.
+Fecho formal da Fase 8: execução completa da suíte (423/423), gate `FOUNDATION APPROVED WITH WARNINGS`, relatório persistente integral em `docs/validation/FOUNDATION_VALIDATION_REPORT.md` e estado actualizado para **FASE 8 CONCLUÍDA**. Unidade puramente de governação e documentação — sem alterações a `src/wsai2`.
 
 ## Estado dos residuais Via B
 
@@ -69,12 +69,13 @@ Regra: a arquitectura real do código e testes é a fonte primária; documentaç
 
 ### Evidência actual
 
-A execução local fornecida pelo `/wsai-validate foundation` registou:
+Execução real da suíte completa no fecho formal (2026-09-09):
 
-- **423 testes passed / 0 failed**;
-- Python 3.12.0 / pytest 9.1.1 / Windows;
+- **423 testes passed / 0 failed / 0 errors / 0 skipped** (junitxml, `exit 0`);
+- Python 3.12 / Windows;
 - 10/10 testes de contrato arquitectural aprovados;
 - invariantes das filas multicamadas aprovadas;
+- gate `/wsai-validate foundation`: **🟡 APPROVED WITH WARNINGS**;
 - nenhum blocker funcional ou arquitectural.
 
 ### GAPs identificados e tratamento
@@ -83,8 +84,9 @@ A execução local fornecida pelo `/wsai-validate foundation` registou:
 - **FV-02 — P3 — ABERTO:** execução remota do GitHub Actions ainda não foi confirmada. Existe workflow `.github/workflows/tests.yml`; o estado remoto deve ser confirmado quando a API das Actions disponibilizar a execução.
 - **FV-03 — P3 — RESOLVIDO DOCUMENTALMENTE:** `ARCHITECTURE.md` esclarece que as percentagens são indicadores de maturidade/cobertura arquitectural, não percentagens de implementação da fase.
 - **FV-04 — P3 — NÃO BLOQUEANTE:** duplicação interna da ordem de prioridades e superfície pública `priority_for_plan` ficam como melhoria futura de baixo risco; não justificam alterar a arquitectura nem reabrir a Fase 8.
+- **W-01 — P2 — RESOLVIDO NESTE GATE:** relatório persistente truncado e `PROJECT_STATE.md` sem fecho; resolvido como unidade correctiva documental do próprio gate, sem alteração de código funcional.
 
-A documentação está agora alinhada com o estado funcional conhecido. O estado formal permanece pendente apenas da nova validação final.
+A documentação está alinhada com o estado funcional conhecido. A Fase 8 está **formalmente encerrada**.
 
 ## Testes
 
@@ -115,24 +117,21 @@ Estas barras não representam progresso global do projecto; representam maturida
 
 ## Estado Git
 
-A implementação do residual 3 e as correcções documentais foram adicionadas directamente ao `main` em commits incrementais. O repositório contém o módulo de fila, integração no Scheduler, testes, BASE-36, pipeline GitHub Actions e documentação arquitectural alinhada.
+O fecho formal da Fase 8 foi registado em `main`: relatório de validação integral, log de implementação e `PROJECT_STATE.md` actualizado, num commit coerente de governação. Não existem alterações de código funcional pendentes nesta unidade.
 
 ## Regra de continuação
 
-**Não iniciar Fase 9 ainda.** Primeiro executar a validação final da Fase 8:
+**Fase 8 formalmente aprovada.** A próxima fase é a **Fase 9 — Knowledge Engine** (subsistema 3.9):
 
 ```text
-pytest completo
+FASE 8 CONCLUÍDA (gate APPROVED WITH WARNINGS)
     ↓
-/wsai-validate foundation
+determinar próxima unidade em ROADMAP.md
     ↓
-se APPROVED / APPROVED WITH WARNINGS → fechar Fase 8
-    ↓
-actualizar PROJECT_STATE para FASE 8 CONCLUÍDA
-    ↓
-commit final de fecho
-    ↓
-Fase 9 — Knowledge Engine
+Fase 9 — Knowledge Engine (ingestão, extracção, metadados,
+indexação, recuperação, contexto)
 ```
 
-Nenhum novo módulo funcional deve ser criado antes deste gate final.
+A Fase 9 **não está autorizada a arrancar sem planeamento dedicado**: o subsistema 3.9 é novo (actualmente apenas um stub arquitectural) e a sua criação é uma decisão arquitectural material — contrato do subsistema, fronteiras em `FRONTEIRAS`, modelo de documentos e estratégia de indexação/recuperação exigem auditoria e plano em unidade própria, antes de qualquer código de produção. O teste de contrato arquitectural proíbe antecipação de `knowledge` antes dessa decisão.
+
+Nenhum novo módulo funcional deve ser criado antes dessa auditoria formal da Fase 9.

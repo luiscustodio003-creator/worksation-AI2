@@ -1,5 +1,101 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-09 — Fecho formal da Fase 8 — validação da fundação
+
+### Objectivo
+
+Fechar formalmente a Fase 8 — Runtime Engine após o gate de validação da
+fundação, registando a evidência necessária no estado persistente sem
+alterar código funcional.
+
+### Realizado
+
+- resolvida a lacuna documental do log (entrada do residual 3 abaixo) e
+  completado o relatório persistente truncado — W-01 do gate
+  `/wsai-validate foundation`;
+- reexecução da suíte completa: **423/423 testes aprovados**;
+- criado `docs/validation/FOUNDATION_VALIDATION_REPORT.md` com a estrutura
+  oficial (10 secções): execução, inventário, análise arquitectural,
+  problemas e decisão do gate;
+- decisão do gate: **🟡 APPROVED WITH WARNINGS** (apenas avisos P3
+  documentados: FV-02 CI remota não confirmada, FV-04 ordem de prioridade
+  duplicada; sem bloqueadores);
+- `PROJECT_STATE.md` e `ROADMAP.md` actualizados para **FASE 8 CONCLUÍDA**.
+
+### Arquitectura abrangida
+
+Fecho de governação da Fase 8 (subsistema 3.8 e residuais Via B). Sem
+alterações a `src/wsai2`; apenas documentação e estado persistente.
+
+### Validação
+
+```text
+py -3.12 -m pytest          →   423 passed
+/wsai-validate foundation   →   APPROVED WITH WARNINGS
+```
+
+### Próximo passo
+
+Fase 9 — Knowledge Engine (ingestão). Gate de fundação satisfeito; a
+Fase 9 requer auditoria/planeamento dedicado do subsistema 3.9 (novo) —
+decisão arquitectural material a executar em unidade própria.
+
+---
+
+## 2026-09-08 — Filas multicamadas — Fase 8 residual 3 (Via B)
+
+### Objectivo
+
+Fechar o último residual funcional da Fase 8 (Via B): introduzir uma camada
+de filas por prioridade com backlog, capacidade opcional e preempção de
+trabalho ainda **pendente**, sem substituir nem alterar destrutivamente o
+caminho directo do `Scheduler`.
+
+### Realizado
+
+- `src/wsai2/runtime_engine/queue.py` (novo): `MultilayerExecutionQueue`
+  (genérica e thread-safe), `QueueItem`, `QueueSnapshot` e
+  `priority_for_plan`;
+- camada pronta ordenada por prioridade (`CRITICAL`/`HIGH`/`NORMAL`/`LOW`),
+  backlog de espera, capacidade opcional `max_ready`, preempção apenas de
+  itens ainda não iniciados (nenhum trabalho em curso é interrompido),
+  promoção automática do backlog e operações `snapshot()`/`pending()`/`clear()`;
+- integração **opt-in** no `Scheduler.run(queue=...)`; `queue=None` preserva
+  exactamente a via directa histórica;
+- exportação pública em `wsai2.runtime_engine` (`__init__.py`);
+- `tests/test_runtime_engine_queue.py` (novo, **8 testes**) — fila e
+  integração com o Scheduler;
+- `.github/workflows/tests.yml` — execução da suíte no GitHub Actions
+  (Python 3.12);
+- alinhamento documental de `ARCHITECTURE.md`, `CORE_HARDENING_PLAN.md`,
+  `ROADMAP.md` e `PROJECT_STATE.md` (resolução FV-01).
+
+### Arquitectura abrangida
+
+Fase 8 — Runtime Engine (`wsai2.runtime_engine`, subsistema 3.8). Camada
+aditiva; sem arestas novas em `FRONTEIRAS`; stdlib `heapq`/`threading` e
+reutilização de `wsai2.core.context` (`ExecutionPriority`) e
+`wsai2.core.errors` (`ValidationError`). `ExecutionPlan` importado apenas em
+`TYPE_CHECKING`.
+
+### Resultado
+
+`MultilayerExecutionQueue` funcional e testado; Scheduler com fila opcional
+mantendo a via histórica. Unidade registada no `PROJECT_STATE`.
+
+### Validação
+
+```text
+py -3.12 -m pytest   →   423 passed (415 bases anteriores + 8 filas)
+```
+
+### Próximo passo
+
+Fecho formal da Fase 8: reexecução da suíte, `/wsai-validate foundation` e
+relatório persistente.
+
+---
+
 ## 2026-09-08 — Concorrência entre planos — Fase 8 residual (Via B)
 
 ### Objectivo
