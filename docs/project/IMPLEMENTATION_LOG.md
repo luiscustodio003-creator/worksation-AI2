@@ -56,7 +56,7 @@ py -3.12 -m pytest   →   354 passed (3 fundação + 5 platform + 17 hardware +
 
 ### Próximo passo
 
-Fase 8.7 — Testes de contrato arquitectural (hardening 10): testes que
+Fase 8.7 — Testes de contrato arquitectural (hardening 11): testes que
 verificam no repositório as fronteiras de dependências, a ausência de
 ciclos de import, o isolamento de código Windows/Linux e a documentação
 por módulo — sem decisão arquitectural nova. Concorrência entre planos,

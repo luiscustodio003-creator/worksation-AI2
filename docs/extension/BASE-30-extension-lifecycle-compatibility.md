@@ -164,7 +164,7 @@ extensões / concorrência (ainda não anunciadas, fora da 8.6).
 
 ## Próximo passo
 
-**Fase 8.7 — Testes de contrato arquitectural** (hardening 10): testes
+**Fase 8.7 — Testes de contrato arquitectural** (hardening 11): testes
 que verificam as regras da CONSTITUTION/AGENTS no repositório (fronteiras
 de dependências, ausência de ciclos de import, isolamento de código
 Windows/Linux, documentação por módulo). Sem decisão arquitectural nova —

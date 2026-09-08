@@ -22,7 +22,7 @@ Fase 8.6 — Lifecycle + Compatibility: `ContractVersion.parse`/`is_compatible_w
 
 ## Próxima unidade
 
-**Fase 8.7 — Testes de contrato arquitectural** (hardening 10): testes que verificam as regras da CONSTITUTION/AGENTS no repositório (fronteiras de dependências, ausência de ciclos de import, isolamento de código Windows/Linux, documentação por módulo) — sem decisão arquitectural nova. Concorrência entre planos, filas multicamadas e monitorização contínua permanecem para unidades posteriores.
+**Fase 8.7 — Testes de contrato arquitectural** (hardening 11): testes que verificam as regras da CONSTITUTION/AGENTS no repositório (fronteiras de dependências, ausência de ciclos de import, isolamento de código Windows/Linux, documentação por módulo) — sem decisão arquitectural nova. Concorrência entre planos, filas multicamadas e monitorização contínua permanecem para unidades posteriores.
 
 ## Subsistemas funcionais implementados:
 
