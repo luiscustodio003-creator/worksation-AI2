@@ -10,45 +10,48 @@
 
 ## Estado da fase
 
-EM CURSO (Fase 8.1 a 8.9 concluídas — Gate de addons aprovado; residuais Via B: monitorização ✓, concorrência ✓; filas multicamadas pendentes)
+**IMPLEMENTAÇÃO CONCLUÍDA — validação final pendente.** As unidades 8.1–8.9 e os três residuais Via B estão implementados. O residual 3 — filas multicamadas — foi implementado como camada aditiva sobre o Scheduler. O fecho formal requer execução da suíte completa e `/wsai-validate foundation`.
 
-## Base actual
+## Última unidade implementada
 
-Unidade residual 2 da Fase 8 (Via B) — **Concorrência entre planos CONCLUÍDA**: `Scheduler.run` ganha o kwarg aditivo `concurrency` (por omissão `1` = agendamento sequencial histórico intacto; com `> 1`, execução paralela num `ThreadPoolExecutor` com relatório em ordem de prioridade). Contextos materializados no thread principal com `execution_id` únicos (duplicações rejeitadas); `stop_on_failure` descarta planos ainda não iniciados; `step_runner` propagado. `ResourceGovernor` passa a thread-safe (trinco sobre alocações) — dependência necessária para partilha segura entre planos paralelos. Baseline sobe para 415 (405 + 10 em `tests/test_runtime_engine_concurrency.py`). `FRONTEIRAS` intactas; filas multicamadas permanecem o residual 3.
+Fase 8 — residual 3: **Filas multicamadas** (`BASE-36-runtime-engine-queues.md`). Foi criado `MultilayerExecutionQueue`, com camada pronta por prioridade, backlog, capacidade opcional, preempção apenas de trabalho pendente, promoção do backlog, snapshot/pending/clear e integração opt-in no `Scheduler.run(queue=...)`. A via directa (`queue=None`) mantém o comportamento histórico.
 
-## Última unidade concluída
+## Estado dos residuais Via B
 
-Fase 8 — residual 2: **Concorrência entre planos** (relatório `docs/runtime_engine/BASE-35-runtime-engine-concurrency.md`). Aditiva e opcional; execução paralela sem alterar a semântica de cada plano; governação de recursos partilhada tornada thread-safe. Baseline de testes: 415.
+- Residual 1 — monitorização contínua: **CONCLUÍDO** (`BASE-34`).
+- Residual 2 — concorrência entre planos: **CONCLUÍDO** (`BASE-35`).
+- Residual 3 — filas multicamadas: **IMPLEMENTADO** (`BASE-36`), validação final pendente.
 
-## Próxima unidade
+## Subsistemas funcionais implementados
 
-Implementar a **unidade 3 dos residuais da Fase 8 — Filas multicamadas**: filas por prioridade com backlog/preempção sobre o scheduler actual, aditivas, preservando o agendamento directo por omissão. A **decisão material pós-Gate** está registada (Via B: fechar primeiro os residuais do Runtime — monitorização ✓, concorrência ✓, filas multicamadas); a **Fase 9 — Knowledge Engine** só é iniciada depois do fecho completo da Fase 8.
+- Platform Foundation
+- Hardware Intelligence
+- Runtime Intelligence
+- Capability Engine
+- Model Intelligence
+- Provider Layer
+- Task Intelligence
+- Extension Contract
+- Execution Context + Error Model
+- Resource Governance
+- Runtime Engine
+- Monitorização contínua do Runtime
+- Concorrência entre planos
+- Filas multicamadas do Runtime: prioridade + backlog + preempção de pendentes
+- Extension Lifecycle + Compatibility
+- Architecture Contract Tests
+- Security / Policy + Project Isolation
+- Gate — Core pronto para addons
 
-## Subsistemas funcionais implementados:
+## Filas multicamadas — contrato
 
-- Platform Foundation (detecção e abstracção de SO)
-- Hardware Intelligence (CPU, memória, GPU, armazenamento, perfil, capacidades)
-- Runtime Intelligence (carga, memória, processos, uptime, disponibilidade)
-- Capability Engine (definições, registo, avaliação, compatibilidade, capacidades disponíveis)
-- Model Intelligence (registo, metadados, requisitos, compatibilidade, classificação, recomendação)
-- Provider Layer (contratos, registo, detecção, adaptadores de runtime, health checks)
-- Task Intelligence (contrato, classificação, requisitos, selecção de capacidades, plano de execução)
-- Extension Contract (contrato mínimo declarativo de extensões — Fase 8.1)
-- Execution Context + Error Model (camada transversal `wsai2.core` — Fase 8.2)
-- Resource Governance (governador de orçamento e accounting `wsai2.resource` — Fase 8.3)
-- Runtime Engine (gestor de execução e scheduler `wsai2.runtime_engine` — Fase 8.5)
-- Monitorização contínua do Runtime (observação em curso de execuções e agendamentos `wsai2.runtime_engine.monitoring` — Fase 8 residual 1)
-- Concorrência entre planos (execução paralela opcional no `Scheduler` `concurrency` + governador thread-safe — Fase 8 residual 2)
-- Extension Lifecycle + Compatibility (máquina de lifecycle, registo e versioning de contratos `wsai2.extension` — Fase 8.6)
-- Architecture Contract Tests (regras da Constituição executáveis — Fase 8.7)
-- Security / Policy + Project Isolation (política exact-match e fronteira de projectos `wsai2.security` — Fase 8.8)
-- Gate — Core pronto para addons (formalização do marco: critério executável + propagação da política no `Scheduler` + ponte `permissions`→grants no registo — Fase 8.9)
+`MultilayerExecutionQueue` é genérica e thread-safe. A prioridade é determinada por `ExecutionPriority` (`CRITICAL`, `HIGH`, `NORMAL`, `LOW`). Com `max_ready=None`, a camada pronta funciona como priority queue. Com capacidade limitada, uma entrada superior pode preemptar a menor prioridade ainda pronta, que passa para o backlog. Nenhum trabalho já iniciado é interrompido.
+
+O Scheduler aceita `queue=None` por omissão. Quando uma fila é fornecida, os planos são admitidos e consumidos pela mesma pipeline de execução, mantendo políticas, monitorização, timeout, recovery, `step_runner` e concorrência existentes.
 
 ## Desenvolvimento controlado
 
-A base de desenvolvimento está formalizada em `docs/project/CONTROLLED_DEVELOPMENT.md` e `docs/architecture/CORE_HARDENING_PLAN.md`.
-
-A família oficial de comandos OpenCode do projecto é:
+A família oficial de comandos OpenCode é:
 
 - `/wsai`
 - `/wsai-run`
@@ -60,29 +63,25 @@ A família oficial de comandos OpenCode do projecto é:
 - `/wsai-doc`
 - `/wsai-git`
 
-Papéis:
-
-- `/wsai` — entrada/orientação do sistema de desenvolvimento.
-- `/wsai-run` — orquestrador autónomo do ciclo completo de uma unidade.
-- `/wsai-audit` — fotografia do estado real, sem implementação funcional.
-- `/wsai-plan` — plano executável da unidade, sem implementação.
-- `/wsai-implement` — implementação da unidade aprovada.
-- `/wsai-test` — execução/criação de testes e correcção de falhas dentro do âmbito aprovado.
-- `/wsai-validate` — gate independente de consolidação; valida sem alterar código funcional.
-- `/wsai-doc` — documentação e estado persistente.
-- `/wsai-git` — revisão, commit e sincronização.
-
-Regra: `/wsai-run` usa esta mesma família e não pode contornar os gates definidos por `/wsai-validate`. A arquitectura real do código, testes e contratos é a fonte primária; documentação serve para declarar intenção e estado, não para provar implementação.
+Regra: a arquitectura real do código e testes é a fonte primária; documentação declara intenção/estado mas não substitui execução de testes.
 
 ## Testes
 
-Base de testes configurada com `pytest`. Executar:
+Baseline anterior à unidade 3: **415 testes**.
+
+Foram adicionados **8 testes** em `tests/test_runtime_engine_queue.py`, cobrindo a fila e a integração com o Scheduler. A baseline final não é declarada como aprovada até executar:
 
 ```text
 py -3.12 -m pytest -v
 ```
 
-Baseline registada antes desta auditoria: 415 testes aprovados. A alteração de qualidade do Gate deve ser validada novamente no ambiente local antes de aumentar a baseline; o número remoto permanece 415 até essa execução.
+e, depois, executar:
+
+```text
+/wsai-validate foundation
+```
+
+Foi também criado `.github/workflows/tests.yml` para executar a suíte em Python 3.12 no GitHub Actions. O estado das Actions deve ser confirmado antes do fecho formal.
 
 ## Estado da arquitectura
 
@@ -95,7 +94,7 @@ Capability Engine      ██████████ 100%
 Model Intelligence     ██████████ 100%
 Provider Layer         ██████████ 100%
 Task Intelligence      ██████████ 100%
-Runtime Engine         █████████░ 99%
+Runtime Engine         ██████████ 100% (implementação)
 Knowledge Engine       ░░░░░░░░░░ 0%
 API                    ░░░░░░░░░░ 0%
 UI                     ░░░░░░░░░░ 0%
@@ -103,8 +102,22 @@ UI                     ░░░░░░░░░░ 0%
 
 ## Estado Git
 
-Repositório remoto inicializado. A Fase 8 avançou nas unidades 8.1 (Extension Contract), 8.2 (Execution Context + Error Model), 8.3 (Resource Governance), 8.4 (Execution Policies), 8.5 (Runtime Engine), 8.6 (Lifecycle + Compatibility), 8.7 (Architecture Contract Tests), 8.8 (Security/Policy + Project Isolation), 8.9 (Gate — Core pronto para addons) e nos residuais Via B 1 (Monitorização contínua — BASE-34) e 2 (Concorrência entre planos — BASE-35). A auditoria actual detectou uma fragilidade de qualidade no teste de negação do Gate e corrigiu-a para injectar efectivamente o `step_runner`, tornando a asserção `executado == []` observável. Esta correcção ainda requer execução local da suíte para fechar a validação final.
+A implementação do residual 3 foi adicionada directamente ao `main` em commits incrementais. O repositório contém agora o módulo de fila, integração no Scheduler, testes, relatório BASE-36 e pipeline GitHub Actions.
 
 ## Regra de continuação
 
-A próxima execução deve ler este ficheiro antes de seleccionar trabalho novo. A **decisão material pós-Gate** está registada: **Via B** — fechar primeiro os residuais da Fase 8 (monitorização ✓; concorrência ✓; filas multicamadas) e só depois iniciar a Fase 9 — Knowledge Engine. A próxima unidade de código é a **filas multicamadas** (residual 3, o último da Fase 8), mas deve passar pelo ciclo audit → plan → implement → test → validate → doc → git.
+**Não iniciar Fase 9 ainda.** Primeiro executar a validação final da Fase 8:
+
+```text
+pytest completo
+    ↓
+/wsai-validate foundation
+    ↓
+resolver GAPs materiais, se existirem
+    ↓
+validar novamente
+    ↓
+actualizar PROJECT_STATE para FASE 8 CONCLUÍDA
+    ↓
+commit final
+```
