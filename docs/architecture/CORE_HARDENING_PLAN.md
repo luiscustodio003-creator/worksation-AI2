@@ -163,6 +163,15 @@ Propagar `project_id` pelas fronteiras relevantes e impedir acesso cruzado sem a
 
 Transformar regras da Constituição em testes executáveis: dependências, isolamento, compatibilidade, recursos, timeout, cancellation, permissões e falha isolada de addons.
 
+> **Estado: NÚCLEO IMPLEMENTADO na Fase 8.7.** `tests/test_architecture_contract.py`
+> executa as regras de dependências (fronteiras autorizadas entre
+> subsistemas), isolamento do código de SO, ausência de ciclos em runtime,
+> documentação por subsistema e crescimento controlado. As restantes
+> regras (compatibilidade, recursos, timeout, cancellation, permissões e
+> falha isolada de addons) são já cobertas pelos testes funcionais das
+> unidades 8.1–8.6; o Security/Policy (hardening 09) dará origem aos
+> testes de permissões antes do Gate de addons.
+
 ## Ordem recomendada
 
 ```text

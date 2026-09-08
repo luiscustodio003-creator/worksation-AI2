@@ -1,5 +1,57 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-08 — Architecture Contract Tests — Fase 8.7
+
+### Objectivo
+
+Fechar o hardening 11 do CORE_HARDENING_PLAN e a "ordem recomendada" da
+Fase 8: transformar as regras da CONSTITUTION/AGENTS em testes
+executáveis sobre o repositório real, sem alterar código de produção.
+
+### Criado
+
+- `tests/test_architecture_contract.py`
+- `docs/architecture/BASE-31-architecture-contract-tests.md`
+
+### Arquitectura abrangida
+
+Fase 8 — Runtime Engine (hardening 11, último passo antes do Gate de
+addons). Testes estáticos (ast/pathlib, stdlib), idênticos em Windows e
+Linux. Regras cobertas: ARTIGO 1/10 (responsabilidade, documentação),
+ARTIGO 2/13 (dependências para dentro, sem ciclos em runtime),
+ARTIGO 4 (code de SO isolado, entrada só via `get_platform`), ARTIGO 8
+(crescimento controlado, sem pastas placeholder nem subsistemas antecipados
+api/ui/knowledge), ARTIGO 9 (testes sem recursos externos). A lista
+`FRONTEIRAS` (21 arestas autorizadas entre subsistemas) foi fotografada
+em auditoria e cresce apenas com justificação documental.
+
+### Resultado
+
+10 testes: docstring em todos os fontes; BASE-*.md por subsistema;
+arestas respeitam `FRONTEIRAS`; imports apontam para subsistemas reais;
+adaptadores de SO inacessíveis fora da plataforma; `get_platform` como
+ponto único de entrada; Windows/Linux não se importam entre si; grafo de
+runtime acíclico (imports `TYPE_CHECKING` excluídos); api/ui/knowledge
+não antecipados; nenhuma pasta placeholder (__init__ re-exporta).
+Alteração 100% aditiva — nenhum módulo de produção foi tocado.
+
+### Validação
+
+```text
+py -3.12 -m pytest   →   364 passed (354 bases anteriores + 10 contrato arquitectural)
+```
+
+### Próximo passo
+
+Decisão arquitectural material — Security / Policy (hardening 09) e
+Project Isolation (hardening 10), pré-requisitos do Gate de addons:
+modelar `principal → project → capability → resource → action → policy →
+decision` e a propagação/preservação de `project_id` nas fronteiras. Sem
+módulo próprio na Fase 8 e com contrato novo — exige auditoria e
+planeamento dedicados antes de implementar.
+
+---
+
 ## 2026-09-08 — Extension Lifecycle + Compatibility — Fase 8.6
 
 ### Objectivo

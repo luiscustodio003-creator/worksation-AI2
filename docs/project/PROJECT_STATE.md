@@ -10,19 +10,19 @@
 
 ## Estado da fase
 
-EM CURSO (Fase 8.1, 8.2, 8.3, 8.4, 8.5 e 8.6 concluídas)
+EM CURSO (Fase 8.1 a 8.7 concluídas — falta decisão do Gate de addons)
 
 ## Base actual
 
-Fase 8.6 — Extension Lifecycle + Compatibility **CONCLUÍDA**: subsistema `wsai2.extension` estendido com `versioning` (leitura semântica de `contract_version` `major.minor`; compatibilidade = mesmo major; rejeição antes do registo — hardening 08), `lifecycle` (máquina de transições do diagrama do hardening 02, pura e sem efeitos laterais) e `registry` (`ExtensionRegistry` no padrão das Fases 4–6, com barreiras de unicidade, compatibilidade e estado `VALIDATED` antes do registo; estado de lifecycle mantido no próprio contrato).
+Fase 8.7 — Architecture Contract Tests **CONCLUÍDA**: `tests/test_architecture_contract.py` (10 testes) que executam as regras da CONSTITUTION/AGENTS sobre o repositório — docstrings e bases documentais por subsistema, fronteiras de import autorizadas (`FRONTEIRAS`), isolamento dos adaptadores de SO (acesso só via `get_platform`), ausência de ciclos de import em runtime e proibição de subsistemas/squatters antecipados (api, ui, knowledge). Unidade 100% aditiva, sem tocar em código de produção.
 
 ## Última unidade concluída
 
-Fase 8.6 — Lifecycle + Compatibility: `ContractVersion.parse`/`is_compatible_with` com `SUPPORTED_CONTRACT_VERSION = "1.0"`; `transition` valida e devolve novo contrato (imutável) e transições inválidas são `ValidationError` `wsai.extension.lifecycle` sem mutar estado global; `ExtensionRegistry.register` rejeita duplicados (`wsai.extension.duplicate`), contratos incompatíveis (`wsai.extension.contract_incompatible`) e versões mal formadas antes de registar. **Correcção registada:** não existe `RuntimeStatus` do registo — o estado de execução de uma extensão é o próprio campo `lifecycle` do `ExtensionContract` (referência inventada anteriormente removida).
+Fase 8.7 — Architecture Contract Tests: `FRONTEIRAS` (21 arestas autorizadas entre subsistemas, fotografadas por auditoria), parser AST com exclusão de imports tipográficos `TYPE_CHECKING`, detecção de ciclos em runtime, e 10 verificações executáveis (Artigo 2, 4, 8, 10, 13 da Constituição). Baseline de testes sobe para 364.
 
 ## Próxima unidade
 
-**Fase 8.7 — Testes de contrato arquitectural** (hardening 11): testes que verificam as regras da CONSTITUTION/AGENTS no repositório (fronteiras de dependências, ausência de ciclos de import, isolamento de código Windows/Linux, documentação por módulo) — sem decisão arquitectural nova. Concorrência entre planos, filas multicamadas e monitorização contínua permanecem para unidades posteriores.
+**Decisão arquitectural material — Security / Policy (hardening 09) e Project Isolation (hardening 10)**, pré-requisitos do Gate de addons: modelar `principal → project → capability → resource → action → policy → decision` e a propagação/preservação de `project_id` nas fronteiras. São responsabilidades ainda sem módulo próprio na Fase 8 — exigem auditoria e planeamento dedicados. Concorrência entre planos, filas multicamadas e monitorização contínua permanecem para unidades posteriores.
 
 ## Subsistemas funcionais implementados:
 
@@ -38,6 +38,7 @@ Fase 8.6 — Lifecycle + Compatibility: `ContractVersion.parse`/`is_compatible_w
 - Resource Governance (governador de orçamento e accounting `wsai2.resource` — Fase 8.3)
 - Runtime Engine (gestor de execução e scheduler `wsai2.runtime_engine` — Fase 8.5)
 - Extension Lifecycle + Compatibility (máquina de lifecycle, registo e versioning de contratos `wsai2.extension` — Fase 8.6)
+- Architecture Contract Tests (regras da Constituição executáveis — Fase 8.7)
 
 ## Desenvolvimento controlado
 
@@ -64,7 +65,7 @@ Base de testes configurada com `pytest`. Executar:
 py -3.12 -m pytest -v
 ```
 
-Baseline registada: 354 testes aprovados (3 fundação + 5 platform + 17 hardware + 24 runtime + 33 capability + 42 model + 46 provider + 39 task + 12 extension + 22 core + 21 resource + 28 execution + 22 runtime_engine + 40 lifecycle/compatibilidade).
+Baseline registada: 364 testes aprovados (3 fundação + 5 platform + 17 hardware + 24 runtime + 33 capability + 42 model + 46 provider + 39 task + 12 extension + 22 core + 21 resource + 28 execution + 22 runtime_engine + 40 lifecycle/compatibilidade + 10 contrato arquitectural).
 
 ## Estado da arquitectura
 
@@ -77,7 +78,7 @@ Capability Engine      ██████████ 100%
 Model Intelligence     ██████████ 100%
 Provider Layer         ██████████ 100%
 Task Intelligence      ██████████ 100%
-Runtime Engine         ████████░░ 80%
+Runtime Engine         █████████░ 90%
 Knowledge Engine       ░░░░░░░░░░ 0%
 API                    ░░░░░░░░░░ 0%
 UI                     ░░░░░░░░░░ 0%
@@ -85,8 +86,8 @@ UI                     ░░░░░░░░░░ 0%
 
 ## Estado Git
 
-Repositório remoto inicializado. A Fase 8 avançou nas unidades 8.1 (Extension Contract), 8.2 (Execution Context + Error Model), 8.3 (Resource Governance), 8.4 (Execution Policies), 8.5 (Runtime Engine) e 8.6 (Lifecycle + Compatibility), aditivas e reversíveis. A próxima unidade (8.7) é de testes de contrato arquitectural.
+Repositório remoto inicializado. A Fase 8 avançou nas unidades 8.1 (Extension Contract), 8.2 (Execution Context + Error Model), 8.3 (Resource Governance), 8.4 (Execution Policies), 8.5 (Runtime Engine), 8.6 (Lifecycle + Compatibility) e 8.7 (Architecture Contract Tests), aditivas e reversíveis. Falta decidir o Security/Policy (hardening 09) e o Project Isolation (hardening 10) antes do Gate de addons.
 
 ## Regra de continuação
 
-A próxima execução deve ler este ficheiro antes de seleccionar trabalho novo. A próxima unidade da Fase 8 é a **Fase 8.7 — Testes de contrato arquitectural**.
+A próxima execução deve ler este ficheiro antes de seleccionar trabalho novo. A próxima unidade da Fase 8 é a **decisão arquitectural material — Security / Policy (hardening 09) e Project Isolation (hardening 10)**, pré-requisitos do Gate de addons.
