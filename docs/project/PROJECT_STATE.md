@@ -22,17 +22,34 @@ Fase 7 — Task Intelligence (plano de execução): integração determinística
 
 ## Próxima unidade
 
-Iniciar a **Fase 8 — Runtime Engine** (execução no fornecedor/modelo escolhidos, monitorização, cancelamento e gestão de recursos).
+Iniciar a **Fase 8 — Runtime Engine**, começando pela auditoria da base e pela preparação controlada dos contratos necessários à execução.
 
 ## Subsistemas funcionais implementados:
 
-- Platform Foundation (detecção e abstração de SO)
+- Platform Foundation (detecção e abstracção de SO)
 - Hardware Intelligence (CPU, memória, GPU, armazenamento, perfil, capacidades)
 - Runtime Intelligence (carga, memória, processos, uptime, disponibilidade)
 - Capability Engine (definições, registo, avaliação, compatibilidade, capacidades disponíveis)
 - Model Intelligence (registo, metadados, requisitos, compatibilidade, classificação, recomendação)
 - Provider Layer (contratos, registo, detecção, adaptadores de runtime, health checks)
 - Task Intelligence (contrato, classificação, requisitos, selecção de capacidades, plano de execução)
+
+## Desenvolvimento controlado
+
+A base de desenvolvimento está agora formalizada em `docs/project/CONTROLLED_DEVELOPMENT.md` e `docs/architecture/CORE_HARDENING_PLAN.md`.
+
+A família de comandos OpenCode disponível no projecto é:
+
+- `/wsai`
+- `/wsai-run`
+- `/wsai-audit`
+- `/wsai-plan`
+- `/wsai-implement`
+- `/wsai-test`
+- `/wsai-doc`
+- `/wsai-git`
+
+`/wsai-run` permanece o orquestrador autónomo. Os restantes comandos permitem executar cada etapa individualmente.
 
 ## Testes
 
@@ -42,7 +59,7 @@ Base de testes configurada com `pytest`. Executar:
 py -3.12 -m pytest -v
 ```
 
-Resultado actual: 209 testes aprovados (3 fundação + 5 platform + 17 hardware + 24 runtime + 33 capability + 42 model + 46 provider + 39 task).
+Baseline registada: 209 testes aprovados (3 fundação + 5 platform + 17 hardware + 24 runtime + 33 capability + 42 model + 46 provider + 39 task).
 
 ## Estado da arquitectura
 
@@ -63,8 +80,8 @@ UI                     ░░░░░░░░░░ 0%
 
 ## Estado Git
 
-Repositório remoto inicializado. O estado da cópia local deve ser verificado pelo ambiente de desenvolvimento. A fundação Python e a base de testes estão sincronizadas com a cópia local.
+Repositório remoto inicializado. A cópia local deve ser verificada pelo ambiente de desenvolvimento. A preparação da Fase 8 é feita numa alteração controlada e reversível antes de integrar novas responsabilidades funcionais.
 
 ## Regra de continuação
 
-A próxima execução deve ler este ficheiro antes de seleccionar trabalho novo.
+A próxima execução deve ler este ficheiro antes de seleccionar trabalho novo. A primeira unidade da Fase 8 deve auditar o estado real do Runtime e do fluxo `wsai-run` antes de modificar código funcional.

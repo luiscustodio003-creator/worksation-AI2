@@ -1,3 +1,6 @@
+---
+description: Orquestrar autonomamente uma unidade completa de desenvolvimento WSAI 2
+---
 # /wsai-run — ORQUESTRADOR AUTÓNOMO DO WORKSTATION AI 2
 
 ## Missão
@@ -36,6 +39,21 @@ A visibilidade de progresso é obrigatória mesmo quando a unidade é executada 
 O progresso mostrado deve reflectir o estado real e nunca inventar percentagens. Se uma etapa ainda não puder ser quantificada, usar `EM EXECUÇÃO` em vez de uma percentagem falsa.
 
 > Nota: este requisito garante progresso visível no fluxo do agente. A disposição exacta de painéis laterais é controlada pela interface do OpenCode e não pelo ficheiro de comando.
+
+## FAMÍLIA DE COMANDOS WSAI
+
+`/wsai-run` é o orquestrador completo. As etapas também estão disponíveis individualmente:
+
+```text
+/wsai-audit
+/wsai-plan
+/wsai-implement
+/wsai-test
+/wsai-doc
+/wsai-git
+```
+
+Quando `/wsai-run` executa autonomamente, deve seguir as mesmas regras e critérios definidos para essa família. Não deve saltar a auditoria de responsabilidades existentes só porque a próxima unidade aparece no estado persistente.
 
 ## Entrada
 
@@ -181,6 +199,8 @@ Implementar de acordo com:
 O código deve possuir documentação técnica detalhada e comentários úteis em português de Portugal.
 
 Não criar uma estrutura artificialmente complexa.
+
+Antes de criar uma nova responsabilidade, verificar se já existe uma implementação equivalente. Se existir, integrar ou evoluir essa implementação em vez de duplicá-la.
 
 Se durante a implementação forem encontrados problemas menores e solucionáveis sem alterar a arquitectura, corrigi-los autonomamente e continuar.
 
