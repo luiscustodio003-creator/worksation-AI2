@@ -6,15 +6,15 @@
 
 ## Fase actual
 
-**FASE 8 — Runtime Engine — CONCLUÍDA**
+**FASE 9 — Knowledge Engine (subsistema 3.9) — EM CURSO**
 
 ## Estado da fase
 
-**FASE 8 CONCLUÍDA.** As unidades 8.1–8.9 e os três residuais Via B estão implementados, testados e documentados. O gate `/wsai-validate foundation` foi executado sobre o estado real do repositório (2026-09-09): **423 testes aprovados, 0 falhas**, sem blockers funcionais ou arquitecturais, com decisão **🟡 APPROVED WITH WARNINGS** (apenas avisos P3 documentados). O closing documental foi completado neste fecho formal (relatório persistente integral e `PROJECT_STATE.md` alinhado — resolução do P2 documental W-01). A Fase 9 — Knowledge Engine fica autorizada a iniciar, sujeita ao planeamento do subsistema 3.9.
+**FASE 9 INICIADA** após o fecho formal da Fase 8 (gate de fundação `APPROVED WITH WARNINGS`). A unidade 9.1 — **Knowledge Contract** — está concluída: contrato declarativo e imutável do subsistema (`wsai2.knowledge`), autorizando `knowledge` no teste de contrato arquitectural. A decisão de fronteira foi documentada (subsistema folha, sem arestas novas em `FRONTEIRAS`). Suíte completa: **433 testes aprovados, 0 falhas**.
 
 ## Última unidade implementada
 
-Fecho formal da Fase 8: execução completa da suíte (423/423), gate `FOUNDATION APPROVED WITH WARNINGS`, relatório persistente integral em `docs/validation/FOUNDATION_VALIDATION_REPORT.md` e estado actualizado para **FASE 8 CONCLUÍDA**. Unidade puramente de governação e documentação — sem alterações a `src/wsai2`.
+Fase 9 — unidade 9.1: **Knowledge Contract** (`docs/knowledge/BASE-37-knowledge-engine-contract.md`). Criado `wsai2.knowledge` com `KnowledgeKind` (document/extract/note), `KnowledgeMetadata` (fonte, idioma, autor, etiquetas, extras), `KnowledgeRecord` (frozen, validado à criação) e `KNOWLEDGE_CONTRACT_VERSION = "1.0"`. Subsistema folha (só stdlib). O teste de contrato arquitectural passou a autorizar `knowledge` (fica `SUBSISTEMAS_FUTUROS = ("api", "ui")`). 10 novos testes.
 
 ## Estado dos residuais Via B
 
@@ -42,6 +42,7 @@ Fecho formal da Fase 8: execução completa da suíte (423/423), gate `FOUNDATIO
 - Architecture Contract Tests
 - Security / Policy + Project Isolation
 - Gate — Core pronto para addons
+- Knowledge Contract (Fase 9, subsistema 3.9 — contrato declarativo)
 
 ## Filas multicamadas — contrato
 
@@ -90,9 +91,9 @@ A documentação está alinhada com o estado funcional conhecido. A Fase 8 está
 
 ## Testes
 
-Baseline anterior ao residual 3: **415 testes**.
+Baseline do fecho da Fase 8: **423 testes**.
 
-Foram adicionados **8 testes** em `tests/test_runtime_engine_queue.py`, cobrindo a fila e a integração com o Scheduler. A execução fornecida após a implementação registou **423/423 testes aprovados**.
+Foram adicionados **10 testes** em `tests/test_knowledge.py`, cobrindo o contrato do Knowledge Engine (construção, validação à criação, imutabilidade, defaults, enums e resumo textual). A execução registou **433/433 testes aprovados**.
 
 Foi também criado `.github/workflows/tests.yml` para executar a suíte em Python 3.12 no GitHub Actions. O estado remoto continua tratado como evidência P3 até existir confirmação de uma execução.
 
@@ -108,7 +109,7 @@ Model Intelligence     ██████████ 100%
 Provider Layer         ██████████ 100%
 Task Intelligence      ██████████ 100%
 Runtime Engine         ██████████ 100% (implementação)
-Knowledge Engine       ░░░░░░░░░░ 0%   (não iniciado)
+Knowledge Engine       █░░░░░░░░░ 10%  (contrato 9.1 — em curso)
 API                    ░░░░░░░░░░ 0%   (não iniciado)
 UI                     ░░░░░░░░░░ 0%   (não iniciado)
 ```
@@ -117,21 +118,31 @@ Estas barras não representam progresso global do projecto; representam maturida
 
 ## Estado Git
 
-O fecho formal da Fase 8 foi registado em `main`: relatório de validação integral, log de implementação e `PROJECT_STATE.md` actualizado, num commit coerente de governação. Não existem alterações de código funcional pendentes nesta unidade.
+A unidade 9.1 (contrato do Knowledge Engine) foi registada em `main` num commit coerente: módulo `knowledge` (base + init), testes, BASE-37 e documentação arquitectural/estado alinhados.
 
 ## Regra de continuação
 
-**Fase 8 formalmente aprovada.** A próxima fase é a **Fase 9 — Knowledge Engine** (subsistema 3.9):
+**Fase 9 — Knowledge Engine EM CURSO.** A próxima unidade é a **9.2 — registo de conhecimento (ingestão/admissão)**:
 
 ```text
-FASE 8 CONCLUÍDA (gate APPROVED WITH WARNINGS)
+9.1 contrato do subsistema ✓ (esta unidade)
     ↓
-determinar próxima unidade em ROADMAP.md
+9.2 KnowledgeRegistry — registo central de KnowledgeRecord
+   (admissão por id, duplicações rejeitadas, padrão dos registos
+    das Fases 4–8)
     ↓
-Fase 9 — Knowledge Engine (ingestão, extracção, metadados,
-indexação, recuperação, contexto)
+9.3 extracção / metadados
+9.4 indexação
+9.5 recuperação
+9.6 construção de contexto
 ```
 
-A Fase 9 **não está autorizada a arrancar sem planeamento dedicado**: o subsistema 3.9 é novo (actualmente apenas um stub arquitectural) e a sua criação é uma decisão arquitectural material — contrato do subsistema, fronteiras em `FRONTEIRAS`, modelo de documentos e estratégia de indexação/recuperação exigem auditoria e plano em unidade própria, antes de qualquer código de produção. O teste de contrato arquitectural proíbe antecipação de `knowledge` antes dessa decisão.
+A unidade 9.2 segue o padrão já autorizado dos `Registry` das Fases 4, 5,
+6 e 8 (sem decisão arquitectural material nova) e pode ser executada de
+forma autónoma. As unidades de indexação/recuperação (9.4/9.5) e a
+estratégia de armazenamento exigirão decisão documentada antes de I/O;
+essas decisões serão tratadas no devido ritmo, uma unidade de cada vez,
+mantendo sempre a reversibilidade.
 
-Nenhum novo módulo funcional deve ser criado antes dessa auditoria formal da Fase 9.
+Nenhum I/O, motor de embeddings ou armazenamento persistente é criado
+antes dessa decisão.

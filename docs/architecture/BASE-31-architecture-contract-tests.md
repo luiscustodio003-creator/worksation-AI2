@@ -32,9 +32,12 @@ qualquer módulo de produção.
   plataforma (`get_platform`) não expõe os adaptadores.
 - **Garantir documentação:** todo o ficheiro de `src/wsai2` tem docstring
   do módulo e cada subsistema tem `docs/<nome>/BASE-*.md`.
-- **Impedir antecipação:** subsistemas futuros (api, ui, knowledge —
-  Fases 9–11) estão proibidos de existir como pastas placeholder, e
+- **Impedir antecipação:** subsistemas ainda não iniciados (api, ui —
+  Fases 10–11) estão proibidos de existir como pastas placeholder, e
   nenhuma pasta pode viver só com `__init__.py` que não re-exporta.
+  O subsistema `knowledge` foi autorizado na unidade 9.1 (Fase 9
+  aprovada no estado persistente) e saiu desta lista sem quebra das
+  restantes garantias.
 
 ## Ficheiros criados/alterados
 
@@ -61,7 +64,7 @@ Nenhum módulo de produção nem qualquer outro teste existente foi alterado.
 | 6 | `get_platform` é o ponto único de entrada | Artigo 4 |
 | 7 | Windows/Linux não se importam entre si | Artigo 4 |
 | 8 | sem ciclos de import em runtime | Artigo 2 (dependências) |
-| 9 | api/ui/knowledge não antecipados | Artigo 8 (Fases 9–11) |
+| 9 | api/ui não antecipados (knowledge autorizado na 9.1) | Artigo 8 (Fases 10–11) |
 | 10 | nenhuma pasta placeholder | Artigo 8 |
 
 A lista `FRONTEIRAS` (aresta autorizada por subsistema) espelha a

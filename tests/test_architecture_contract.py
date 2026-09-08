@@ -10,8 +10,10 @@ repositório real:
   subsistemas pertence a uma lista explícita (``FRONTEIRAS``);
 - ARTIGO 4 — código específico de SO isolado na camada de plataforma,
   alcançável apenas através da fábrica;
-- ARTIGO 8 — crescimento controlado: subsistemas futuros (api, ui,
-  knowledge) não são antecipados como pacotes vazios;
+- ARTIGO 8 — crescimento controlado: subsistemas ainda não iniciados
+  (api, ui) não são antecipados como pacotes vazios. O subsistema
+  ``knowledge`` passou a estar autorizado na unidade 9.1 (Fase 9
+  aprovada no estado persistente) — deixa de constar desta lista;
 - ARTIGO 13/2 — sem ciclos de import em runtime (arestas tipográficas
   ``TYPE_CHECKING`` não contam).
 
@@ -59,8 +61,9 @@ FRONTEIRAS: frozenset[tuple[str, str]] = frozenset(
     }
 )
 
-# Subsistemas funcionais previstos mas ainda não iniciados (Fases 9–11).
-SUBSISTEMAS_FUTUROS = ("api", "ui", "knowledge")
+# Subsistemas funcionais previstos mas ainda não iniciados (Fases 10–11);
+# knowledge foi autorizado na unidade 9.1 e saiu desta lista.
+SUBSISTEMAS_FUTUROS = ("api", "ui")
 
 # Adaptadores de plataforma: específicos de SO, de acesso reservado.
 _ADAPTADORES_SO = ("wsai2.platform.windows", "wsai2.platform.linux")
@@ -227,7 +230,7 @@ def test_artigo2_13_sem_ciclos_de_import_em_runtime() -> None:
 
 
 def test_artigo8_subsistemas_futuros_nao_antecipados() -> None:
-    """API, UI e Knowledge não podem existir como pastas placeholder."""
+    """API e UI não podem existir como pastas placeholder antes das Fases 10–11."""
     antecipados: list[str] = []
     for nome in SUBSISTEMAS_FUTUROS:
         if (RAIZ_SRC / nome).exists():

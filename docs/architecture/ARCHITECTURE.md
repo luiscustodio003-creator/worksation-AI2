@@ -58,7 +58,7 @@ Executa planos, gere recursos, concorrência, cancelamento, timeouts, streaming 
 
 ### 3.9 Knowledge Engine
 
-Trata ingestão de ficheiros, extracção, metadados, indexação, recuperação e construção de contexto.
+Trata a gestão de conhecimento: ingestão de ficheiros, extracção, metadados, indexação, recuperação e construção de contexto. Na unidade 9.1 foi criado o contrato declarativo do subsistema (`wsai2.knowledge`): `KnowledgeKind` (document/extract/note), `KnowledgeMetadata` (fonte, idioma, autor, etiquetas) e `KnowledgeRecord` (imutável, validado à criação), além da versão de contrato `KNOWLEDGE_CONTRACT_VERSION = "1.0"`. O subsistema é **folha** — depende apenas de stdlib; a ingestão e a extracção reais consumirão extensões, fornecedores e o Runtime em unidades posteriores, sem antecipar I/O nem motores de embeddings neste contrato.
 
 ### 3.10 API
 
@@ -126,9 +126,9 @@ Resultado
 
 ## 7. Estado actual da arquitectura
 
-As fases Platform Foundation, Hardware Intelligence, Runtime Intelligence, Capability Engine, Model Intelligence, Provider Layer e Task Intelligence encontram-se concluídas. A **Fase 8 — Runtime Engine** tem a implementação funcional concluída: unidades 8.1–8.9, monitorização contínua (residual 1), concorrência entre planos (residual 2) e filas multicamadas (residual 3). A fila multicamada é uma extensão aditiva do Scheduler e não altera o caminho directo existente.
+As fases Platform Foundation, Hardware Intelligence, Runtime Intelligence, Capability Engine, Model Intelligence, Provider Layer, Task Intelligence e **Fase 8 — Runtime Engine** encontram-se concluídas (8.1–8.9, monitorização contínua, concorrência entre planos e filas multicamadas). A Fase 8 foi **formalmente fechada** pelo gate de validação da fundação (consulta `docs/validation/FOUNDATION_VALIDATION_REPORT.md`).
 
-A Fase 8 só é considerada **formalmente fechada** após a execução da validação final da fundação e o registo do respectivo resultado em `docs/validation/FOUNDATION_VALIDATION_REPORT.md`.
+A **Fase 9 — Knowledge Engine** está em curso: a unidade 9.1 define o contrato declarativo do subsistema 3.9 (`wsai2.knowledge`).
 
 A fonte de verdade para o progresso, estado de validação e próxima fase é `docs/project/PROJECT_STATE.md`. A arquitectura e os planos de hardening devem reflectir o estado real do código e dos testes; não devem manter como “futuro” um componente já implementado e coberto por testes.
 

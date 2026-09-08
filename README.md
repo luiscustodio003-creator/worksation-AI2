@@ -64,13 +64,15 @@ Antes de iniciar trabalho novo, o processo deve inspeccionar o estado do project
 
 ## Estado actual
 
-A **Fase 8 — Runtime Engine** encontra-se na unidade **8.9 — Gate: Core pronto para addons**, concluída e aprovada, mais as unidades residuais de **monitorização contínua** (observação em curso de execuções e agendamentos, aditiva e reversível) e **concorrência entre planos** (execução paralela opcional no scheduler, `concurrency`). As unidades 8.1 a 8.9 estão implementadas e cobertas por testes. O Gate formaliza os contratos necessários para evolução por extensões, incluindo lifecycle, compatibilidade, permissões, política de execução, governação de recursos, contexto de execução e isolamento de projectos.
+A **Fase 8 — Runtime Engine** está **formalmente concluída**: unidades 8.1–8.9 e os três residuais Via B (monitorização contínua, concorrência entre planos e filas multicamadas) implementados, com o gate de fundação **APPROVED WITH WARNINGS** e relatório persistente em `docs/validation/FOUNDATION_VALIDATION_REPORT.md`.
+
+A **Fase 9 — Knowledge Engine** está **em curso**. A unidade 9.1 (contrato declarativo do subsistema 3.9 — `wsai2.knowledge`) está concluída; as unidades seguintes (ingestão/admissão, extracção, metadados, indexação, recuperação e contexto) são governadas pelo `PROJECT_STATE.md`.
 
 O estado persistente e a fonte de verdade operacional encontram-se em:
 
 `docs/project/PROJECT_STATE.md`
 
-Após o Gate 8.9, a **decisão material** foi registada no estado do projecto: fechar primeiro os **residuais da Fase 8** (via B) — monitorização contínua e concorrência entre planos concluídas, faltando **filas multicamada** — e só depois iniciar a **Fase 9 — Knowledge Engine** (ingestão, extracção e metadados).
+O estado persistente regista a Fase 8 formalmente fechada e o início da Fase 9 (unidade 9.1 — contrato do Knowledge Engine concluída).
 
 ## Sincronização
 

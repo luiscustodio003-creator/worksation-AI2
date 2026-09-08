@@ -112,14 +112,20 @@ A ordem concreta das unidades e dos residuais é determinada pelo `PROJECT_STATE
 
 ## Fase 9 — Knowledge Engine
 
-- ingestão;
+- contrato do subsistema (3.9) ✓ (unidade 9.1 — `wsai2.knowledge`);
+- ingestão/admissão de conhecimento;
 - extracção;
 - metadados;
 - indexação;
 - recuperação;
 - contexto.
 
-**Entrada condicionada:** só iniciar depois de a Fase 8 estar formalmente aprovada pelo `/wsai-validate foundation`.
+**Estado actual:** fase **em curso**. A entrada estava condicionada à
+aprovação formal da Fase 8 pelo `/wsai-validate foundation` — satisfeita
+(2026-09-09). A unidade 9.1 (contrato declarativo) está concluída; a
+ordem concreta das restantes unidades é governada por `PROJECT_STATE.md`.
+Unidades com I/O ou motor de embeddings (indexação/recuperação) exigirão
+decisão documentada antes de qualquer persistência quando se aproximarem.
 
 ## Fase 10 — API
 

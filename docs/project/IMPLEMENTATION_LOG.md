@@ -1,5 +1,53 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-09 — Knowledge Contract — Fase 9.1
+
+### Objectivo
+
+Iniciar a Fase 9 — Knowledge Engine com o contrato declarativo do
+subsistema 3.9, autorizada após o fecho formal da Fase 8, seguindo o
+padrão das fases anteriores (unidade declarativa primeira), sem I/O,
+indexação ou recuperação.
+
+### Realizado
+
+- `src/wsai2/knowledge/base.py` (novo): `KNOWLEDGE_CONTRACT_VERSION`
+  (`"1.0"`), `KnowledgeKind` (`document`/`extract`/`note`),
+  `KnowledgeMetadata` (frozen: source, language, author, tags, extras) e
+  `KnowledgeRecord` (frozen, validado em `__post_init__`);
+- `src/wsai2/knowledge/__init__.py` — exports públicos do submódulo;
+- `tests/test_knowledge.py` (novo, **10 testes**) — contrato, validação,
+  imutabilidade, defaults, enums, versão e resumo;
+- `tests/test_architecture_contract.py` — `knowledge` sai de
+  `SUBSISTEMAS_FUTUROS` (fica `("api", "ui")`); justificação documental
+  da decisão de fronteira;
+- `ARCHITECTURE.md` — secção 3.9 expandida; secção 7 actualizada
+  (Fase 8 fechada, Fase 9 em curso);
+- `BASE-31` — regra 9 alinhada com a autorização de `knowledge`;
+- `docs/knowledge/BASE-37-knowledge-engine-contract.md` — relatório da base.
+
+### Arquitectura abrangida
+
+Fase 9 — Knowledge Engine (subsistema 3.9). `knowledge` é **folha** nesta
+unidade: depende apenas de stdlib, sem arestas novas em `FRONTEIRAS`.
+Nenhum módulo das Fases 1–8 foi alterado. Decisão de fronteira registada:
+a criação do subsistema foi autorizada pelo estado persistente/roadmap
+(gate de fundação aprovado) e documentada em BASE-37.
+
+### Validação
+
+```text
+py -3.12 -m pytest   →   433 passed (423 bases anteriores + 10 knowledge)
+```
+
+### Próximo passo
+
+Fase 9.2 — Knowledge Registry: registo central de `KnowledgeRecord`
+(admissão por id, duplicações rejeitadas), no padrão dos registos das
+Fases 4–8, sem I/O.
+
+---
+
 ## 2026-09-09 — Fecho formal da Fase 8 — validação da fundação
 
 ### Objectivo
