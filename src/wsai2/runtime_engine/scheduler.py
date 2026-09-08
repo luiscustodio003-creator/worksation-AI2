@@ -30,6 +30,7 @@ from .manager import RuntimeManager
 if TYPE_CHECKING:
     from wsai2.execution import RecoveryPolicy, TimeoutPolicy
     from wsai2.task import ExecutionPlan
+    from .monitoring import ExecutionMonitor
 
 # Ordem de serviço por prioridade (determinística; valores menores
 # executam primeiro).
@@ -73,6 +74,7 @@ class Scheduler:
         recovery: RecoveryPolicy | None = None,
         policy: PolicyEngine | None = None,
         stop_on_failure: bool = False,
+        monitor: ExecutionMonitor | None = None,
     ) -> SchedulerReport:
         """Executa os planos na ordem determinada por prioridade.
 
@@ -92,6 +94,10 @@ class Scheduler:
                 (Gate de addons, 8.9). Sem motor, nenhuma autorização é
                 aplicada (comportamento preservado).
             stop_on_failure: interrompe o agendamento na primeira falha.
+            monitor: monitor de execução (unidade residual da Fase 8)
+                propagado ao gestor e alimentado com os marcos do
+                agendamento; sem monitor, nenhuma observação contínua é
+                feita (comportamento preservado).
 
         Returns:
             O relatório do agendamento, com a ordem efectiva e os
@@ -108,6 +114,8 @@ class Scheduler:
         ordem = sorted(plans, key=_chave)
         resultados: list[ScheduleOutcome] = []
         inicio = self._clock()
+        if monitor is not None:
+            monitor.on_schedule_started()
 
         for plano in ordem:
             contexto = None
@@ -119,6 +127,7 @@ class Scheduler:
                 timeout=timeout,
                 recovery=recovery,
                 policy=policy,
+                monitor=monitor,
             )
             prioridade = prioridades.get(plano.task_id, ExecutionPriority.NORMAL)
             resultados.append(
@@ -131,11 +140,14 @@ class Scheduler:
             if stop_on_failure and not relatorio.is_success:
                 break
 
-        return SchedulerReport(
+        relatorio_final = SchedulerReport(
             outcomes=tuple(resultados),
             order=tuple(resultado.task_id for resultado in resultados),
             duration=self._clock() - inicio,
         )
+        if monitor is not None:
+            monitor.on_schedule_finished(relatorio_final)
+        return relatorio_final
 
 
 __all__ = ["Scheduler"]

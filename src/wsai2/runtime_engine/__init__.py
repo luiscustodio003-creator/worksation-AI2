@@ -6,10 +6,12 @@ Intelligence (Fase 7), aplicando as políticas centralizadas de timeout,
 cancelamento e recuperação (8.4) e a governação de recursos (8.3), e
 agenda múltiplos planos por prioridade de forma determinística.
 
-Fora de âmbito desta unidade: lifecycle de extensões (8.6), filas com
-concorrência entre planos e monitorização contínua — a observabilidade
-aqui produzida é por execução (``ExecutionReport``) e por agendamento
-(``SchedulerReport``).
+Fora de âmbito desta unidade: lifecycle de extensões (8.6 — subsistema
+``wsai2.extension``) e filas com concorrência entre planos. A observabilidade
+cobre execução (``ExecutionReport``), agendamento (``SchedulerReport``) e,
+desde a unidade residual de monitorização contínua, o estado **em curso** via
+``ExecutionMonitor`` (``snapshot()`` interroga as execuções enquanto decorrem,
+de outra thread, sem esperar pelo relatório final).
 """
 
 from .base import (
@@ -22,11 +24,15 @@ from .base import (
     StepStatus,
 )
 from .manager import RuntimeManager
+from .monitoring import ExecutionMonitor, ExecutionSnapshot, MonitorSnapshot
 from .scheduler import Scheduler
 
 __all__ = [
+    "ExecutionMonitor",
     "ExecutionReport",
+    "ExecutionSnapshot",
     "ExecutionStatus",
+    "MonitorSnapshot",
     "RuntimeManager",
     "ScheduleOutcome",
     "Scheduler",

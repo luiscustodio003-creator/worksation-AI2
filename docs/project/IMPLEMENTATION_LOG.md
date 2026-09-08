@@ -1,5 +1,64 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-08 — Monitorização contínua do Runtime — Fase 8 residual (Via B)
+
+### Objectivo
+
+Fechar a unidade 1 dos residuais da Fase 8 (Via B): observar execuções de
+planos e agendamentos **em curso** — não apenas o relatório pós-facto da
+8.5 — de forma aditiva, thread-safe e reversível, reutilizando
+`FRONTEIRAS` e o determinismo do scheduler por omissão.
+
+### Realizado
+
+- `src/wsai2/runtime_engine/monitoring.py` (novo): `ExecutionMonitor` com
+  hooks `on_execution_started` / `on_step_started` / `on_execution_finished`
+  / `on_schedule_started` / `on_schedule_finished` e `snapshot()` protegido
+  por `threading.Lock`; `ExecutionSnapshot` e `MonitorSnapshot` como API
+  pública (execução em curso, passo actual, elapsed, marcos do scheduler);
+- `RuntimeManager.execute_plan(..., monitor=None)` — ganchos de arranque,
+  por passo e de finalização (inclui execuções negadas pela política, com
+  passos `SKIPPED`);
+- `Scheduler.run(..., monitor=None)` — propaga o monitor ao gestor e regista
+  os marcos do agendamento;
+- `runtime_engine/__init__.py` — exports públicos novos;
+- `tests/test_runtime_engine_monitoring.py` (novo, 8 testes) — API, fotografia
+  in-flight de outra thread, avanço de passos, falha, negação por política,
+  reutilização do relatório final e propagação pelo scheduler;
+- fakes em `tests/test_runtime_engine.py` actualizados para aceitar `monitor`.
+
+### Arquitectura abrangida
+
+Fase 8 — Runtime Engine (`wsai2.runtime_engine`, subsistema 3.8).
+Alteração **100% aditiva e reversível**: sem o kwarg `monitor`, o
+comportamento é idêntico ao das unidades anteriores; sem arestas novas em
+`FRONTEIRAS`; `monitoring.py` depende só de `base.py` e da stdlib. A
+medição de recursos do sistema (CPU/RAM/GPU) permanece no Runtime
+Intelligence, fora desta unidade. Precedentes de concorrência reutilizados:
+worker thread daemon da 8.4 e token de cancelamento da 8.2.
+
+### Resultado
+
+Observação contínua de execuções e agendamentos por interrogação em
+qualquer momento; relatórios finais e scheduler determinístico intactos.
+Unidade registada no `PROJECT_STATE` (baseline 405, Runtime Engine 97%).
+
+### Validação
+
+```text
+py -3.12 -m pytest   →   405 passed (397 bases anteriores + 8 monitorização)
+```
+
+### Próximo passo
+
+Unidade 2 dos residuais da Fase 8 — **Concorrência entre planos**:
+execução paralela opcional no scheduler, aditiva, reutilizando o
+`ExecutionMonitor`, preservando o scheduler determinístico por omissão.
+A decisão pós-Gate (Via B) fica registada no `PROJECT_STATE`; a Fase 9 é
+iniciada depois do fecho da Fase 8.
+
+---
+
 ## 2026-09-08 — Gate — Core pronto para addons — Fase 8.9
 
 ### Objectivo

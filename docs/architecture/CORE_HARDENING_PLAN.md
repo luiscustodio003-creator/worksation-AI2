@@ -135,8 +135,10 @@ Execution Result
 > unidade de políticas — `execute_with_policies` da 8.4 + `ResourceGovernor`
 > da 8.3 — devolvendo `ExecutionReport` por passo) e `Scheduler`
 > (agendamento determinístico por prioridade com `stop_on_failure`).
-> Concorrência entre planos, filas multicamadas e monitorização contínua
-> ficam para unidades posteriores; o passo concreto (contacto
+> **Residual 1 (monitorização contínua) implementado**: `ExecutionMonitor`
+> observa em curso execuções e agendamentos, aditivo e reversível
+> (BASE-34). Concorrência entre planos e filas multicamadas ficam para
+> unidades posteriores; o passo concreto (contacto
 > modelo/fornecedor) é um `step_runner` injectado.
 
 ## Hardening 08 — Versioning / Compatibility

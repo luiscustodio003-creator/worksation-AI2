@@ -16,7 +16,9 @@ Responsabilidades:
 - validar o plano (executável) e a coerência com o contexto;
 - construir o contexto por omissão quando não é fornecido;
 - executar o plano com as políticas centralizadas da Fase 8;
-- produzir o ``ExecutionReport`` (Execution Result) com métricas por passo.
+- produzir o ``ExecutionReport`` (Execution Result) com métricas por passo;
+- alimentar a monitorização contínua (``ExecutionMonitor``) quando fornecida
+  — estado em curso e relatório final, sem alterar o fluxo.
 
 Fora de âmbito desta unidade: agendamento de múltiplos planos (8.5 —
 ``scheduler.py``), lifecycle de extensões (8.6) e contacto com
@@ -48,6 +50,7 @@ if TYPE_CHECKING:
     from wsai2.execution import RecoveryPolicy, TimeoutPolicy
     from wsai2.resource import ResourceGovernor
     from wsai2.security import PolicyDecision
+    from .monitoring import ExecutionMonitor
 
 
 def _passo_vazio(indice: int, passo: str) -> None:
@@ -111,6 +114,7 @@ class RuntimeManager:
         timeout: TimeoutPolicy | None = None,
         recovery: RecoveryPolicy | None = None,
         policy: PolicyEngine | None = None,
+        monitor: ExecutionMonitor | None = None,
     ) -> ExecutionReport:
         """Executa um plano de execução e devolve o relatório.
 
@@ -124,6 +128,10 @@ class RuntimeManager:
             recovery: política de recuperação (retry) do plano.
             policy: motor de política (8.8) aplicado **antes do passo 1**;
                 sem motor, nenhuma autorização é aplicada (comportamento
+                preservado).
+            monitor: monitor de execução (unidade residual da Fase 8) que
+                regista o estado em curso e o relatório final; sem monitor,
+                nenhuma observação contínua é feita (comportamento
                 preservado).
 
         Returns:
@@ -162,6 +170,8 @@ class RuntimeManager:
         runner = step_runner if step_runner is not None else _passo_vazio
         passos: list[StepOutcome] = []
         inicio = self._clock()
+        if monitor is not None:
+            monitor.on_execution_started(contexto.execution_id, plan.task_id)
 
         decisao: PolicyDecision | None = None
         if policy is not None:
@@ -197,7 +207,14 @@ class RuntimeManager:
                 )
                 raise denied_decision(decisao)
             execute_with_policies(
-                functools.partial(self._executar_passos, plan, runner, passos),
+                functools.partial(
+                    self._executar_passos,
+                    plan,
+                    runner,
+                    passos,
+                    monitor,
+                    contexto.execution_id,
+                ),
                 context=contexto,
                 timeout=timeout,
                 recovery=recovery,
@@ -219,7 +236,7 @@ class RuntimeManager:
             estado = ExecutionStatus.FAILED
             erro = _erro_wsai(problema)
 
-        return ExecutionReport(
+        relatorio = ExecutionReport(
             execution_id=contexto.execution_id,
             task_id=plan.task_id,
             status=estado,
@@ -227,12 +244,17 @@ class RuntimeManager:
             duration=self._clock() - inicio,
             error=erro,
         )
+        if monitor is not None:
+            monitor.on_execution_finished(relatorio)
+        return relatorio
 
     def _executar_passos(
         self,
         plan: ExecutionPlan,
         runner: StepRunner,
         registo: list[StepOutcome],
+        monitor: ExecutionMonitor | None,
+        execution_id: str,
     ) -> None:
         """Executa os passos do plano, observando cada um no ``registo``.
 
@@ -245,6 +267,8 @@ class RuntimeManager:
         total = len(plan.steps)
         for indice, passo in enumerate(plan.steps):
             inicio = self._clock()
+            if monitor is not None:
+                monitor.on_step_started(execution_id, indice, passo)
             try:
                 runner(indice, passo)
             except Exception as problema:  # noqa: BLE001 - registado e propagado
