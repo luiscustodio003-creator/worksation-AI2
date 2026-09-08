@@ -1,5 +1,63 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-08 — Concorrência entre planos — Fase 8 residual (Via B)
+
+### Objectivo
+
+Fechar a unidade 2 dos residuais da Fase 8 (Via B): dar ao `Scheduler` a
+capacidade de executar vários planos em paralelo de forma **aditiva e
+opcional**, preservando o agendamento sequencial determinístico por
+prioridade como comportamento por omissão, e a governação de recursos
+partilhada em execução paralela.
+
+### Realizado
+
+- `Scheduler.run` ganha o kwarg aditivo `concurrency: int = 1` — com `1`
+  usa o caminho sequencial histórico (extraído para `_agendar_sequencial`,
+  comportamento intacto) e com `> 1` executa em paralelo
+  (`_agendar_paralelo` via `ThreadPoolExecutor`);
+- contextos materializados no thread principal com `execution_id` únicos
+  (duplicações rejeitadas antes de executar — `wsai.runtime.duplicate_execution`);
+- `stop_on_failure` paralelo: falha sinaliza um evento e os planos ainda
+  não iniciados são descartados (os em curso concluem e são reportados);
+- `step_runner` propagado do scheduler ao gestor (aditivo);
+- `ResourceGovernor` passa a **thread-safe** (trinco sobre o livro de
+  alocações e o contador) — dependência necessária para planos paralelos
+  partilharem a mesma instância com contracepção de recursos;
+- `tests/test_runtime_engine_concurrency.py` (novo, 10 testes) — validação,
+  equivalência sequencial, sobreposição real (barrier), ordem de
+  prioridade, `stop_on_failure` determinístico, falha parcial, monitor,
+  governador partilhado e unicidade de `execution_id`.
+
+### Arquitectura abrangida
+
+Fase 8 — Runtime Engine (`wsai2.runtime_engine`, subsistema 3.8) +
+`wsai2.resource` (thread-safety aditiva, sem mudança de semântica).
+Sem arestas novas em `FRONTEIRAS`; stdlib `concurrent.futures`/`threading`.
+Precedentes reutilizados: monitor thread-safe (residual 1), worker daemon
+da 8.4, token cooperativo da 8.2. Filas multicamadas permanecem o residual 3.
+
+### Resultado
+
+`Scheduler` com execução paralela opcional; relatório em ordem de
+prioridade nas duas vias; governador seguro em concorrência.
+Unidade registada no `PROJECT_STATE` (baseline 415, Runtime Engine 99%).
+
+### Validação
+
+```text
+py -3.12 -m pytest   →   415 passed (405 bases anteriores + 10 concorrência)
+```
+
+### Próximo passo
+
+Unidade 3 dos residuais da Fase 8 — **Filas multicamadas** (última da
+Fase 8): filas por prioridade com backlog sobre o scheduler actual,
+aditivas, preservando o agendamento directo. A decisão pós-Gate (Via B)
+está registada; a Fase 9 só é iniciada depois do fecho completo da Fase 8.
+
+---
+
 ## 2026-09-08 — Monitorização contínua do Runtime — Fase 8 residual (Via B)
 
 ### Objectivo

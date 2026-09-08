@@ -137,8 +137,11 @@ Execution Result
 > (agendamento determinístico por prioridade com `stop_on_failure`).
 > **Residual 1 (monitorização contínua) implementado**: `ExecutionMonitor`
 > observa em curso execuções e agendamentos, aditivo e reversível
-> (BASE-34). Concorrência entre planos e filas multicamadas ficam para
-> unidades posteriores; o passo concreto (contacto
+> (BASE-34). **Residual 2 (concorrência entre planos) implementado**:
+> `Scheduler.run` executa em paralelo com `concurrency > 1` (aditivo;
+> sequencial por omissão) e o `ResourceGovernor` é thread-safe para
+> partilha segura entre planos (BASE-35). Filas multicamadas ficam para a
+> unidade posterior; o passo concreto (contacto
 > modelo/fornecedor) é um `step_runner` injectado.
 
 ## Hardening 08 — Versioning / Compatibility

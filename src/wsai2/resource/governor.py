@@ -18,13 +18,20 @@ scheduling/gestor de execução (8.5) — o governador não agenda nem lança
 tarefas.
 
 Dimensões sem leitura de runtime (VRAM em uso, espaço livre de disco)
-são governadas pela capacidade estrutural; ``available_now`` fica
-``None`` e a limitação é explicitada.
-"""
+    são governadas pela capacidade estrutural; ``available_now`` fica
+    ``None`` e a limitação é explicitada.
+
+    Desde a unidade de concorrência entre planos (Fase 8), o governador é
+    **thread-safe**: o livro de alocações e o contador de sequência são
+    protegidos por um trinco, permitindo que o ``Scheduler`` execute planos
+    em paralelo sobre a mesma instância (os planos concorrentes vêem o já
+    comprometido uns dos outros — contracepção de recursos desejada).
+    """
 
 from __future__ import annotations
 
 import math
+import threading
 from dataclasses import replace
 from typing import TYPE_CHECKING
 
@@ -93,6 +100,7 @@ class ResourceGovernor:
         self._runtime = runtime
         self._allocations: dict[str, ResourceAllocation] = {}
         self._seq = 0
+        self._trinco = threading.Lock()
 
     def _capacity(self, dimension: ResourceDimension) -> float | None:
         """Capacidade estrutural total disponível na dimensão."""
@@ -125,14 +133,15 @@ class ResourceGovernor:
 
     def _committed(self, dimension: ResourceDimension) -> float:
         """Soma do valor já comprometido por alocações activas."""
-        total = 0.0
-        for allocation in self._allocations.values():
-            if not allocation.is_active:
-                continue
-            for check in allocation.checks:
-                if check.dimension is dimension:
-                    total += check.required
-        return total
+        with self._trinco:
+            total = 0.0
+            for allocation in self._allocations.values():
+                if not allocation.is_active:
+                    continue
+                for check in allocation.checks:
+                    if check.dimension is dimension:
+                        total += check.required
+            return total
 
     def committed_for(self, dimension: ResourceDimension) -> float:
         """Valor comprometido numa dimensão por alocações activas."""
@@ -211,6 +220,9 @@ class ResourceGovernor:
         comprometido) e, se satisfeito, regista uma alocação activa que
         passa a comprometer os valores pretendidos.
 
+        A operação é atómica face a outras chamadas concorrentes sobre a
+        mesma instância (trinco do livro de alocações).
+
         Args:
             owner: dono da reserva (tipicamente um id de execução).
             budget: limites declarativos a reservar.
@@ -231,26 +243,28 @@ class ResourceGovernor:
                 code="wsai.resource.insufficient",
                 details=details,
             )
-        alloc_id = allocation_id or self._next_id(owner)
-        if alloc_id in self._allocations:
-            raise ResourceError(
-                f"alocação já registada: {alloc_id}",
-                code="wsai.resource.duplicate",
+        with self._trinco:
+            alloc_id = allocation_id or self._next_id(owner)
+            if alloc_id in self._allocations:
+                raise ResourceError(
+                    f"alocação já registada: {alloc_id}",
+                    code="wsai.resource.duplicate",
+                )
+            allocation = ResourceAllocation(
+                allocation_id=alloc_id,
+                owner=owner,
+                checks=result.checks,
+                state=AllocationState.ACTIVE,
             )
-        allocation = ResourceAllocation(
-            allocation_id=alloc_id,
-            owner=owner,
-            checks=result.checks,
-            state=AllocationState.ACTIVE,
-        )
-        self._allocations[alloc_id] = allocation
+            self._allocations[alloc_id] = allocation
         return allocation
 
     def release(self, allocation_id: str) -> ResourceAllocation:
         """Liberta uma alocação, devolvendo os recursos comprometidos.
 
         A libertação é idempotente: uma alocação já libertada devolve-se
-        tal como está, sem erro.
+        tal como está, sem erro. A operação é atómica face a chamadas
+        concorrentes (trinco do livro de alocações).
 
         Args:
             allocation_id: identificador da alocação a libertar.
@@ -261,22 +275,24 @@ class ResourceGovernor:
         Raises:
             ResourceError: se a alocação for desconhecida.
         """
-        allocation = self._allocations.get(allocation_id)
-        if allocation is None:
-            raise ResourceError(
-                f"alocação desconhecida: {allocation_id}",
-                code="wsai.resource.unknown",
-            )
-        if not allocation.is_active:
-            return allocation
-        released = replace(allocation, state=AllocationState.RELEASED)
-        self._allocations[allocation_id] = released
+        with self._trinco:
+            allocation = self._allocations.get(allocation_id)
+            if allocation is None:
+                raise ResourceError(
+                    f"alocação desconhecida: {allocation_id}",
+                    code="wsai.resource.unknown",
+                )
+            if not allocation.is_active:
+                return allocation
+            released = replace(allocation, state=AllocationState.RELEASED)
+            self._allocations[allocation_id] = released
         return released
 
     @property
     def outstanding(self) -> tuple[ResourceAllocation, ...]:
         """Alocações activas (reservas em vigor)."""
-        return tuple(a for a in self._allocations.values() if a.is_active)
+        with self._trinco:
+            return tuple(a for a in self._allocations.values() if a.is_active)
 
 
 __all__ = ["ResourceGovernor"]

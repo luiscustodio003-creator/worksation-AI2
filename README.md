@@ -64,13 +64,13 @@ Antes de iniciar trabalho novo, o processo deve inspeccionar o estado do project
 
 ## Estado actual
 
-A **Fase 8 — Runtime Engine** encontra-se na unidade **8.9 — Gate: Core pronto para addons**, concluída e aprovada, mais a unidade residual de **monitorização contínua** (observação em curso de execuções e agendamentos, aditiva e reversível). As unidades 8.1 a 8.9 estão implementadas e cobertas por testes. O Gate formaliza os contratos necessários para evolução por extensões, incluindo lifecycle, compatibilidade, permissões, política de execução, governação de recursos, contexto de execução e isolamento de projectos.
+A **Fase 8 — Runtime Engine** encontra-se na unidade **8.9 — Gate: Core pronto para addons**, concluída e aprovada, mais as unidades residuais de **monitorização contínua** (observação em curso de execuções e agendamentos, aditiva e reversível) e **concorrência entre planos** (execução paralela opcional no scheduler, `concurrency`). As unidades 8.1 a 8.9 estão implementadas e cobertas por testes. O Gate formaliza os contratos necessários para evolução por extensões, incluindo lifecycle, compatibilidade, permissões, política de execução, governação de recursos, contexto de execução e isolamento de projectos.
 
 O estado persistente e a fonte de verdade operacional encontram-se em:
 
 `docs/project/PROJECT_STATE.md`
 
-Após o Gate 8.9, a **decisão material** foi registada no estado do projecto: fechar primeiro os **residuais da Fase 8** (via B) — monitorização contínua concluída, faltando **concorrência entre planos** e **filas multicamada** — e só depois iniciar a **Fase 9 — Knowledge Engine** (ingestão, extracção e metadados).
+Após o Gate 8.9, a **decisão material** foi registada no estado do projecto: fechar primeiro os **residuais da Fase 8** (via B) — monitorização contínua e concorrência entre planos concluídas, faltando **filas multicamada** — e só depois iniciar a **Fase 9 — Knowledge Engine** (ingestão, extracção e metadados).
 
 ## Sincronização
 

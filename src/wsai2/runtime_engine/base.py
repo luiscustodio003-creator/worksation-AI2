@@ -8,9 +8,10 @@ produzindo o **Execution Result** com observabilidade por passo.
 
 Este módulo contém apenas tipos, estados e relatórios — a execução
 concreta fica em ``manager.py`` (gestor de execução) e ``scheduler.py``
-(agendamento determinístico por prioridade). O "scheduler" desta unidade
-é sequencial por plano; concorrência entre planos pertence a uma unidade
-posterior (a Fase 8.6), fora do âmbito de 8.5.
+(agendamento determinístico por prioridade; sequencial por omissão, com
+concorrência entre planos implementada como unidade residual aditiva via
+``concurrency``). As filas de espera multicamadas permanecem posteriores,
+fora do âmbito de 8.5.
 """
 
 from __future__ import annotations
