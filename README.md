@@ -64,11 +64,18 @@ Antes de iniciar trabalho novo, o processo deve inspeccionar o estado do project
 
 ## Estado actual
 
-As fases 1 a 6 encontram-se concluídas. A próxima fase a iniciar é a **Fase 7 — Task Intelligence**.
+A **Fase 8 — Runtime Engine** encontra-se na unidade **8.9 — Gate: Core pronto para addons**, concluída e aprovada. As unidades 8.1 a 8.9 estão implementadas e cobertas por testes. O Gate formaliza os contratos necessários para evolução por extensões, incluindo lifecycle, compatibilidade, permissões, política de execução, governação de recursos, contexto de execução e isolamento de projectos.
 
-Consultar:
+O estado persistente e a fonte de verdade operacional encontram-se em:
 
 `docs/project/PROJECT_STATE.md`
+
+Após o Gate 8.9, a próxima evolução requer uma decisão material entre:
+
+- **Fase 9 — Knowledge Engine**, para ingestão, extracção e metadados; ou
+- **Unidades residuais do Runtime Engine**, nomeadamente monitorização contínua, concorrência e filas multicamada.
+
+Nenhuma destas vias deve ser iniciada sem que a decisão seja registada no estado do projecto.
 
 ## Sincronização
 
