@@ -10,6 +10,8 @@ Planear a unidade `$ARGUMENTS` sem implementar código funcional.
 
 Usar a auditoria disponível. Se a unidade não estiver auditada, executar primeiro uma análise equivalente e registar as lacunas.
 
+O plano deve ser baseado no **estado real do código e dos testes**, usando `PROJECT_STATE.md`, `ROADMAP.md` e a arquitectura como contexto e contrato. Não planear a partir de componentes que existem apenas na documentação.
+
 ## Plano obrigatório
 
 1. Objectivo e critério de conclusão.
@@ -22,16 +24,34 @@ Usar a auditoria disponível. Se a unidade não estiver auditada, executar prime
 8. Compatibilidade com comandos `/wsai-*` individuais.
 9. Estratégia de migração não destrutiva.
 10. Estratégia de rollback.
-11. Testes unitários, integração e regressão.
-12. Documentação a actualizar.
-13. Alterações ao `PROJECT_STATE.md`/`IMPLEMENTATION_LOG.md`.
-14. Alterações Git previstas.
-15. Riscos e condições de paragem.
+11. Testes unitários, integração, negativos e regressão.
+12. Critérios de validação da unidade.
+13. Gate de consolidação necessário, se aplicável (`/wsai-validate`).
+14. Documentação a actualizar.
+15. Alterações ao `PROJECT_STATE.md`/`IMPLEMENTATION_LOG.md`.
+16. Alterações Git previstas.
+17. Riscos e condições de paragem.
 
 ## Regra especial
 
 Não propor a criação de um novo módulo quando uma responsabilidade equivalente já existir. Preferir extensão, adapter ou integração sobre a substituição.
 
+Não transformar uma lacuna documental num novo componente funcional sem confirmar a necessidade no código e na arquitectura.
+
 ## Resultado
 
 Entregar um plano executável por uma unidade pequena e verificável. Se a unidade for demasiado grande, dividi-la antes da implementação.
+
+O plano deve terminar com uma decisão clara:
+
+```text
+READY TO IMPLEMENT
+```
+
+ou
+
+```text
+BLOCKED
+Motivo: ...
+Decisão necessária: ...
+```
