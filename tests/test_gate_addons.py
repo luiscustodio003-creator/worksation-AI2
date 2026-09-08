@@ -9,7 +9,7 @@ contrato arquitectural) e verifica as duas integrações registadas na 8.9:
 - a **propagação da política** do ``Scheduler`` para o ``RuntimeManager``
   (contrato de composição: quem cria o runtime passa o motor);
 - a **ponte permissions→grants** no ``ExtensionRegistry`` (as permissões
-  declaradas tornam-se acções exactas do principal = id da extensão).
+declaradas tornam-se acções exactas do principal = id da extensão).
 
 Se algum destes testes falhar, a base deixou de satisfazer o critério do
 Gate — voltar à auditoria antes de declarar addons prontos.
@@ -131,6 +131,7 @@ def test_politica_propagada_negacao_antes_do_passo_1() -> None:
         (_plano(),),
         context_factory=lambda plano: _contexto(principal="alice"),
         policy=motor,
+        step_runner=runner,
     )
     assert relatorio.failed == 1
     erro = relatorio.outcomes[0].report.error
