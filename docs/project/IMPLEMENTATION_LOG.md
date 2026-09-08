@@ -1,5 +1,56 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-08 — Execution Context + Error Model — Fase 8.2
+
+### Objectivo
+
+Criar a fundação transversal de execução da Fase 8: a taxonomia unificada
+de erros (hardening 03) e o `ExecutionContext` com cancelamento
+cooperativo (hardening 04), num submódulo folha `wsai2.core`. Sem lógica
+de execução, scheduler ou governação efectiva — apenas contratos.
+
+### Criado
+
+- `src/wsai2/core/errors.py`
+- `src/wsai2/core/context.py`
+- `src/wsai2/core/__init__.py`
+- `tests/test_core_errors.py`
+- `tests/test_execution_context.py`
+- `docs/core/BASE-26-execution-context-error-model.md`
+
+### Arquitectura abrangida
+
+Fase 8 — Runtime Engine. Subsistema 3.8 da arquitectura.
+`wsai2.core` é uma camada folha do núcleo (constituição, artigo 2).
+`WsaiError` + 10 categorias (Validation, Capability, Model, Provider,
+Resource, Timeout, Cancellation, Permission, ProjectIsolation, Execution)
+com `code` estável; `ExecutionContext` imutável com deadline
+(`time.monotonic`), token de cancelamento cooperativo, budget e
+prioridade. Decisão registada: o orçamento reutiliza `ResourceLimit`
+(8.1) apenas por `TYPE_CHECKING`, mantendo o núcleo folha em runtime e
+evitando ciclo futuro quando a extensão adoptar a taxaonomia.
+
+### Resultado
+
+Taxonomia transversal pronta para captura (`pytest.raises`) e contexto
+de execução com validação à criação. `AdapterError` e `ProviderProbeError`
+das Fases 1–7 permanecem intactos; o alinhamento do `AdapterError` sobre
+`ProviderError` fica documentado como unidade posterior. Os 221 testes da
+base permanecem aprovados — alteração 100% aditiva.
+
+### Validação
+
+```text
+py -3.12 -m pytest -v   →   243 passed (3 fundação + 5 platform + 17 hardware + 24 runtime + 33 capability + 42 model + 46 provider + 39 task + 12 extension + 22 core)
+```
+
+### Próximo passo
+
+Fase 8.3 — Resource Governance (CPU, RAM, GPU/VRAM, armazenamento/I/O,
+tempo), evoluindo a gestão de memória existente sem duplicar mecanismos.
+
+---
+
 ## 2026-09-08 — Extension Contract — Fase 8.1
 
 ### Objectivo

@@ -10,19 +10,19 @@
 
 ## Estado da fase
 
-EM CURSO (Fase 8.1 concluída)
+EM CURSO (Fase 8.1 e 8.2 concluídas)
 
 ## Base actual
 
-Fase 8.1 — Extension Contract **CONCLUÍDA**: contrato mínimo declarativo para extensões (identidade, versões, tipo, capacidades, dependências, recursos, permissões e lifecycle), base da Fase 8 segundo o CORE_HARDENING_PLAN (hardening 01).
+Fase 8.2 — Execution Context + Error Model **CONCLUÍDA**: camada transversal `wsai2.core` com a taxonomia unificada de erros (10 categorias) e o `ExecutionContext` (execution_id, task_id, project_id, deadline, cancellation token cooperativo, budget, prioridade).
 
 ## Última unidade concluída
 
-Fase 8.1 — Extension Contract: definição do contrato declarativo imutável de extensões (`ExtensionKind`, `ExtensionLifecycleState`, `ResourceLimit`, `ExtensionContract`); iniciou a Fase 8.
+Fase 8.2 — Execution Context + Error Model: taxonomia transversal (`WsaiError` + 10 categorias) e `ExecutionContext` com `CancellationToken` cooperativo e `ExecutionPriority`; núcleo folha em runtime (`TYPE_CHECKING` para `ResourceLimit` da 8.1).
 
 ## Próxima unidade
 
-Iniciar a **Fase 8.2 — Execution Context + Error Model**: transporte consistente de `execution_id`, `task_id`, `project_id`, deadline, cancellation token, resource budget e prioridade, e a taxonomia de erros transversal.
+Iniciar a **Fase 8.3 — Resource Governance**: evoluir a gestão de memória existente (Runtime Intelligence) para governação de recursos (CPU, RAM, GPU/VRAM, armazenamento/I/O, tempo), sem duplicar mecanismos.
 
 ## Subsistemas funcionais implementados:
 
@@ -34,6 +34,7 @@ Iniciar a **Fase 8.2 — Execution Context + Error Model**: transporte consisten
 - Provider Layer (contratos, registo, detecção, adaptadores de runtime, health checks)
 - Task Intelligence (contrato, classificação, requisitos, selecção de capacidades, plano de execução)
 - Extension Contract (contrato mínimo declarativo de extensões — Fase 8.1)
+- Execution Context + Error Model (camada transversal `wsai2.core` — Fase 8.2)
 
 ## Desenvolvimento controlado
 
@@ -60,7 +61,7 @@ Base de testes configurada com `pytest`. Executar:
 py -3.12 -m pytest -v
 ```
 
-Baseline registada: 221 testes aprovados (3 fundação + 5 platform + 17 hardware + 24 runtime + 33 capability + 42 model + 46 provider + 39 task + 12 extension).
+Baseline registada: 243 testes aprovados (3 fundação + 5 platform + 17 hardware + 24 runtime + 33 capability + 42 model + 46 provider + 39 task + 12 extension + 22 core).
 
 ## Estado da arquitectura
 
@@ -81,8 +82,8 @@ UI                     ░░░░░░░░░░ 0%
 
 ## Estado Git
 
-Repositório remoto inicializado. A Fase 8 avançou na unidade 8.1 (Extension Contract), aditiva e reversível. A próxima unidade (8.2) é preparada de forma controlada antes de integrar novas responsabilidades de execução.
+Repositório remoto inicializado. A Fase 8 avançou nas unidades 8.1 (Extension Contract) e 8.2 (Execution Context + Error Model), aditivas e reversíveis. A próxima unidade (8.3) é preparada de forma controlada antes de integrar novas responsabilidades de execução.
 
 ## Regra de continuação
 
-A próxima execução deve ler este ficheiro antes de seleccionar trabalho novo. A próxima unidade da Fase 8 é a **Fase 8.2 — Execution Context + Error Model**.
+A próxima execução deve ler este ficheiro antes de seleccionar trabalho novo. A próxima unidade da Fase 8 é a **Fase 8.3 — Resource Governance**.

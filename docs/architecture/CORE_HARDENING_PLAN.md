@@ -58,9 +58,19 @@ Criar uma taxonomia transversal apenas quando a auditoria mostrar que as excepç
 
 Exemplos: Validation, Capability, Model, Provider, Resource, Timeout, Cancellation, Permission, ProjectIsolation e Execution.
 
+> **Estado: IMPLEMENTADO na Fase 8.2.** `wsai2.core.errors` com `WsaiError`
+> (code + details) e 10 categorias. O alinhamento aditivo do
+> `AdapterError`/`ProviderProbeError` sobre a taxaonomia fica para unidade
+> posterior, após regressão validada (regra de não destruição).
+
 ## Hardening 04 — Execution Context
 
 Transportar de forma consistente `execution_id`, `task_id`, `project_id`, deadline, cancellation token, resource budget, prioridade e metadata.
+
+> **Estado: NÚCLEO IMPLEMENTADO na Fase 8.2.** `wsai2.core.context` com
+> `ExecutionContext` imutável e validado, `CancellationToken` cooperativo
+> (thread-agnostic) e `ExecutionPriority`. A governação efectiva de
+> timeout/cancelamento/recuperação permanece na 8.4.
 
 ## Hardening 05 — Resource Governance
 
