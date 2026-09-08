@@ -10,19 +10,19 @@
 
 ## Estado da fase
 
-EM CURSO (Fase 8.1, 8.2, 8.3, 8.4 e 8.5 concluídas)
+EM CURSO (Fase 8.1, 8.2, 8.3, 8.4, 8.5 e 8.6 concluídas)
 
 ## Base actual
 
-Fase 8.5 — Runtime Engine **CONCLUÍDA**: subsistema `wsai2.runtime_engine` com `RuntimeManager` (consome o `ExecutionPlan` da Fase 7, executa-o com `execute_with_policies` da 8.4 e a governação de recursos da 8.3, devolvendo um `ExecutionReport` com observabilidade por passo) e `Scheduler` (agendamento determinístico por prioridade, estável, com relatório agregado).
+Fase 8.6 — Extension Lifecycle + Compatibility **CONCLUÍDA**: subsistema `wsai2.extension` estendido com `versioning` (leitura semântica de `contract_version` `major.minor`; compatibilidade = mesmo major; rejeição antes do registo — hardening 08), `lifecycle` (máquina de transições do diagrama do hardening 02, pura e sem efeitos laterais) e `registry` (`ExtensionRegistry` no padrão das Fases 4–6, com barreiras de unicidade, compatibilidade e estado `VALIDATED` antes do registo; estado de lifecycle mantido no próprio contrato).
 
 ## Última unidade concluída
 
-Fase 8.5 — Runtime Engine: `RuntimeManager` valida a executabilidade do plano, constrói o contexto por omissão, executa o plano como unidade de políticas (checkpoint → timeout → recuperação → orçamento) e devolve `ExecutionReport` mesmo em falha (estado global + `StepOutcome` por passo, com `SKIPPED` após a primeira falha e erros normalizados na taxonomia 8.2); `Scheduler` ordena por prioridade (crítica→baixa, estável) e suporta `stop_on_failure`.
+Fase 8.6 — Lifecycle + Compatibility: `ContractVersion.parse`/`is_compatible_with` com `SUPPORTED_CONTRACT_VERSION = "1.0"`; `transition` valida e devolve novo contrato (imutável) e transições inválidas são `ValidationError` `wsai.extension.lifecycle` sem mutar estado global; `ExtensionRegistry.register` rejeita duplicados (`wsai.extension.duplicate`), contratos incompatíveis (`wsai.extension.contract_incompatible`) e versões mal formadas antes de registar. **Correcção registada:** não existe `RuntimeStatus` do registo — o estado de execução de uma extensão é o próprio campo `lifecycle` do `ExtensionContract` (referência inventada anteriormente removida).
 
 ## Próxima unidade
 
-Iniciar a **Fase 8.6 — Lifecycle + Compatibility** (hardening 02 e 08): auditá-la e evoluir `wsai2.extension.lifecycle` existente, amarrando o estado de execução das extensões (`ExtensionLifecycleState` da 8.1) ao `RuntimeStatus` do registo (8.1) e adicionando versioning/compatibilidade de contratos antes da execução. Concorrência entre planos, filas multicamadas e monitorização contínua permanecem para unidades posteriores.
+**Fase 8.7 — Testes de contrato arquitectural** (hardening 10): testes que verificam as regras da CONSTITUTION/AGENTS no repositório (fronteiras de dependências, ausência de ciclos de import, isolamento de código Windows/Linux, documentação por módulo) — sem decisão arquitectural nova. Concorrência entre planos, filas multicamadas e monitorização contínua permanecem para unidades posteriores.
 
 ## Subsistemas funcionais implementados:
 
@@ -37,6 +37,7 @@ Iniciar a **Fase 8.6 — Lifecycle + Compatibility** (hardening 02 e 08): audit�
 - Execution Context + Error Model (camada transversal `wsai2.core` — Fase 8.2)
 - Resource Governance (governador de orçamento e accounting `wsai2.resource` — Fase 8.3)
 - Runtime Engine (gestor de execução e scheduler `wsai2.runtime_engine` — Fase 8.5)
+- Extension Lifecycle + Compatibility (máquina de lifecycle, registo e versioning de contratos `wsai2.extension` — Fase 8.6)
 
 ## Desenvolvimento controlado
 
@@ -63,7 +64,7 @@ Base de testes configurada com `pytest`. Executar:
 py -3.12 -m pytest -v
 ```
 
-Baseline registada: 314 testes aprovados (3 fundação + 5 platform + 17 hardware + 24 runtime + 33 capability + 42 model + 46 provider + 39 task + 12 extension + 22 core + 21 resource + 28 execution + 22 runtime_engine).
+Baseline registada: 354 testes aprovados (3 fundação + 5 platform + 17 hardware + 24 runtime + 33 capability + 42 model + 46 provider + 39 task + 12 extension + 22 core + 21 resource + 28 execution + 22 runtime_engine + 40 lifecycle/compatibilidade).
 
 ## Estado da arquitectura
 
@@ -76,7 +77,7 @@ Capability Engine      ██████████ 100%
 Model Intelligence     ██████████ 100%
 Provider Layer         ██████████ 100%
 Task Intelligence      ██████████ 100%
-Runtime Engine         █████░░░░░ 50%
+Runtime Engine         ████████░░ 80%
 Knowledge Engine       ░░░░░░░░░░ 0%
 API                    ░░░░░░░░░░ 0%
 UI                     ░░░░░░░░░░ 0%
@@ -84,8 +85,8 @@ UI                     ░░░░░░░░░░ 0%
 
 ## Estado Git
 
-Repositório remoto inicializado. A Fase 8 avançou nas unidades 8.1 (Extension Contract), 8.2 (Execution Context + Error Model), 8.3 (Resource Governance), 8.4 (Execution Policies) e 8.5 (Runtime Engine), aditivas e reversíveis. A próxima unidade (8.6) trata domínio de lifecycle e compatibilidade, já esboçado na 8.1/8.2.
+Repositório remoto inicializado. A Fase 8 avançou nas unidades 8.1 (Extension Contract), 8.2 (Execution Context + Error Model), 8.3 (Resource Governance), 8.4 (Execution Policies), 8.5 (Runtime Engine) e 8.6 (Lifecycle + Compatibility), aditivas e reversíveis. A próxima unidade (8.7) é de testes de contrato arquitectural.
 
 ## Regra de continuação
 
-A próxima execução deve ler este ficheiro antes de seleccionar trabalho novo. A próxima unidade da Fase 8 é a **Fase 8.6 — Lifecycle + Compatibility**.
+A próxima execução deve ler este ficheiro antes de seleccionar trabalho novo. A próxima unidade da Fase 8 é a **Fase 8.7 — Testes de contrato arquitectural**.

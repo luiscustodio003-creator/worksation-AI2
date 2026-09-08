@@ -1,5 +1,70 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-08 — Extension Lifecycle + Compatibility — Fase 8.6
+
+### Objectivo
+
+Fechar os hardening 02 (ciclo de vida de extensões, isolamento de falhas)
+e 08 (compatibilidade/versioning de contratos) do CORE_HARDENING_PLAN:
+implementar a máquina de lifecycle, o registo de extensões e a rejeição
+de contratos incompatíveis **antes** do registo/execução. Unidade 100%
+aditiva sobre a 8.1 — o `base.py` não foi alterado.
+
+### Criado
+
+- `src/wsai2/extension/versioning.py`
+- `src/wsai2/extension/lifecycle.py`
+- `src/wsai2/extension/registry.py`
+- Actualizado `src/wsai2/extension/__init__.py` (novos exports)
+- `tests/test_extension_versioning.py`
+- `tests/test_extension_lifecycle.py`
+- `tests/test_extension_registry.py`
+- `docs/extension/BASE-30-extension-lifecycle-compatibility.md`
+
+### Arquitectura abrangida
+
+Fase 8 — Runtime Engine. Subsistema 3.8 (extensões). Direcção de
+dependências mantida para dentro (`wsai2.core.errors` + `.base` do próprio
+subsistema). Decisões registadas: compatibilidade = **mesmo major**
+(formato `major.minor`, sem patch); `SUPPORTED_CONTRACT_VERSION = "1.0"`;
+rejeição antes do registo (`wsai.extension.contract_version`,
+`wsai.extension.contract_incompatible`); `register` exige `VALIDATED`
+e move para `REGISTERED`; `transition` é pura (devolve novo contrato
+`frozen`, nunca executa acções) — uma transição inválida é
+`ValidationError` `wsai.extension.lifecycle` sem mutar estado global.
+**Correcção:** o "RuntimeStatus do registo (8.1)" referido em relatórios
+anteriores **não existe**; o estado de uma extensão é o próprio campo
+`lifecycle` do `ExtensionContract`, mantido no `ExtensionRegistry` sem
+duplicação.
+
+### Resultado
+
+`ContractVersion.parse`/`is_compatible_with` validam e comparam versões;
+`lifecycle.valid_transitions`/`can_transition`/`transition` implementam o
+diagrama DISCOVERED→VALIDATED→REGISTERED→INITIALIZING→READY→RUNNING→
+DEGRADED/FAILED→STOPPING→STOPPED; `ExtensionRegistry` oferece
+`register`/`unregister`/`get`/`has`/`all`/`state`/`transition_state` no
+padrão das Fases 4–6. Foram adicionados os códigos
+`wsai.extension.duplicate` e `wsai.extension.unknown`. Alteração 100%
+aditiva — os 314 testes da base permanecem aprovados.
+
+### Validação
+
+```text
+py -3.12 -m pytest   →   354 passed (3 fundação + 5 platform + 17 hardware + 24 runtime + 33 capability + 42 model + 46 provider + 39 task + 12 extension + 22 core + 21 resource + 28 execution + 22 runtime_engine + 40 lifecycle/compatibilidade)
+```
+
+### Próximo passo
+
+Fase 8.7 — Testes de contrato arquitectural (hardening 10): testes que
+verificam no repositório as fronteiras de dependências, a ausência de
+ciclos de import, o isolamento de código Windows/Linux e a documentação
+por módulo — sem decisão arquitectural nova. Concorrência entre planos,
+filas multicamadas e monitorização contínua ficam para unidades
+posteriores (fora do âmbito da 8.6).
+
+---
+
 ## 2026-09-08 — Runtime Engine — Fase 8.5
 
 ### Objectivo

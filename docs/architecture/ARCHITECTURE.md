@@ -54,7 +54,7 @@ Interpreta tarefas, identifica requisitos e produz planos de execução.
 
 ### 3.8 Runtime Engine
 
-Executa planos, gere recursos, concorrência, cancelamento, timeouts, streaming e observabilidade.
+Executa planos, gere recursos, concorrência, cancelamento, timeouts, streaming e observabilidade. Inclui o ciclo de vida, o registo e a compatibilidade de extensões: em 8.6, `wsai2.extension.lifecycle` (máquina de transições, pura e sem efeitos laterais — uma falha de addon não derruba o Core), `wsai2.extension.registry` (`ExtensionRegistry`, padrão dos registos das Fases 4–6, com o estado de lifecycle mantido no próprio contrato) e `wsai2.extension.versioning` (`ContractVersion` `major.minor`; compatibilidade por major; rejeição antes do registo/execução).
 
 ### 3.9 Knowledge Engine
 
@@ -126,6 +126,6 @@ Resultado
 
 ## 7. Estado actual da arquitectura
 
-As fases Platform Foundation, Hardware Intelligence, Runtime Intelligence, Capability Engine, Model Intelligence, Provider Layer e Task Intelligence encontram-se concluídas. A **Fase 8 — Runtime Engine** está em curso: concluídas as unidades 8.1 (Extension Contract, contrato mínimo declarativo de extensões), 8.2 (Execution Context + Error Model, camada transversal `wsai2.core`), 8.3 (Resource Governance, subsistema `wsai2.resource` com governador de orçamento e accounting de recursos), 8.4 (Execution Policies, subsistema `wsai2.execution` com timeout, cancelamento cooperativo e recuperação centralizados) e 8.5 (Runtime Engine, subsistema `wsai2.runtime_engine` com `RuntimeManager` que executa o `ExecutionPlan` do Task Intelligence e `Scheduler` determinístico por prioridade).
+As fases Platform Foundation, Hardware Intelligence, Runtime Intelligence, Capability Engine, Model Intelligence, Provider Layer e Task Intelligence encontram-se concluídas. A **Fase 8 — Runtime Engine** está em curso: concluídas as unidades 8.1 (Extension Contract, contrato mínimo declarativo de extensões), 8.2 (Execution Context + Error Model, camada transversal `wsai2.core`), 8.3 (Resource Governance, subsistema `wsai2.resource` com governador de orçamento e accounting de recursos), 8.4 (Execution Policies, subsistema `wsai2.execution` com timeout, cancelamento cooperativo e recuperação centralizados), 8.5 (Runtime Engine, subsistema `wsai2.runtime_engine` com `RuntimeManager` que executa o `ExecutionPlan` do Task Intelligence e `Scheduler` determinístico por prioridade) e 8.6 (Extension Lifecycle + Compatibility, subsistema `wsai2.extension` com máquina de lifecycle pura, `ExtensionRegistry` e `ContractVersion` com compatibilidade por major e rejeição antes do registo).
 
 A fonte de verdade para o progresso e a próxima unidade é `docs/project/PROJECT_STATE.md`.

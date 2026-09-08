@@ -52,6 +52,12 @@ DISCOVERED → VALIDATED → REGISTERED → INITIALIZING → READY
 
 Falha de addon não pode derrubar o Core.
 
+> **Estado: IMPLEMENTADO na Fase 8.6.** `wsai2.extension.lifecycle` com a
+> máquina de transições do diagrama (pura: valida e devolve novo contrato
+> `frozen`, nunca executa acções de sistema). Transições inválidas são
+> `ValidationError` `wsai.extension.lifecycle`, sem mutar estado fora de
+> quem invoca — uma transição negada não corrompe o catálogo.
+
 ## Hardening 03 — Unified Error Model
 
 Criar uma taxonomia transversal apenas quando a auditoria mostrar que as excepções actuais não cobrem o contrato necessário.
@@ -136,6 +142,14 @@ Execution Result
 ## Hardening 08 — Versioning / Compatibility
 
 Introduzir apenas as versões necessárias para Core/API/Capability/Provider/Extension contracts e rejeitar incompatibilidades antes da execução.
+
+> **Estado: IMPLEMENTADO na Fase 8.6 (extensões).** `wsai2.extension.versioning`
+> com `ContractVersion` (`major.minor`, a `version` do addon permanece
+> opaca) e `SUPPORTED_CONTRACT_VERSION = "1.0"`; compatibilidade = mesmo
+> major. `ExtensionRegistry.register` rejeita antes de registar
+> (`wsai.extension.contract_version` / `wsai.extension.contract_incompatible`).
+> Core/API/Capability/Provider acumulam evolução de unidades passadas e
+> futuras de cada subsistema.
 
 ## Hardening 09 — Security / Policy
 
