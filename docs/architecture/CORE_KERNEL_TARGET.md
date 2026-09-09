@@ -320,8 +320,8 @@ O núcleo será considerado consolidado quando:
 KERNEL-01  Inventário real da base          ✓ CONCLUÍDA (KERNEL-01-core-inventory.md)
 KERNEL-02  Mapa de dependências             ✓ CONCLUÍDA (KERNEL-02-dependency-map.md)
 KERNEL-03  Core Public Contract             ✓ CONCLUÍDA (KERNEL-03-core-public-contract.md)
-KERNEL-04  Dependency Firewall              -> próxima unidade
-KERNEL-05  Resource / Execution boundary    -> depois
+KERNEL-04  Dependency Firewall              ✓ CONCLUÍDA (KERNEL-04-dependency-firewall.md)
+KERNEL-05  Resource / Execution boundary    -> próxima unidade
 KERNEL-06  Observability boundary            -> depois
 KERNEL-07  Architecture contract tests      -> depois
 KERNEL-08  Migração incremental de imports  -> depois

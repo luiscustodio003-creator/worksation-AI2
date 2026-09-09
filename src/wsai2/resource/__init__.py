@@ -22,6 +22,10 @@ from .base import (
 )
 from .governor import ResourceGovernor
 
+# Contrato público da fronteira de recursos (KERNEL-05): a superfície
+# sancionada é o `__all__` abaixo, congelada por teste de contrato.
+RESOURCE_CONTRACT_VERSION = "1.0"
+
 __all__ = [
     "AllocationState",
     "ResourceAllocation",

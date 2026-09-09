@@ -1,5 +1,45 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-09 — KERNEL-05 — Resource / Execution boundary
+
+### Objectivo
+
+Definir e fixar as superfícies públicas de `execution`, `resource` e
+`security` (fronteiras do kernel com consumidores reais), com versão de
+contrato e detecção automática de alterações.
+
+### Decisão
+
+Opção A: a fronteira é o `__all__` do `__init__` de cada subsistema.
+Razão: os consumidores já importam ao nível do pacote; fachadas
+`public.py` duplicariam a superfície (drift) e fariam churn no KERNEL-08
+sem ganho. `core.public` permanece o único agregador explícito (folha
+`core`).
+
+### Alterações
+
+- `src/wsai2/execution/__init__.py` — `EXECUTION_CONTRACT_VERSION = "1.0"`.
+- `src/wsai2/resource/__init__.py` — `RESOURCE_CONTRACT_VERSION = "1.0"`.
+- `src/wsai2/security/__init__.py` — `SECURITY_CONTRACT_VERSION = "1.0"`.
+- `tests/test_boundary_kernel.py` (novo, 3 testes) — versão major.minor,
+  superfícies sancionadas congeladas, consumidores só ao nível do pacote
+  (AST sobre `src`).
+- `docs/architecture/KERNEL-05-execution-resource-boundary.md`.
+- `docs/project/PROJECT_STATE.md` — KERNEL-05 concluída; KERNEL-06 próxima.
+- `docs/architecture/CORE_KERNEL_TARGET.md` — secção 12.
+
+### Validação
+
+```text
+py -3.12 -m pytest
+tests=500  failures=0  errors=0  skipped=0
+```
+
+### Próximo passo
+
+`/wsai-plan KERNEL-06` — Observability boundary (superfície de
+observabilidade e fronteira de governação de `runtime_engine`).
+
 ## 2026-09-09 — KERNEL-04 — Dependency Firewall
 
 ### Objectivo

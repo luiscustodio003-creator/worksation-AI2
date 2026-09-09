@@ -131,7 +131,8 @@ vigente; `COMMAND_EXECUTION_CONTRACT.md` governa a transição).
 - **KERNEL-02 — MAPA DE DEPENDÊNCIAS: CONCLUÍDA** (`docs/architecture/KERNEL-02-dependency-map.md`). Mapa formal (22 arestas, consumidores reais por scan AST) + candidata a `core.public` (símbolos públicos reais do núcleo). Documental, sem código alterado; decisão do conjunto definitivo fica no KERNEL-03.
 - **KERNEL-03 — CORE PUBLIC CONTRACT: CONCLUÍDA** (`docs/architecture/KERNEL-03-core-public-contract.md`). Criado `wsai2.core.public` (Opção A): fachada versionada (`CORE_PUBLIC_CONTRACT_VERSION = "1.0"`) dos 14 símbolos do leaf `core` (erros + contexto), sem lógica própria nem novas arestas — `core` permanece folha. Bloqueio de localização resolvido em planeamento (agregado único violaria aciclicidade). 5 testes novos (`test_core_public.py`). Suíte **496/496 verdes**.
 - **KERNEL-04 — DEPENDENCY FIREWALL: CONCLUÍDA** (`docs/architecture/KERNEL-04-dependency-firewall.md`). Firewall exacto por subsistema (`FIREWALL`, 26 arestas com tipagem) + teste automático `test_artigo2_13_firewall_por_subsistema` que detecta qualquer aresta nova; `core` permanece folha; grandfathering dos imports internos até KERNEL-08. Sem MOVE físico. Suíte **497/497 verdes**.
-- **Próxima unidade:** `/wsai-plan KERNEL-05` — Resource / Execution boundary (superfícies públicas de execution/resource/runtime_engine/security).
+- **KERNEL-05 — RESOURCE / EXECUTION BOUNDARY: CONCLUÍDA** (`docs/architecture/KERNEL-05-execution-resource-boundary.md`). Opção A: fronteira = `__all__` do `__init__` de `execution`/`resource`/`security` + `EXECUTION_CONTRACT_VERSION`/`RESOURCE_CONTRACT_VERSION`/`SECURITY_CONTRACT_VERSION = "1.0"`; `tests/test_boundary_kernel.py` (3 testes: versão major.minor, superfícies congeladas, consumidores só ao nível do pacote). Sem fachadas novas e sem MOVE. `runtime_engine` fica para o KERNEL-06. Suíte **500/500 verdes**.
+- **Próxima unidade:** `/wsai-plan KERNEL-06` — Observability boundary (superfície de observabilidade e fronteira de governação de `runtime_engine`).
 
 ## Estado Git
 
@@ -143,14 +144,15 @@ documentação arquitectural/estado alinhados.
 
 ## Regra de continuação
 
-**Migração do Kernel — TRANSITION (KERNEL-01, KERNEL-02, KERNEL-03 e KERNEL-04 concluídas).**
+**Migração do Kernel — TRANSITION (KERNEL-01 a KERNEL-05 concluídas).**
 
 ```text
 KERNEL-01  Inventário real da base            ✓ CONCLUÍDA (auditoria read-only)
 KERNEL-02  Mapa de dependências + core.public ✓ CONCLUÍDA (documental; candidata registada)
 KERNEL-03  Core Public Contract               ✓ CONCLUÍDA (core.public; Opção A, 496/496)
 KERNEL-04  Dependency Firewall                ✓ CONCLUÍDA (FIREWALL por subsistema; 497/497)
-KERNEL-05  Resource / Execution boundary      → PRÓXIMA UNIDADE (/wsai-plan)
+KERNEL-05  Resource / Execution boundary      ✓ CONCLUÍDA (Opção A; fronteiras versionadas; 500/500)
+KERNEL-06  Observability boundary             → PRÓXIMA UNIDADE (/wsai-plan)
 KERNEL-05  Resource / Execution boundary
 KERNEL-06  Observability boundary
 KERNEL-07  Architecture contract tests

@@ -19,6 +19,10 @@ from .base import PolicyDecision, Principal
 from .isolation import assert_same_project, require_project
 from .policy import PolicyEngine, denied_decision
 
+# Contrato público da fronteira de segurança (KERNEL-05): a superfície
+# sancionada é o `__all__` abaixo, congelada por teste de contrato.
+SECURITY_CONTRACT_VERSION = "1.0"
+
 __all__ = [
     "PolicyDecision",
     "PolicyEngine",

@@ -18,6 +18,10 @@ from .runner import (
     run_with_timeout,
 )
 
+# Contrato público da fronteira de execução (KERNEL-05): a superfície
+# sancionada é o `__all__` abaixo, congelada por teste de contrato.
+EXECUTION_CONTRACT_VERSION = "1.0"
+
 __all__ = [
     "DeadlineGuard",
     "RecoveryPolicy",
