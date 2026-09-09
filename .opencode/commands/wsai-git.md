@@ -6,11 +6,13 @@ agent: build
 
 Rever e sincronizar a unidade `$ARGUMENTS` ou a alteração actual.
 
+## Protecção da migração
+
+Ler `docs/architecture/COMMAND_EXECUTION_CONTRACT.md`.
+
+Antes de commit/push verificar se a alteração estrutural pertence a uma unidade coerente e se não existem consumidores ou ficheiros não relacionados. Em `TRANSITION`, confirmar também que a origem não foi eliminada prematuramente.
+
 ## Pré-condições
-
-Não fazer commit/push de alterações cujo objectivo não esteja claro.
-
-Verificar:
 
 ```text
 git status
@@ -20,38 +22,41 @@ git diff --stat
 git diff
 ```
 
-Quando permitido pelo ambiente, actualizar referências remotas sem sobrescrever alterações locais.
+Actualizar referências remotas sem sobrescrever alterações locais.
 
 ## Checklist
 
-1. A alteração pertence a uma única unidade coerente?
-2. Há ficheiros não relacionados?
-3. Os testes aplicáveis passaram?
-4. A documentação e o estado foram actualizados?
-5. Existem alterações locais que não pertencem a esta unidade?
-6. Existe divergência remota?
-7. O commit é reversível e descritivo?
+1. Unidade coerente?
+2. Tipo de alteração identificado?
+3. Ficheiros não relacionados?
+4. Testes aplicáveis passaram?
+5. Arquitectura/contratos validados?
+6. Documentação e estado actualizados?
+7. Consumidores/dependências verificados?
+8. Divergência remota?
+9. Commit reversível e descritivo?
 
 ## Segurança
 
-- Nunca fazer reset destrutivo.
-- Nunca fazer force push como solução normal.
+- Nunca reset destrutivo.
+- Nunca force push como solução normal.
 - Nunca apagar trabalho local desconhecido.
-- Se houver conflito Git inseguro, parar e reportar.
+- Parar perante conflito inseguro.
 
 ## Commit
 
-Criar um commit apenas quando a unidade estiver validada e coerente.
-
-Depois do commit, verificar novamente o estado. Fazer push apenas quando autorizado pelo ambiente e sem conflito.
+Criar commit apenas após validação e coerência da unidade. Push apenas quando permitido e seguro. Verificar estado final.
 
 ## Resultado
 
 ```text
 WSAI 2 — GIT
 Branch: ...
+Unidade: ...
+Tipo alteração: ...
 Ficheiros: ...
 Testes: ...
+Validação: ...
 Commit: ...
 Push: ...
 Estado final: ...
