@@ -1,5 +1,34 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-09 — KERNEL-06 — Observability boundary
+
+### Objectivo
+
+Fixar a fronteira de observabilidade do `runtime_engine` (superfície
+sancionada + versão), sem descer a implementação pesada — colecção de
+métricas fica para KERNEL-08/09 (regra superfície vs. implementação).
+
+### Alterações
+
+- `src/wsai2/runtime_engine/__init__.py` — `RUNTIME_ENGINE_CONTRACT_VERSION = "1.0"`.
+- `tests/test_boundary_kernel.py` — `runtime_engine` nas superfícies
+  congeladas (16 símbolos) + `test_subcontrato_de_observabilidade` (nova):
+  observabilidade (10) vs governação (6), disjuntas e exaustivas.
+- `docs/architecture/KERNEL-06-observability-boundary.md`.
+- `docs/project/PROJECT_STATE.md` — KERNEL-06 concluída; KERNEL-07 próxima.
+- `docs/architecture/CORE_KERNEL_TARGET.md` — secção 12.
+
+### Validação
+
+```text
+py -3.12 -m pytest
+tests=501  failures=0  errors=0  skipped=0
+```
+
+### Próximo passo
+
+`/wsai-plan KERNEL-07` — Architecture contract tests.
+
 ## 2026-09-09 — Política de reconstrução do Core (superfície vs. implementação)
 
 ### Objectivo

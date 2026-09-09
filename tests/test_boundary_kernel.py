@@ -13,11 +13,12 @@ import re
 import wsai2
 import wsai2.execution
 import wsai2.resource
+import wsai2.runtime_engine
 import wsai2.security
 
 RAIZ_SRC = pathlib.Path(wsai2.__file__).parent
 
-_SUBSISTEMAS_FRONTEIRA = ("execution", "resource", "security")
+_SUBSISTEMAS_FRONTEIRA = ("execution", "resource", "security", "runtime_engine")
 
 # Superfícies públicas sancionadas (reflexo exacto dos `__all__` actuais).
 SUPERFICIES_PUBLICAS: dict[str, frozenset[str]] = {
@@ -53,18 +54,68 @@ SUPERFICIES_PUBLICAS: dict[str, frozenset[str]] = {
             "require_project",
         }
     ),
+    "runtime_engine": frozenset(
+        {
+            "ExecutionMonitor",
+            "ExecutionReport",
+            "ExecutionSnapshot",
+            "ExecutionStatus",
+            "MonitorSnapshot",
+            "MultilayerExecutionQueue",
+            "QueueItem",
+            "QueueSnapshot",
+            "RuntimeManager",
+            "ScheduleOutcome",
+            "Scheduler",
+            "SchedulerReport",
+            "StepOutcome",
+            "StepRunner",
+            "StepStatus",
+            "priority_for_plan",
+        }
+    ),
 }
+
+# Subcontrato de observabilidade (KERNEL-06): a fracção da superfície de
+# governação que é a fronteira transversal de métricas (target sec. 3.5).
+OBSERVABILIDADE_SUPERFICIE: frozenset[str] = frozenset(
+    {
+        "ExecutionMonitor",
+        "ExecutionReport",
+        "ExecutionSnapshot",
+        "ExecutionStatus",
+        "MonitorSnapshot",
+        "ScheduleOutcome",
+        "SchedulerReport",
+        "StepOutcome",
+        "StepRunner",
+        "StepStatus",
+    }
+)
+
+GOVERNO_SUPERFICIE: frozenset[str] = frozenset(
+    {
+        "MultilayerExecutionQueue",
+        "QueueItem",
+        "QueueSnapshot",
+        "RuntimeManager",
+        "Scheduler",
+        "priority_for_plan",
+    }
+)
 
 _MODULOS_FRONTEIRA: dict[str, object] = {
     "execution": wsai2.execution,
     "resource": wsai2.resource,
     "security": wsai2.security,
+    "runtime_engine": wsai2.runtime_engine,
 }
 
 _VERSIONES: dict[str, str] = {
     "execution": getattr(wsai2.execution, "EXECUTION_CONTRACT_VERSION"),
     "resource": getattr(wsai2.resource, "RESOURCE_CONTRACT_VERSION"),
     "security": getattr(wsai2.security, "SECURITY_CONTRACT_VERSION"),
+    "runtime_engine": getattr(wsai2.runtime_engine, "RUNTIME_ENGINE_CONTRACT_VERSION"),
 }
 
 
@@ -98,6 +149,15 @@ def test_superficies_publicas_congeladas():
         assert getattr(modulo, nome_constante) not in superficie, (
             f"{subsistema}: a versão não deve fazer parte da superfície"
         )
+
+
+def test_subcontrato_de_observabilidade():
+    """A fronteira de observabilidade é a fracção sancionada da superfície."""
+    superficie = set(getattr(wsai2.runtime_engine, "__all__", []))
+    assert OBSERVABILIDADE_SUPERFICIE <= superficie
+    assert GOVERNO_SUPERFICIE <= superficie
+    assert OBSERVABILIDADE_SUPERFICIE | GOVERNO_SUPERFICIE == superficie
+    assert OBSERVABILIDADE_SUPERFICIE.isdisjoint(GOVERNO_SUPERFICIE)
 
 
 def test_consumidores_apenas_ao_nivel_do_pacote():
