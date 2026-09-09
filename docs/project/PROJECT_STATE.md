@@ -6,11 +6,11 @@
 
 ## Fase actual
 
-**FASE 9 — Knowledge Engine (subsistema 3.9) — EM CURSO**
+**FASE 9 — Knowledge Engine (subsistema 3.9) — CONCLUÍDA (âmbito lexical)**
 
 ## Estado da fase
 
-**FASE 9 INICIADA** após o fecho formal da Fase 8 (gate de fundação `APPROVED WITH WARNINGS`). Unidades **9.1 – 9.7** concluídas — o **âmbito lexical da Fase 9 está completo** (contrato → registo → metadados → índice → persistência → contexto → ingestão de ficheiros). Decisões de fronteira documentadas (`knowledge` autorizado; aresta `knowledge→core`; armazenamento SQLite decidido). Suíte completa: **491 testes aprovados, 0 falhas**.
+**FASE 9 CONCLUÍDA (âmbito lexical)** — fecho formal após gate `/wsai-validate fase9` (`APPROVED`, 2026-09-09, `docs/validation/FASE9_VALIDATION_REPORT.md`). Unidades **9.1 – 9.7** implementadas, testadas e sincronizadas: contrato → registo → metadados → índice → persistência → contexto → ingestão de ficheiros. Decisões documentadas (`knowledge` autorizado; aresta `knowledge→core`; 9.4 memória pura; 9.5 SQLite local). Suíte completa: **491 testes aprovados, 0 falhas**. O enriquecimento semântico (embeddings) é a **decisão material terminal** — permanece em aberto por natureza e fica registado como próximo ponto.
 
 ## Última unidade implementada
 
@@ -132,7 +132,7 @@ documentação arquitectural/estado alinhados.
 
 ## Regra de continuação
 
-**Fase 9 — Knowledge Engine — âmbito lexical concluído (9.1–9.7 ✓).**
+**Fase 9 — Knowledge Engine — CONCLUÍDA (âmbito lexical, fecho formal em 2026-09-09).**
 
 ```text
 9.1 contrato do subsistema ✓
@@ -143,11 +143,14 @@ documentação arquitectural/estado alinhados.
 9.6 construção de contexto ✓
 9.7 ingestão de ficheiros de texto do projecto ✓ (lexical — sem embeddings)
     ↓
-ENRIQUECIMENTO SEMÂNTICO — embeddings via Model/Provider sobre o índice
-léxico — DECISÃO MATERIAL TERMINAL: exige decisões documentadas de
-modelo/fornecedor, integração com o Provider Layer/Runtime e definição de
-admissão/aditividade. Não é executável autonomamente numa unidade do
-âmbito lexical.
+FECHO FORMAL da Fase 9 (âmbito lexical) ✓ — gate APPROVED
+    ↓
+ENRIQUECIMENTO SEMÂNTICO — embeddings via Model/Provider — DECISÃO
+MATERIAL TERMINAL: decisões de modelo/fornecedor, integração Provider/
+Runtime e aditividade sobre o índice léxico. Planeamento próprio.
+    ↓
+Fase 10 — API (health/system/hardware/runtime/capabilities/models/tasks/
+knowledge) — requer decidir framework HTTP.
 ```
 
 O **âmbito lexical da Fase 9 está completo e sincronizado**. O próximo

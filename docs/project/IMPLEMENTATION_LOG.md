@@ -1,5 +1,37 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-09 — Fecho formal da Fase 9 — validação do âmbito lexical
+
+### Objectivo
+
+Encerrar formalmente a Fase 9 — Knowledge Engine (subsistema 3.9) no
+seu âmbito lexical (unidades 9.1–9.7), espelhando o gate da Fase 8.
+
+### Alterações
+
+- `docs/validation/FASE9_VALIDATION_REPORT.md` — relatório de validação
+  com a estrutura oficial de 10 secções; resultado **APPROVED**
+  (sem P0/P1/P2 bloqueantes; avisos P3 documentados).
+- `docs/project/PROJECT_STATE.md` — `FASE 9 CONCLUÍDA (âmbito lexical)`;
+  enriquecimento semântico (embeddings) registado como decisão material
+  terminal; regra de continuação actualizada.
+- `docs/project/ROADMAP.md` — estado da Fase 9 marcado como concluído
+  (âmbito lexical).
+
+### Validação
+
+```text
+py -3.12 -m pytest
+tests=491  failures=0  errors=0  skipped=0
+exit code: 0
+```
+
+### Próximo passo
+
+Decisão material entre o enriquecimento semântico (embeddings via
+Model/Provider) e a Fase 10 — API; integração da linha Kernel
+(core-hardening-foundation) sobre a base completa.
+
 ## 2026-09-09 — Knowledge File Ingestion — Fase 9.7 (fecho do âmbito lexical)
 
 ### Objectivo

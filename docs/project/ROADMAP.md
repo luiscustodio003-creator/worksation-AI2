@@ -126,16 +126,12 @@ A ordem concreta das unidades e dos residuais é determinada pelo `PROJECT_STATE
 - recuperação;
 - contexto.
 
-**Estado actual:** fase **em curso — âmbito lexical completo**. A
-entrada estava condicionada à aprovação formal da Fase 8 pelo
-`/wsai-validate foundation` — satisfeita (2026-09-09). As unidades
-9.1 (contrato), 9.2 (registo), 9.3 (metadados), 9.4 (índice em memória),
-9.5 (persistência SQLite), 9.6 (contexto) e 9.7 (ingestão lexical) estão
-concluídas; a ordem concreta das restantes unidades é governada por
-`PROJECT_STATE.md`. O **enriquecimento semântico** (embeddings via
-Model/Provider) é a **decisão material terminal** da Fase 9 e exige
-planeamento próprio e decisões documentadas antes de motores de
-embeddings.
+**Estado:** **fase concluída (âmbito lexical)** — fecho formal
+`APPROVED` (2026-09-09, `docs/validation/FASE9_VALIDATION_REPORT.md`),
+unidades 9.1–9.7 implementadas e sincronizadas. O **enriquecimento
+semântico** (embeddings via Model/Provider) é a **decisão material
+terminal** da Fase 9 e exige planeamento próprio e decisões
+documentadas antes de motores de embeddings.
 
 ## Fase 10 — API
 
