@@ -10,11 +10,11 @@
 
 ## Estado da fase
 
-**FASE 9 INICIADA** após o fecho formal da Fase 8 (gate de fundação `APPROVED WITH WARNINGS`). Unidades **9.1 — Knowledge Contract**, **9.2 — Knowledge Registry**, **9.3 — Metadata Extraction**, **9.4 — In-Memory Index** e **9.5 — SQLite Persistence** concluídas: contrato declarativo e imutável (`wsai2.knowledge`), registo central de admissão por id único (padrão dos registos F4–8), extracção heurística de metadados, índice invertido em memória e persistência SQLite (decisões 9.4/9.5 documentadas). Decisões de fronteira documentadas (`knowledge` autorizado; aresta `knowledge→core`). Suíte completa: **474 testes aprovados, 0 falhas**.
+**FASE 9 INICIADA** após o fecho formal da Fase 8 (gate de fundação `APPROVED WITH WARNINGS`). Unidades **9.1 — Knowledge Contract**, **9.2 — Knowledge Registry**, **9.3 — Metadata Extraction**, **9.4 — In-Memory Index**, **9.5 — SQLite Persistence** e **9.6 — Context Builder** concluídas — o núcleo reversível da Fase 9 está **completo** (contrato → registo → metadados → índice → persistência → contexto). Decisões de fronteira documentadas (`knowledge` autorizado; aresta `knowledge→core`; armazenamento SQLite decidido). Suíte completa: **482 testes aprovados, 0 falhas**.
 
 ## Última unidade implementada
 
-Fase 9 — unidade 9.5: **Knowledge SQLite Persistence** (`docs/knowledge/BASE-41-knowledge-sqlite-persistence.md`). Criado `KnowledgeStore` (persistência local por id com esquema `knowledge_record`, metadados serializados em JSON, `save`/`save_all`/`delete`/`count`/`load` ordenada por id). **Decisão da unidade (consultada): persistência SQLite local** como estratégia de armazenamento da recuperação; embeddings continuam fora desta unidade. Sem arestas novas em `FRONTEIRAS`. 8 novos testes.
+Fase 9 — unidade 9.6: **Knowledge Context Builder** (`docs/knowledge/BASE-42-knowledge-context-builder.md`). Criado `ContextBuilder`/`KnowledgeContext`/`ContextEntry` (pacote textual determinista por relevância do índice: títulos, excertos com elipse, proveniência e etiquetas; `text()` estável). Sem I/O, sem modelos e sem arestas novas em `FRONTEIRAS`. 8 novos testes. **A 9.6 fecha o circuito definido para a Fase 9.**
 
 ## Estado dos residuais Via B
 
@@ -47,6 +47,7 @@ Fase 9 — unidade 9.5: **Knowledge SQLite Persistence** (`docs/knowledge/BASE-4
 - Knowledge Metadata Extraction (Fase 9, subsistema 3.9 — idioma/etiquetas/proveniência)
 - Knowledge In-Memory Index (Fase 9, subsistema 3.9 — consulta por termos)
 - Knowledge SQLite Persistence (Fase 9, subsistema 3.9 — armazenamento local decidido)
+- Knowledge Context Builder (Fase 9, subsistema 3.9 — pacote de contexto determinista)
 
 ## Filas multicamadas — contrato
 
@@ -97,7 +98,7 @@ A documentação está alinhada com o estado funcional conhecido. A Fase 8 está
 
 Baseline do fecho da Fase 8: **423 testes**.
 
-Foram adicionados **10 testes** em `tests/test_knowledge.py` (contrato 9.1), **8 testes** em `tests/test_knowledge_registry.py` (registo 9.2), **14 testes** em `tests/test_knowledge_metadata.py` (extracção 9.3), **11 testes** em `tests/test_knowledge_index.py` (índice 9.4) e **8 testes** em `tests/test_knowledge_storage.py` (persistência 9.5). A execução registou **474/474 testes aprovados**.
+Foram adicionados **10 testes** em `tests/test_knowledge.py` (contrato 9.1), **8 testes** em `tests/test_knowledge_registry.py` (registo 9.2), **14 testes** em `tests/test_knowledge_metadata.py` (extracção 9.3), **11 testes** em `tests/test_knowledge_index.py` (índice 9.4), **8 testes** em `tests/test_knowledge_storage.py` (persistência 9.5) e **8 testes** em `tests/test_knowledge_context.py` (contexto 9.6). A execução registou **482/482 testes aprovados**.
 
 Foi também criado `.github/workflows/tests.yml` para executar a suíte em Python 3.12 no GitHub Actions. O estado remoto continua tratado como evidência P3 até existir confirmação de uma execução.
 
@@ -113,7 +114,7 @@ Model Intelligence     ██████████ 100%
 Provider Layer         ██████████ 100%
 Task Intelligence      ██████████ 100%
 Runtime Engine         ██████████ 100% (implementação)
-Knowledge Engine       █████░░░░░ 50%  (9.1–9.5: contrato, registo, metadados, índice, SQLite)
+Knowledge Engine       ██████░░░░ 60%  (núcleo reversível 9.1–9.6 completo)
 API                    ░░░░░░░░░░ 0%   (não iniciado)
 UI                     ░░░░░░░░░░ 0%   (não iniciado)
 ```
@@ -122,18 +123,15 @@ Estas barras não representam progresso global do projecto; representam maturida
 
 ## Estado Git
 
-As unidades 9.1–9.5 (contrato, registo, extracção de metadados, índice e
-persistência de conhecimento) foram registadas em `main` em commits
-coerentes: módulo `knowledge` (base, init, registry, metadata, index,
-storage), testes, BASE-37/38/39/40/41 e documentação arquitectural/estado
-alinhados.
+As unidades 9.1–9.6 (contrato, registo, extracção de metadados, índice,
+persistência e contexto de conhecimento) foram registadas em `main` em
+commits coerentes: módulo `knowledge` (base, init, registry, metadata,
+index, storage, context), testes, BASE-37/38/39/40/41/42 e documentação
+arquitectural/estado alinhados.
 
 ## Regra de continuação
 
-**Fase 9 — Knowledge Engine EM CURSO.** As unidades **9.2 — Knowledge
-Registry**, **9.3 — Metadata Extraction**, **9.4 — In-Memory Index** e
-**9.5 — SQLite Persistence** foram executadas (padrão autorizado;
-decisões 9.4 e 9.5 consultadas e documentadas).
+**Fase 9 — Knowledge Engine — núcleo reversível concluído (9.1–9.6 ✓).**
 
 ```text
 9.1 contrato do subsistema ✓
@@ -141,16 +139,19 @@ decisões 9.4 e 9.5 consultadas e documentadas).
 9.3 extracção de metadados (heurística) ✓
 9.4 indexação — Knowledge In-Memory Index ✓ (decisão: memória pura)
 9.5 recuperação — Knowledge SQLite Persistence ✓ (decisão: SQLite local)
+9.6 construção de contexto ✓ (núcleo reversível completo)
     ↓
-9.6 construção de contexto — montagem textual determinista a partir do
-   índice (9.4) e dos registos persistidos (9.5) — sem decisão material
-9.7/rolo seguinte — ingestão e extracção semântica real (ficheiros de
-   projecto, embeddings via Model/Provider) — exige planeamento próprio
-   e decisões documentadas; sessão dedicada.
+INGESTÃO SEMÂNTICA — ler ficheiros do projecto + enriquecer com
+embeddings via Model/Provider — EXIGE PLANEAMENTO PRÓPRIO e decisões
+documentadas (modelo/fornecedor, tokenização, pesos, integração com o
+Runtime). Não é executável de forma autónoma numa unidade do núcleo
+reversível.
 ```
 
-A unidade **9.6 — construção de contexto** é executável de forma autónoma
-na mesma sessão caso o `/wsai-run` continue (unidade pura e directamente
-dependente). A **ingestão semântica real** (ficheiros/embeddings) é o
-ponto de paragem seguinte e exige planeamento próprio. Nenhum motor de
-embeddings é criado antes dessa decisão.
+A Fase 9 está **funcionalmente completa no núcleo reversível**: o circuito
+contrato → registo → metadados → índice → persistência → contexto está
+pronto, testeado e sincronizado. A **ingestão semântica real**
+(fichiero do projecto e embeddings via Model/Provider) é o próximo ponto
+de decisão: exige uma sessão de planeamento própria com decisões
+documentadas antes de qualquer motor de embeddings. Nenhum recurso desse
+âmbito é criado antes dessa decisão.

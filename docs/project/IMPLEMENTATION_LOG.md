@@ -1,5 +1,49 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-09 — Knowledge Context Builder — Fase 9.6 (fecho do núcleo)
+
+### Objectivo
+
+Montar o pacote de contexto textual determinista a partir do índice (9.4)
+e dos registos (9.5), fechando o circuito do núcleo reversível da Fase 9.
+Sem I/O, sem modelos e sem decisão arquitectural material.
+
+### Realizado
+
+- `src/wsai2/knowledge/context.py` (novo): `ContextBuilder` (build com
+  `top`/`snippet_caracteres`), `ContextEntry` e `KnowledgeContext` (com
+  representação textual `text()` estável);
+- `src/wsai2/knowledge/__init__.py` — exporta `ContextBuilder`,
+  `ContextEntry`, `KnowledgeContext`;
+- `tests/test_knowledge_context.py` (novo, **8 testes**);
+- `ARCHITECTURE.md` — secção 3.9 actualizada com a construção de contexto;
+- `docs/knowledge/BASE-42-knowledge-context-builder.md` — relatório da
+  base.
+
+### Arquitectura abrangida
+
+Fase 9 — Knowledge Engine (subsistema 3.9). `context.py` depende apenas
+de `knowledge.base` e `knowledge.index`; **nenhuma aresta nova** em
+`FRONTEIRAS`. Com esta unidade, o núcleo reversível da Fase 9 está
+completo (contrato → registo → metadados → índice → persistência →
+contexto).
+
+### Validação
+
+```text
+py -3.12 -m pytest   →   482 passed (474 anteriores + 8 contexto)
+```
+
+### Próximo passo
+
+**Ingestão semântica real** (ficheiros do projecto + embeddings via
+Model/Provider) — ponto de decisão seguinte: exige planeamento próprio e
+decisões documentadas antes de motores de embeddings
+(`PROJECT_STATE.md`, regra de continuação). A Fase 9 está funcionalmente
+completa no núcleo reversível.
+
+---
+
 ## 2026-09-09 — Knowledge SQLite Persistence — Fase 9.5
 
 ### Objectivo
