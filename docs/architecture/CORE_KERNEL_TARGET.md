@@ -12,6 +12,14 @@ O nome arquitectural recomendado é **Core / Execution & Intelligence Kernel**. 
 
 O Core deve ser pequeno, determinista, testável e independente de capacidades concretas.
 
+**Regra de superfície vs. implementação.** A reconstrução do Core **nunca
+remove a superfície pública já versionada** (`core.public`, fronteiras de
+execution/resource/security, firewall de dependências). O que se extrai do
+núcleo é a **implementação pesada**: a mecânica de execução (executores,
+filas, agendamento, governação de recursos, colecção de métricas) desce
+para infra-estrutura especializada, **por trás** dos contratos públicos.
+O Core mantém os contratos e a inteligência de decisão (decide/plan/govern).
+
 ```text
                 APPLICATION
              API / UI / CLI
@@ -198,6 +206,11 @@ Um addon não pode importar outro addon directamente.
 
 Dependências concretas entre subsistemas só são aceites quando justificadas pelo contrato arquitectural e cobertas por testes.
 
+**Preservação de superfície.** A reorganização não retira do Core nenhuma
+superfície pública já versionada (KERNEL-03/04/05). O que sai do núcleo é a
+implementação pesada, movida para infra-estrutura por trás dos contratos
+públicos; a direcção das dependências mantém-se a indicada acima.
+
 ## 7. Superfície pública do Core
 
 A reorganização futura deve distinguir claramente:
@@ -298,6 +311,13 @@ A migração deve seguir **Preservar antes de estender**:
 
 Não deve existir uma grande migração única.
 
+**Regra de reconstrução.** Cada unidade preserva a superfície pública já
+versionada e move apenas peso: a implementação pesada do núcleo (incluindo
+o que estiver em `execution.runner`, `resource.governor` e
+`runtime_engine.{manager,scheduler,queue,monitoring}`) desce para
+infra-estrutura por trás dos contratos públicos (KERNEL-08/09). Nenhuma
+superfície é removida; apenas se retira implementação pesada do núcleo.
+
 ## 11. Critérios de qualidade do Kernel
 
 O núcleo será considerado consolidado quando:
@@ -312,6 +332,7 @@ O núcleo será considerado consolidado quando:
 - observabilidade for transversal;
 - a suíte completa permanecer verde;
 - não existirem dependências pesadas desnecessárias no arranque do Core;
+- a implementação pesada do núcleo ocorrer por trás dos contratos públicos, sem residir no núcleo;
 - a API e UI puderem evoluir sem modificar a lógica central.
 
 ## 12. Primeira sequência de trabalho
@@ -321,11 +342,11 @@ KERNEL-01  Inventário real da base          ✓ CONCLUÍDA (KERNEL-01-core-inve
 KERNEL-02  Mapa de dependências             ✓ CONCLUÍDA (KERNEL-02-dependency-map.md)
 KERNEL-03  Core Public Contract             ✓ CONCLUÍDA (KERNEL-03-core-public-contract.md)
 KERNEL-04  Dependency Firewall              ✓ CONCLUÍDA (KERNEL-04-dependency-firewall.md)
-KERNEL-05  Resource / Execution boundary    -> próxima unidade
-KERNEL-06  Observability boundary            -> depois
+KERNEL-05  Resource / Execution boundary    ✓ CONCLUÍDA (KERNEL-05-execution-resource-boundary.md)
+KERNEL-06  Observability boundary            -> próxima unidade
 KERNEL-07  Architecture contract tests      -> depois
-KERNEL-08  Migração incremental de imports  -> depois
-KERNEL-09  Core freeze                       -> depois
+KERNEL-08  Migração incremental de imports  -> depois (superfície preservada; implementação pesada desce)
+KERNEL-09  Core freeze                       -> depois (superfície versionada; peso fora do núcleo)
 KERNEL-10  Addon SDK / Projects foundation  -> depois
 ```
 

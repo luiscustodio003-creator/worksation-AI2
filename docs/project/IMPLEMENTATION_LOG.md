@@ -1,5 +1,38 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-09 — Política de reconstrução do Core (superfície vs. implementação)
+
+### Objectivo
+
+Registar como regra arquitectural a decisão do utilizador: na reconstrução
+do Core **não se retira a superfície**; extrai-se **a implementação pesada**.
+
+### Decisão
+
+- As superfícies públicas já versionadas (`core.public`, fronteiras de
+  execution/resource/security, `FIREWALL`) permanecem no núcleo.
+- A implementação pesada (executores, filas, agendamento, mecânica de
+  governação de recursos, colecção de métricas) desce para infra-estrutura
+  por trás dos contratos públicos — KERNEL-08/09.
+
+### Alterações (documentais)
+
+- `docs/architecture/CORE_KERNEL_TARGET.md` — regra de superfície vs.
+  implementação nas secções 2, 6, 10, 11 e 12 (KERNEL-08/09 anotados;
+  secção 12 sincronizada: KERNEL-05 ✓ CONCLUÍDA, KERNEL-06 próxima).
+- `docs/architecture/COMMAND_EXECUTION_CONTRACT.md` — regra nas regras de
+  migração da transição.
+- `docs/project/PROJECT_STATE.md` — política registada.
+
+### Validação
+
+Suíte de contrato arquitectural coerente (docs-only; sem alteração de
+comportamento). Suíte completa 500/500 inalterada.
+
+### Próximo passo
+
+`/wsai-plan KERNEL-06` — Observability boundary, considerando esta regra.
+
 ## 2026-09-09 — KERNEL-05 — Resource / Execution boundary
 
 ### Objectivo

@@ -133,6 +133,7 @@ vigente; `COMMAND_EXECUTION_CONTRACT.md` governa a transição).
 - **KERNEL-04 — DEPENDENCY FIREWALL: CONCLUÍDA** (`docs/architecture/KERNEL-04-dependency-firewall.md`). Firewall exacto por subsistema (`FIREWALL`, 26 arestas com tipagem) + teste automático `test_artigo2_13_firewall_por_subsistema` que detecta qualquer aresta nova; `core` permanece folha; grandfathering dos imports internos até KERNEL-08. Sem MOVE físico. Suíte **497/497 verdes**.
 - **KERNEL-05 — RESOURCE / EXECUTION BOUNDARY: CONCLUÍDA** (`docs/architecture/KERNEL-05-execution-resource-boundary.md`). Opção A: fronteira = `__all__` do `__init__` de `execution`/`resource`/`security` + `EXECUTION_CONTRACT_VERSION`/`RESOURCE_CONTRACT_VERSION`/`SECURITY_CONTRACT_VERSION = "1.0"`; `tests/test_boundary_kernel.py` (3 testes: versão major.minor, superfícies congeladas, consumidores só ao nível do pacote). Sem fachadas novas e sem MOVE. `runtime_engine` fica para o KERNEL-06. Suíte **500/500 verdes**.
 - **Próxima unidade:** `/wsai-plan KERNEL-06` — Observability boundary (superfície de observabilidade e fronteira de governação de `runtime_engine`).
+- **Política de reconstrução do Core (regra de superfície vs. implementação):** registada em `CORE_KERNEL_TARGET.md` (sec. 2, 6, 10, 11, 12) e `COMMAND_EXECUTION_CONTRACT.md` (regras de migração): a reconstrução nunca remove superfícies públicas já versionadas; extrai-se do núcleo apenas a implementação pesada (mecânica de execução), por trás dos contratos públicos, no KERNEL-08/09.
 
 ## Estado Git
 

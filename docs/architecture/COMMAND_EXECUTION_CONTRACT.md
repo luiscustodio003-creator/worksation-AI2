@@ -73,7 +73,8 @@ Durante `TRANSITION`:
 - manter documentação sincronizada;
 - criar checkpoint Git por unidade coerente;
 - não apagar a origem antes da validação do destino;
-- não alterar simultaneamente várias fronteiras arquitecturais sem necessidade.
+- não alterar simultaneamente várias fronteiras arquitecturais sem necessidade;
+- nunca remover superfícies públicas já versionadas; extrair do núcleo apenas a implementação pesada, por trás dos contratos públicos.
 
 ## Dependency Firewall
 
