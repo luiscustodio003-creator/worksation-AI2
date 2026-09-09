@@ -6,28 +6,43 @@ agent: plan
 
 Actualizar documentação da área `$ARGUMENTS` com base em trabalho já validado.
 
+## Contrato de transição
+
+Ler `docs/architecture/COMMAND_EXECUTION_CONTRACT.md`.
+
+Durante a reestruturação do Kernel, a documentação deve distinguir claramente:
+
+- estado actual;
+- arquitectura target;
+- migração em curso;
+- responsabilidades já migradas;
+- responsabilidades ainda legadas;
+- contratos activos;
+- riscos residuais.
+
+Nunca documentar a arquitectura target como se já estivesse implementada.
+
 ## Regras
 
-- Não inventar estado que não tenha sido validado.
-- Não marcar uma fase como concluída sem implementação e testes.
+- Não inventar estado.
+- Não marcar fase concluída sem evidência.
 - Manter `PROJECT_STATE.md` coerente com `ROADMAP.md`.
 - Registar decisões arquitecturais e motivos.
-- Actualizar `IMPLEMENTATION_LOG.md` no fim de cada unidade.
-- Manter documentação técnica em português de Portugal.
-- Corrigir inconsistências históricas sem reescrever relatórios antigos desnecessariamente.
+- Actualizar `IMPLEMENTATION_LOG.md` por unidade.
+- Documentar dependências e fronteiras.
+- Manter português de Portugal.
 
-## Conteúdo mínimo
-
-A documentação da unidade deve indicar:
+## Conteúdo mínimo da unidade
 
 - objectivo;
-- arquitectura abrangida;
+- arquitectura actual e target quando aplicável;
+- classificação da alteração;
 - componentes envolvidos;
-- dependências;
+- consumidores/dependências;
 - alterações efectuadas;
 - testes e resultado;
-- riscos residuais;
+- riscos/rollback;
 - estado actual;
 - próximo passo.
 
-Este comando documenta o estado; não deve aproveitar a tarefa para iniciar uma nova implementação funcional.
+Este comando documenta trabalho validado; não inicia nova implementação funcional.
