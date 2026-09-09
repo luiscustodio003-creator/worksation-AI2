@@ -128,7 +128,8 @@ Estas barras não representam progresso global do projecto; representam maturida
 vigente; `COMMAND_EXECUTION_CONTRACT.md` governa a transição).
 
 - **KERNEL-01 — CORE INVENTORY: CONCLUÍDA** (`docs/architecture/KERNEL-01-core-inventory.md`). Auditoria read-only: 79 módulos / 14 subsistemas; Kernel = `core`/`execution`/`resource`/`runtime_engine`/`security`; domínio = `hardware`/`runtime`/`capability`/`model`/`provider`/`task`/`knowledge`; infra = `platform`; addon = `extension`; sem Application. 22 arestas `FRONTEIRAS` válidas, grafo acíclico, **491/491 testes verdes**. Sem código alterado.
-- **Próxima unidade:** `/wsai-plan KERNEL-02` — mapa de dependências formal + proposta de fronteiras públicas (`core.public`).
+- **KERNEL-02 — MAPA DE DEPENDÊNCIAS: CONCLUÍDA** (`docs/architecture/KERNEL-02-dependency-map.md`). Mapa formal (22 arestas, consumidores reais por scan AST) + candidata a `core.public` (símbolos públicos reais do núcleo). Documental, sem código alterado; decisão do conjunto definitivo fica no KERNEL-03.
+- **Próxima unidade:** `/wsai-plan KERNEL-03` — Core Public Contract (formalizar `core.public`, revisão de `resource.governor→hardware`).
 
 ## Estado Git
 
@@ -140,12 +141,12 @@ documentação arquitectural/estado alinhados.
 
 ## Regra de continuação
 
-**Migração do Kernel — TRANSITION (KERNEL-01 concluída).**
+**Migração do Kernel — TRANSITION (KERNEL-01 e KERNEL-02 concluídas).**
 
 ```text
 KERNEL-01  Inventário real da base            ✓ CONCLUÍDA (auditoria read-only)
-KERNEL-02  Mapa de dependências + core.public → PRÓXIMA UNIDADE (/wsai-plan)
-KERNEL-03  Core Public Contract
+KERNEL-02  Mapa de dependências + core.public ✓ CONCLUÍDA (documental; candidata registada)
+KERNEL-03  Core Public Contract               → PRÓXIMA UNIDADE (/wsai-plan)
 KERNEL-04  Dependency Firewall
 KERNEL-05  Resource / Execution boundary
 KERNEL-06  Observability boundary

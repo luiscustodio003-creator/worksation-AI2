@@ -1,5 +1,63 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-09 — KERNEL-02 — Mapa de dependências e fronteiras públicas
+
+### Objectivo
+
+Fixar o mapa formal de dependências e a candidata a `core.public` para a
+migração do Kernel (`TRANSITION`).
+
+### Alterações
+
+- `docs/architecture/KERNEL-02-dependency-map.md` — mapa (22 arestas,
+  consumidores reais por scan AST) e superfície pública candidata
+  (símbolos reais de `core`/`execution`/`resource`/`runtime_engine`/
+  `security`); nós de atenção (`runtime_engine` concêntrico;
+  `resource.governor→hardware` a reavaliar).
+- `docs/project/PROJECT_STATE.md` — KERNEL-02 concluída; próxima unidade
+  KERNEL-03 (Core Public Contract).
+- Unidade documental — **sem código alterado**.
+
+### Validação
+
+```text
+py -3.12 -m pytest
+tests=491  failures=0  errors=0  skipped=0
+```
+
+### Próximo passo
+
+`/wsai-plan KERNEL-03` — Core Public Contract (decisão do conjunto
+definitivo de `core.public` e revisão de `resource.governor→hardware`).
+
+## 2026-09-09 — KERNEL-01 — Inventário real da base
+
+### Objectivo
+
+Auditoria read-only do Kernel (`CORE INVENTORY`) antes de qualquer
+reorganização, conforme a secção 12 do `CORE_KERNEL_TARGET.md`.
+
+### Alterações
+
+- `docs/architecture/KERNEL-01-core-inventory.md` — inventário de
+  79 módulos / 14 subsistemas, classificação por destino arquitectural,
+  22 arestas, mapa de consumidores reais, problemas (P3) e riscos de
+  migração.
+- `docs/project/PROJECT_STATE.md` — secção "Migração do Kernel" com o
+  estado `TRANSITION`.
+- Auditoria read-only — **sem código alterado**.
+
+### Validação
+
+```text
+py -3.12 -m pytest
+tests=491  failures=0  errors=0  skipped=0
+```
+
+### Próximo passo
+
+`/wsai-plan KERNEL-02` (concluída em seguida).
+
 ## 2026-09-09 — Fecho formal da Fase 9 — validação do âmbito lexical
 
 ### Objectivo

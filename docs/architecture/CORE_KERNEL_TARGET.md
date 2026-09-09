@@ -317,9 +317,9 @@ O núcleo será considerado consolidado quando:
 ## 12. Primeira sequência de trabalho
 
 ```text
-KERNEL-01  Inventário real da base          -> actual
-KERNEL-02  Mapa de dependências             -> próxima unidade
-KERNEL-03  Core Public Contract             -> depois
+KERNEL-01  Inventário real da base          ✓ CONCLUÍDA (KERNEL-01-core-inventory.md)
+KERNEL-02  Mapa de dependências             ✓ CONCLUÍDA (KERNEL-02-dependency-map.md)
+KERNEL-03  Core Public Contract             -> próxima unidade
 KERNEL-04  Dependency Firewall              -> depois
 KERNEL-05  Resource / Execution boundary    -> depois
 KERNEL-06  Observability boundary            -> depois
