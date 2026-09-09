@@ -69,6 +69,29 @@ SUBSISTEMAS_FUTUROS = ("api", "ui")
 # Adaptadores de plataforma: específicos de SO, de acesso reservado.
 _ADAPTADORES_SO = ("wsai2.platform.windows", "wsai2.platform.linux")
 
+# Dependências exactas permitidas POR SUBSISTEMA (Dependency Firewall,
+# KERNEL-04). Cada subsistema só pode importar dos destinos declarados;
+# qualquer aresta nova é detectada automaticamente. Extraído do grafo real
+# com imports TYPE_CHECKING incluídos (semântica idêntica ao FRONTEIRAS).
+# `core.public` é a superfície pública sancionada; sem MOVE físico na
+# migração (KERNEL-08).
+FIREWALL: dict[str, frozenset[str]] = {
+    "capability": frozenset({"hardware", "runtime"}),
+    "core": frozenset({"extension"}),
+    "execution": frozenset({"core", "resource"}),
+    "extension": frozenset({"core", "security"}),
+    "hardware": frozenset(),
+    "knowledge": frozenset({"core"}),
+    "model": frozenset({"capability", "hardware", "runtime"}),
+    "platform": frozenset(),
+    "provider": frozenset(),
+    "resource": frozenset({"core", "extension", "hardware", "runtime"}),
+    "runtime": frozenset(),
+    "runtime_engine": frozenset({"core", "execution", "resource", "security", "task"}),
+    "security": frozenset({"core"}),
+    "task": frozenset({"capability", "hardware", "model", "provider", "runtime"}),
+}
+
 
 def _ficheiros_src() -> list[pathlib.Path]:
     """Todos os ficheiros Python de ``src/wsai2`` (exclui __pycache__)."""
@@ -161,6 +184,25 @@ def test_artigo2_13_arestas_respeitam_fronteiras() -> None:
             if (origem, destino) not in FRONTEIRAS:
                 violacoes.append((origem, destino, ficheiro.name))
     assert violacoes == [], f"fronteiras violadas (origem->destino, ficheiro): {violacoes}"
+
+
+def test_artigo2_13_firewall_por_subsistema() -> None:
+    """Cada subsistema só depende dos destinos autorizados (firewall exacto).
+
+    Mais estrito que o `FRONTEIRAS` (união): detecta automaticamente
+    qualquer aresta nova, mesmo dentro da união. A chave do firewall deve
+    cobrir todos os subsistemas do código.
+    """
+    grafo: dict[str, set[str]] = {s: set() for s in _subsistemas_src()}
+    for ficheiro in _ficheiros_src():
+        for origem, destino in _arestas_import(ficheiro, excluir_tipagem=False):
+            grafo[origem].add(destino)
+
+    assert set(FIREWALL) == set(_subsistemas_src())
+    for origem, destinos in grafo.items():
+        permitidos = FIREWALL.get(origem, frozenset())
+        ilegais = destinos - permitidos
+        assert ilegais == set(), f"firewall violado por {origem}: {sorted(ilegais)}"
 
 
 def test_artigo2_imports_apontam_para_subsistemas_reais() -> None:

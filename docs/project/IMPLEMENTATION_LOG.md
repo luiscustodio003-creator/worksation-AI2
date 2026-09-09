@@ -1,5 +1,42 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-09 — KERNEL-04 — Dependency Firewall
+
+### Objectivo
+
+Substituir o controlo por união (`FRONTEIRAS`) por um firewall exacto por
+subsistema: cada subsistema declara os destinos autorizados e qualquer
+aresta nova é detectada automaticamente no gate.
+
+### Regra adoptada
+
+- Application/Addons futuros consomem o núcleo por `wsai2.core.public`;
+  imports internos actuais (`wsai2.core.errors`/`wsai2.core.context`) são
+  grandfathered até ao KERNEL-08 (migração incremental).
+- `core` permanece folha; `core -> extension` mantém-se apenas tipográfica.
+- Sem MOVE físico — firewall declarativo e testável.
+
+### Alterações
+
+- `tests/test_architecture_contract.py` — `FIREWALL` (mapa exacto por
+  subsistema, 26 arestas com tipagem) + `test_artigo2_13_firewall_por_subsistema`
+  (arestas reais ⊆ destinos autorizados; chaves cobrem todos os subsistemas).
+- `docs/architecture/KERNEL-04-dependency-firewall.md`.
+- `docs/project/PROJECT_STATE.md` — KERNEL-04 concluída; KERNEL-05 próxima.
+- `docs/architecture/CORE_KERNEL_TARGET.md` — secção 12: KERNEL-04 como
+  próxima unidade.
+
+### Validação
+
+```text
+py -3.12 -m pytest
+tests=497  failures=0  errors=0  skipped=0
+```
+
+### Próximo passo
+
+`/wsai-plan KERNEL-05` — Resource / Execution boundary.
+
 ## 2026-09-09 — KERNEL-03 — Core Public Contract
 
 ### Objectivo

@@ -130,7 +130,8 @@ vigente; `COMMAND_EXECUTION_CONTRACT.md` governa a transição).
 - **KERNEL-01 — CORE INVENTORY: CONCLUÍDA** (`docs/architecture/KERNEL-01-core-inventory.md`). Auditoria read-only: 79 módulos / 14 subsistemas; Kernel = `core`/`execution`/`resource`/`runtime_engine`/`security`; domínio = `hardware`/`runtime`/`capability`/`model`/`provider`/`task`/`knowledge`; infra = `platform`; addon = `extension`; sem Application. 22 arestas `FRONTEIRAS` válidas, grafo acíclico, **491/491 testes verdes**. Sem código alterado.
 - **KERNEL-02 — MAPA DE DEPENDÊNCIAS: CONCLUÍDA** (`docs/architecture/KERNEL-02-dependency-map.md`). Mapa formal (22 arestas, consumidores reais por scan AST) + candidata a `core.public` (símbolos públicos reais do núcleo). Documental, sem código alterado; decisão do conjunto definitivo fica no KERNEL-03.
 - **KERNEL-03 — CORE PUBLIC CONTRACT: CONCLUÍDA** (`docs/architecture/KERNEL-03-core-public-contract.md`). Criado `wsai2.core.public` (Opção A): fachada versionada (`CORE_PUBLIC_CONTRACT_VERSION = "1.0"`) dos 14 símbolos do leaf `core` (erros + contexto), sem lógica própria nem novas arestas — `core` permanece folha. Bloqueio de localização resolvido em planeamento (agregado único violaria aciclicidade). 5 testes novos (`test_core_public.py`). Suíte **496/496 verdes**.
-- **Próxima unidade:** `/wsai-plan KERNEL-04` — Dependency Firewall (verificação automática das fronteiras já autorizadas; superfícies de execution/resource/runtime_engine/security em KERNEL-05/06).
+- **KERNEL-04 — DEPENDENCY FIREWALL: CONCLUÍDA** (`docs/architecture/KERNEL-04-dependency-firewall.md`). Firewall exacto por subsistema (`FIREWALL`, 26 arestas com tipagem) + teste automático `test_artigo2_13_firewall_por_subsistema` que detecta qualquer aresta nova; `core` permanece folha; grandfathering dos imports internos até KERNEL-08. Sem MOVE físico. Suíte **497/497 verdes**.
+- **Próxima unidade:** `/wsai-plan KERNEL-05` — Resource / Execution boundary (superfícies públicas de execution/resource/runtime_engine/security).
 
 ## Estado Git
 
@@ -142,13 +143,14 @@ documentação arquitectural/estado alinhados.
 
 ## Regra de continuação
 
-**Migração do Kernel — TRANSITION (KERNEL-01, KERNEL-02 e KERNEL-03 concluídas).**
+**Migração do Kernel — TRANSITION (KERNEL-01, KERNEL-02, KERNEL-03 e KERNEL-04 concluídas).**
 
 ```text
 KERNEL-01  Inventário real da base            ✓ CONCLUÍDA (auditoria read-only)
 KERNEL-02  Mapa de dependências + core.public ✓ CONCLUÍDA (documental; candidata registada)
 KERNEL-03  Core Public Contract               ✓ CONCLUÍDA (core.public; Opção A, 496/496)
-KERNEL-04  Dependency Firewall                → PRÓXIMA UNIDADE (/wsai-plan)
+KERNEL-04  Dependency Firewall                ✓ CONCLUÍDA (FIREWALL por subsistema; 497/497)
+KERNEL-05  Resource / Execution boundary      → PRÓXIMA UNIDADE (/wsai-plan)
 KERNEL-05  Resource / Execution boundary
 KERNEL-06  Observability boundary
 KERNEL-07  Architecture contract tests
