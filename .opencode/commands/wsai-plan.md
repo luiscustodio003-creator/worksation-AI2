@@ -6,59 +6,56 @@ agent: plan
 
 Planear a unidade `$ARGUMENTS` sem implementar código funcional quando executado isoladamente.
 
+## CONTRATO DE ARQUITECTURA
+
+Ler `docs/architecture/COMMAND_EXECUTION_CONTRACT.md` antes de planear alterações estruturais.
+
+Durante a migração do Kernel, considerar `TRANSITION`. O plano deve trabalhar sobre responsabilidades e contratos, não assumir que a localização física actual de um módulo é definitiva.
+
+Para qualquer alteração estrutural, declarar:
+
+```text
+Tipo: CREATE | ADAPT | MOVE | SPLIT | MERGE | DEPRECATE | DELETE | FREEZE
+```
+
+Aplicar `BEFORE EXTEND`: verificar primeiro se a responsabilidade já existe e preferir reutilização/adaptação/adapter.
+
 ## Pré-condição
 
-Usar a auditoria disponível. Se a unidade não estiver auditada, executar primeiro uma análise equivalente e registar as lacunas.
+Usar a auditoria disponível. O plano deve ser baseado no estado real do código, testes, documentação e Git.
 
-O plano deve ser baseado no **estado real do código e dos testes**, usando `PROJECT_STATE.md`, `ROADMAP.md` e a arquitectura como contexto e contrato. Não planear a partir de componentes que existem apenas na documentação.
+## MODO ISOLADO VS. /WSAI-RUN
 
-## MODO ISOLADO VS. MODO /WSAI-RUN
+Isoladamente, termina em `READY TO IMPLEMENT` ou `BLOCKED`.
 
-Quando `/wsai-plan` for executado directamente pelo utilizador, permanece um comando de planeamento: **não implementa** e termina com `READY TO IMPLEMENT` ou `BLOCKED`.
-
-Quando o planeamento for uma etapa interna de `/wsai-run`, o resultado `READY TO IMPLEMENT` é uma autorização operacional suficiente para o orquestrador prosseguir, desde que a unidade já esteja autorizada pelo `PROJECT_STATE.md`/`ROADMAP.md` e não introduza decisão arquitectural material.
-
-**Não existe uma segunda aprovação humana implícita entre `READY TO IMPLEMENT` e `/wsai-implement` dentro de `/wsai-run`.** Pedir confirmação apenas por existir um plano interno contradiz a missão autónoma do orquestrador.
-
-Se o plano detectar uma decisão arquitectural material nova, deve terminar em `BLOCKED` e identificar exactamente a decisão necessária.
+Dentro de `/wsai-run`, `READY TO IMPLEMENT` é autorização operacional suficiente quando a unidade está autorizada pelo estado/roadmap e não introduz decisão arquitectural material.
 
 ## Plano obrigatório
 
 1. Objectivo e critério de conclusão.
-2. Estado actual e componentes que já fornecem a responsabilidade.
-3. Ficheiros que precisam de ser alterados.
-4. Ficheiros novos estritamente necessários.
-5. Interfaces/contratos envolvidos.
-6. Dependências e direcção das dependências.
-7. Impacto no `wsai-run` e no fluxo sequencial.
-8. Compatibilidade com comandos `/wsai-*` individuais.
+2. Estado actual e responsabilidades já existentes.
+3. Classificação da alteração.
+4. Consumidores e dependências.
+5. Ficheiros afectados e novos estritamente necessários.
+6. Interfaces/contratos.
+7. Direcção das dependências e Dependency Firewall.
+8. Impacto nos comandos e no `/wsai-run`.
 9. Estratégia de migração não destrutiva.
 10. Estratégia de rollback.
 11. Testes unitários, integração, negativos e regressão.
-12. Critérios de validação da unidade.
-13. Gate de consolidação necessário, se aplicável (`/wsai-validate`).
-14. Documentação a actualizar.
-15. Alterações ao `PROJECT_STATE.md`/`IMPLEMENTATION_LOG.md`.
-16. Alterações Git previstas.
-17. Riscos e condições de paragem.
+12. Critérios de validação.
+13. Gate necessário.
+14. Documentação e estado a actualizar.
+15. Alterações Git.
+16. Riscos e condições de paragem.
 
-## Regra especial
+## Regras de migração
 
-Não propor a criação de um novo módulo quando uma responsabilidade equivalente já existir. Preferir extensão, adapter ou integração sobre a substituição.
+Para `MOVE`, `SPLIT`, `MERGE` ou `DELETE`, o plano deve demonstrar consumidores conhecidos e ordem segura de migração. Não planear remoção da origem antes de validar o destino.
 
-Não transformar uma lacuna documental num novo componente funcional sem confirmar a necessidade no código e na arquitectura.
-
-## Correcções de gate
-
-Se o `/wsai-run` receber um `NOT APPROVED` causado exclusivamente por uma lacuna documental/processual P2 inequívoca, localizada e sem impacto funcional ou arquitectural, pode criar uma unidade correctiva mínima para fechar o gap. Essa unidade deve incluir apenas os ficheiros necessários à evidência do gate e deve ser revalidada.
-
-Um P0/P1, uma decisão arquitectural material, alteração de requisitos fundamentais ou risco de perda de dados não pode ser convertido artificialmente em correcção autónoma.
+Não propor estrutura nova artificial. Não transformar intenção futura em implementação.
 
 ## Resultado
-
-Entregar um plano executável por uma unidade pequena e verificável. Se a unidade for demasiado grande, dividi-la antes da implementação.
-
-O plano deve terminar com uma decisão clara:
 
 ```text
 READY TO IMPLEMENT
