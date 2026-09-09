@@ -6,15 +6,15 @@
 
 ## Fase actual
 
-**FASE 9 — Knowledge Engine (subsistema 3.9) — EM CURSO**
+**FASE 9 — Knowledge Engine (subsistema 3.9) — CONCLUÍDA (âmbito lexical)**
 
 ## Estado da fase
 
-**FASE 9 INICIADA** após o fecho formal da Fase 8 (gate de fundação `APPROVED WITH WARNINGS`). Unidades **9.1 — Knowledge Contract**, **9.2 — Knowledge Registry**, **9.3 — Metadata Extraction**, **9.4 — In-Memory Index**, **9.5 — SQLite Persistence** e **9.6 — Context Builder** concluídas — o núcleo reversível da Fase 9 está **completo** (contrato → registo → metadados → índice → persistência → contexto). Decisões de fronteira documentadas (`knowledge` autorizado; aresta `knowledge→core`; armazenamento SQLite decidido). Suíte completa: **482 testes aprovados, 0 falhas**.
+**FASE 9 CONCLUÍDA (âmbito lexical)** — fecho formal após gate `/wsai-validate fase9` (`APPROVED`, 2026-09-09, `docs/validation/FASE9_VALIDATION_REPORT.md`). Unidades **9.1 – 9.7** implementadas, testadas e sincronizadas: contrato → registo → metadados → índice → persistência → contexto → ingestão de ficheiros. Decisões documentadas (`knowledge` autorizado; aresta `knowledge→core`; 9.4 memória pura; 9.5 SQLite local). Suíte completa: **491 testes aprovados, 0 falhas**. O enriquecimento semântico (embeddings) é a **decisão material terminal** — permanece em aberto por natureza e fica registado como próximo ponto.
 
 ## Última unidade implementada
 
-Fase 9 — unidade 9.6: **Knowledge Context Builder** (`docs/knowledge/BASE-42-knowledge-context-builder.md`). Criado `ContextBuilder`/`KnowledgeContext`/`ContextEntry` (pacote textual determinista por relevância do índice: títulos, excertos com elipse, proveniência e etiquetas; `text()` estável). Sem I/O, sem modelos e sem arestas novas em `FRONTEIRAS`. 8 novos testes. **A 9.6 fecha o circuito definido para a Fase 9.**
+Fase 9 — unidade 9.7: **Knowledge File Ingestion** (`docs/knowledge/BASE-43-knowledge-file-ingestion.md`). Criado `FileIngestor` (leitura lexical de ficheiros de texto do projecto — `.md`/`.py`/`.txt`/`.json`/`.toml`/`.yaml`/`.yml` — em registos `document` com proveniência relativa e metadados derivados pelo extractor 9.3; ordem determinista; binários/vazios/oversized ignorados). Sem embeddings e sem arestas novas em `FRONTEIRAS`. 9 novos testes.
 
 ## Estado dos residuais Via B
 
@@ -48,6 +48,7 @@ Fase 9 — unidade 9.6: **Knowledge Context Builder** (`docs/knowledge/BASE-42-k
 - Knowledge In-Memory Index (Fase 9, subsistema 3.9 — consulta por termos)
 - Knowledge SQLite Persistence (Fase 9, subsistema 3.9 — armazenamento local decidido)
 - Knowledge Context Builder (Fase 9, subsistema 3.9 — pacote de contexto determinista)
+- Knowledge File Ingestion (Fase 9, subsistema 3.9 — ficheiros de texto do projecto)
 
 ## Filas multicamadas — contrato
 
@@ -98,7 +99,7 @@ A documentação está alinhada com o estado funcional conhecido. A Fase 8 está
 
 Baseline do fecho da Fase 8: **423 testes**.
 
-Foram adicionados **10 testes** em `tests/test_knowledge.py` (contrato 9.1), **8 testes** em `tests/test_knowledge_registry.py` (registo 9.2), **14 testes** em `tests/test_knowledge_metadata.py` (extracção 9.3), **11 testes** em `tests/test_knowledge_index.py` (índice 9.4), **8 testes** em `tests/test_knowledge_storage.py` (persistência 9.5) e **8 testes** em `tests/test_knowledge_context.py` (contexto 9.6). A execução registou **482/482 testes aprovados**.
+Foram adicionados **10 testes** em `tests/test_knowledge.py` (contrato 9.1), **8 testes** em `tests/test_knowledge_registry.py` (registo 9.2), **14 testes** em `tests/test_knowledge_metadata.py` (extracção 9.3), **11 testes** em `tests/test_knowledge_index.py` (índice 9.4), **8 testes** em `tests/test_knowledge_storage.py` (persistência 9.5), **8 testes** em `tests/test_knowledge_context.py` (contexto 9.6) e **9 testes** em `tests/test_knowledge_ingest.py` (ingestão 9.7). A execução registou **491/491 testes aprovados**.
 
 Foi também criado `.github/workflows/tests.yml` para executar a suíte em Python 3.12 no GitHub Actions. O estado remoto continua tratado como evidência P3 até existir confirmação de uma execução.
 
@@ -114,7 +115,7 @@ Model Intelligence     ██████████ 100%
 Provider Layer         ██████████ 100%
 Task Intelligence      ██████████ 100%
 Runtime Engine         ██████████ 100% (implementação)
-Knowledge Engine       ██████░░░░ 60%  (núcleo reversível 9.1–9.6 completo)
+Knowledge Engine       ███████░░░ 70%  (9.1–9.7 lexical completo; embeddings em decisão)
 API                    ░░░░░░░░░░ 0%   (não iniciado)
 UI                     ░░░░░░░░░░ 0%   (não iniciado)
 ```
@@ -123,15 +124,15 @@ Estas barras não representam progresso global do projecto; representam maturida
 
 ## Estado Git
 
-As unidades 9.1–9.6 (contrato, registo, extracção de metadados, índice,
-persistência e contexto de conhecimento) foram registadas em `main` em
+As unidades 9.1–9.7 (contrato, registo, extracção, índice, persistência,
+contexto e ingestão de conhecimento) foram registadas em `main` em
 commits coerentes: módulo `knowledge` (base, init, registry, metadata,
-index, storage, context), testes, BASE-37/38/39/40/41/42 e documentação
-arquitectural/estado alinhados.
+index, storage, context, ingest), testes, BASE-37/38/39/40/41/42/43 e
+documentação arquitectural/estado alinhados.
 
 ## Regra de continuação
 
-**Fase 9 — Knowledge Engine — núcleo reversível concluído (9.1–9.6 ✓).**
+**Fase 9 — Knowledge Engine — CONCLUÍDA (âmbito lexical, fecho formal em 2026-09-09).**
 
 ```text
 9.1 contrato do subsistema ✓
@@ -139,19 +140,21 @@ arquitectural/estado alinhados.
 9.3 extracção de metadados (heurística) ✓
 9.4 indexação — Knowledge In-Memory Index ✓ (decisão: memória pura)
 9.5 recuperação — Knowledge SQLite Persistence ✓ (decisão: SQLite local)
-9.6 construção de contexto ✓ (núcleo reversível completo)
+9.6 construção de contexto ✓
+9.7 ingestão de ficheiros de texto do projecto ✓ (lexical — sem embeddings)
     ↓
-INGESTÃO SEMÂNTICA — ler ficheiros do projecto + enriquecer com
-embeddings via Model/Provider — EXIGE PLANEAMENTO PRÓPRIO e decisões
-documentadas (modelo/fornecedor, tokenização, pesos, integração com o
-Runtime). Não é executável de forma autónoma numa unidade do núcleo
-reversível.
+FECHO FORMAL da Fase 9 (âmbito lexical) ✓ — gate APPROVED
+    ↓
+ENRIQUECIMENTO SEMÂNTICO — embeddings via Model/Provider — DECISÃO
+MATERIAL TERMINAL: decisões de modelo/fornecedor, integração Provider/
+Runtime e aditividade sobre o índice léxico. Planeamento próprio.
+    ↓
+Fase 10 — API (health/system/hardware/runtime/capabilities/models/tasks/
+knowledge) — requer decidir framework HTTP.
 ```
 
-A Fase 9 está **funcionalmente completa no núcleo reversível**: o circuito
-contrato → registo → metadados → índice → persistência → contexto está
-pronto, testeado e sincronizado. A **ingestão semântica real**
-(fichiero do projecto e embeddings via Model/Provider) é o próximo ponto
-de decisão: exige uma sessão de planeamento própria com decisões
-documentadas antes de qualquer motor de embeddings. Nenhum recurso desse
-âmbito é criado antes dessa decisão.
+O **âmbito lexical da Fase 9 está completo e sincronizado**. O próximo
+ponto é a **decisão material terminal** sobre embeddings (modelo,
+fornecedor e integração com Provider/Runtime) — a tratar numa sessão de
+planeamento própria antes de qualquer motor de embeddings. Nenhum recurso
+desse âmbito é criado antes dessa decisão.

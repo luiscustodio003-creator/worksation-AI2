@@ -117,23 +117,21 @@ A ordem concreta das unidades e dos residuais é determinada pelo `PROJECT_STATE
 - extracção de metadados (heurística) ✓ (unidade 9.3);
 - indexação em memória ✓ (unidade 9.4 — memória pura);
 - recuperação — persistência SQLite ✓ (unidade 9.5 — armazenamento local decidido);
-- construção de contexto ✓ (unidade 9.6 — núcleo reversível da Fase 9 completo);
-- ingestão semântica real — ficheiros do projecto + embeddings via Model/Provider (planeamento próprio e decisões documentadas);
+- construção de contexto ✓ (unidade 9.6);
+- ingestão de ficheiros de texto do projecto ✓ (unidade 9.7 — lexical, sem embeddings);
+- enriquecimento semântico (embeddings via Model/Provider) — decisão material terminal, planeamento próprio;
 - extracção;
 - metadados;
 - indexação;
 - recuperação;
 - contexto.
 
-**Estado actual:** fase **em curso — núcleo reversível completo**. A
-entrada estava condicionada à aprovação formal da Fase 8 pelo
-`/wsai-validate foundation` — satisfeita (2026-09-09). As unidades
-9.1 (contrato), 9.2 (registo), 9.3 (metadados), 9.4 (índice em memória),
-9.5 (persistência SQLite) e 9.6 (contexto) estão concluídas; a ordem
-concreta das restantes unidades é governada por `PROJECT_STATE.md`. A
-**ingestão semântica real** (ficheiros de projecto e embeddings via
-Model/Provider) é o próximo ponto de decisão e exige planeamento próprio
-e decisões documentadas antes de motores de embeddings.
+**Estado:** **fase concluída (âmbito lexical)** — fecho formal
+`APPROVED` (2026-09-09, `docs/validation/FASE9_VALIDATION_REPORT.md`),
+unidades 9.1–9.7 implementadas e sincronizadas. O **enriquecimento
+semântico** (embeddings via Model/Provider) é a **decisão material
+terminal** da Fase 9 e exige planeamento próprio e decisões
+documentadas antes de motores de embeddings.
 
 ## Fase 10 — API
 
