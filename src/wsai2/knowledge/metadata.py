@@ -58,6 +58,17 @@ _EXCLUIDAS_TAGS: frozenset[str] = frozenset(
 _IDIOMA_INDETERMINADO = "und"
 
 
+def tokenize(content: str) -> tuple[str, ...]:
+    """Normaliza o conteúdo em termos pesquisáveis.
+
+    Devolve os termos com ≥ 3 letras, em minúsculas sem acentuar
+    rebentamentos (``casefold``), prontos para detecção, etiquetas e
+    indexação. A normalização é partilhada pelo subsistema para garantir
+    consistência entre extracção e busca.
+    """
+    return tuple(_PALAVRA.findall(content.casefold()))
+
+
 def detect_language(content: str) -> str:
     """Detecta o idioma do conteúdo por marcadores frequentes.
 
@@ -85,7 +96,7 @@ def derive_tags(content: str, *, limit: int = 8) -> tuple[str, ...]:
     ordenados por frequência decrescente e alfabeticamente em caso de
     empate. Limite de ``limit`` etiquetas por omissão.
     """
-    tokens = [token for token in _PALAVRA.findall(content.casefold()) if token not in _EXCLUIDAS_TAGS]
+    tokens = [token for token in tokenize(content) if token not in _EXCLUIDAS_TAGS]
     if not tokens:
         return ()
     frequencias = Counter(tokens)
@@ -131,4 +142,4 @@ class KnowledgeMetadataExtractor:
         )
 
 
-__all__ = ["KnowledgeMetadataExtractor", "detect_language", "derive_tags"]
+__all__ = ["KnowledgeMetadataExtractor", "derive_tags", "detect_language", "tokenize"]

@@ -115,7 +115,8 @@ A ordem concreta das unidades e dos residuais é determinada pelo `PROJECT_STATE
 - contrato do subsistema (3.9) ✓ (unidade 9.1 — `wsai2.knowledge`);
 - registo central / admissão de conhecimento ✓ (unidade 9.2);
 - extracção de metadados (heurística) ✓ (unidade 9.3);
-- indexação;
+- indexação em memória ✓ (unidade 9.4 — memória pura; persistência/embeddings decididos na 9.5);
+- recuperação / construção de contexto;
 - extracção;
 - metadados;
 - indexação;
@@ -125,10 +126,11 @@ A ordem concreta das unidades e dos residuais é determinada pelo `PROJECT_STATE
 **Estado actual:** fase **em curso**. A entrada estava condicionada à
 aprovação formal da Fase 8 pelo `/wsai-validate foundation` — satisfeita
 (2026-09-09). As unidades 9.1 (contrato declarativo), 9.2 (registo de
-admissão) e 9.3 (extracção heurística de metadados) estão concluídas; a
-ordem concreta das restantes unidades é governada por `PROJECT_STATE.md`.
-A etapa seguinte (indexação 9.4) pode envolver I/O de armazenamento ou
-motores de embeddings e **exigirá decisão documentada antes de qualquer
+admissão), 9.3 (extracção heurística de metadados) e 9.4 (índice em
+memória, decisão consultada) estão concluídas; a ordem concreta das
+restantes unidades é governada por `PROJECT_STATE.md`. A etapa seguinte
+(recuperação 9.5) pode envolver I/O de armazenamento ou motores de
+embeddings e **exigirá decisão documentada antes de qualquer
 persistência** quando se aproximar.
 
 ## Fase 10 — API

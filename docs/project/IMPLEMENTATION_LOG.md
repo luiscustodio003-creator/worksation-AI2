@@ -1,5 +1,50 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-09 — Knowledge In-Memory Index — Fase 9.4
+
+### Objectivo
+
+Dotar o Knowledge Engine de consulta por termos sobre o conhecimento
+admitido, com decisão da unidade consultada: **índice em memória puro**
+(reversível, sem I/O, persistência ou embeddings). A estratégia de
+armazenamento/embeddings fica adiada para a recuperação (9.5).
+
+### Realizado
+
+- `src/wsai2/knowledge/index.py` (novo): `KnowledgeIndex` — índice
+  invertido com pesos de campo (título 3, etiquetas 2, conteúdo 1),
+  `build`/`index`/`unindex`/`search`/`len`, reindexação por substituição
+  e ordenação determinista (pontuação e `id`);
+- `src/wsai2/knowledge/metadata.py` — novo `tokenize()` (normalização
+  partilhada de termos); `derive_tags` passa a usá-la sem mudança de
+  comportamento;
+- `src/wsai2/knowledge/__init__.py` — exporta `KnowledgeIndex` e `tokenize`;
+- `tests/test_knowledge_index.py` (novo, **11 testes**);
+- `ARCHITECTURE.md` — secção 3.9 actualizada com o índice;
+- `docs/knowledge/BASE-40-knowledge-in-memory-index.md` — relatório da
+  base + registo da decisão da unidade.
+
+### Arquitectura abrangida
+
+Fase 9 — Knowledge Engine (subsistema 3.9). Dependências internas ao
+subsistema (base/registry/metadata); **nenhuma aresta nova** em
+`FRONTEIRAS`. Decisão documentada: memória pura; persistência/embeddings
+na 9.5 com decisão própria.
+
+### Validação
+
+```text
+py -3.12 -m pytest   →   466 passed (455 anteriores + 11 índice)
+```
+
+### Próximo passo
+
+Fase 9.5 — recuperação/construção de contexto: **interrompida até decisão
+documentada** sobre armazenamento/embeddings (`PROJECT_STATE.md`, regra de
+continuação). Paragem para decisão.
+
+---
+
 ## 2026-09-09 — Knowledge Metadata Extraction — Fase 9.3
 
 ### Objectivo
