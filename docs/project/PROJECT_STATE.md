@@ -10,11 +10,11 @@
 
 ## Estado da fase
 
-**FASE 9 INICIADA** após o fecho formal da Fase 8 (gate de fundação `APPROVED WITH WARNINGS`). Unidades **9.1 — Knowledge Contract**, **9.2 — Knowledge Registry**, **9.3 — Metadata Extraction** e **9.4 — In-Memory Index** concluídas: contrato declarativo e imutável (`wsai2.knowledge`), registo central de admissão por id único (padrão dos registos F4–8), extracção heurística de metadados e índice invertido em memória (decisão 9.4 documentada; a recuperação 9.5 fica adiada para decisão própria). Decisões de fronteira documentadas (`knowledge` autorizado; aresta `knowledge→core`). Suíte completa: **466 testes aprovados, 0 falhas**.
+**FASE 9 INICIADA** após o fecho formal da Fase 8 (gate de fundação `APPROVED WITH WARNINGS`). Unidades **9.1 — Knowledge Contract**, **9.2 — Knowledge Registry**, **9.3 — Metadata Extraction**, **9.4 — In-Memory Index** e **9.5 — SQLite Persistence** concluídas: contrato declarativo e imutável (`wsai2.knowledge`), registo central de admissão por id único (padrão dos registos F4–8), extracção heurística de metadados, índice invertido em memória e persistência SQLite (decisões 9.4/9.5 documentadas). Decisões de fronteira documentadas (`knowledge` autorizado; aresta `knowledge→core`). Suíte completa: **474 testes aprovados, 0 falhas**.
 
 ## Última unidade implementada
 
-Fase 9 — unidade 9.4: **Knowledge In-Memory Index** (`docs/knowledge/BASE-40-knowledge-in-memory-index.md`). Criado `KnowledgeIndex` (índice invertido por termos com pesos de campo — título 3, etiquetas 2, conteúdo 1 —, ordenação determinista por pontuação e `id`, `build`/`index`/`unindex`/`search`, reindexação por substituição) e `tokenize()` partilhado. Decisão da unidade (consultada): índice em memória puro, reversível, sem I/O, persistência ou embeddings; a estratégia de armazenamento/embeddings fica para a 9.5. Sem arestas novas em `FRONTEIRAS`. 11 novos testes.
+Fase 9 — unidade 9.5: **Knowledge SQLite Persistence** (`docs/knowledge/BASE-41-knowledge-sqlite-persistence.md`). Criado `KnowledgeStore` (persistência local por id com esquema `knowledge_record`, metadados serializados em JSON, `save`/`save_all`/`delete`/`count`/`load` ordenada por id). **Decisão da unidade (consultada): persistência SQLite local** como estratégia de armazenamento da recuperação; embeddings continuam fora desta unidade. Sem arestas novas em `FRONTEIRAS`. 8 novos testes.
 
 ## Estado dos residuais Via B
 
@@ -45,7 +45,8 @@ Fase 9 — unidade 9.4: **Knowledge In-Memory Index** (`docs/knowledge/BASE-40-k
 - Knowledge Contract (Fase 9, subsistema 3.9 — contrato declarativo)
 - Knowledge Registry (Fase 9, subsistema 3.9 — admissão por id único)
 - Knowledge Metadata Extraction (Fase 9, subsistema 3.9 — idioma/etiquetas/proveniência)
-- Knowledge In-Memory Index (Fase 9, subsistema 3.9 — consulta por termos, decisão 9.5 em aberto)
+- Knowledge In-Memory Index (Fase 9, subsistema 3.9 — consulta por termos)
+- Knowledge SQLite Persistence (Fase 9, subsistema 3.9 — armazenamento local decidido)
 
 ## Filas multicamadas — contrato
 
@@ -96,7 +97,7 @@ A documentação está alinhada com o estado funcional conhecido. A Fase 8 está
 
 Baseline do fecho da Fase 8: **423 testes**.
 
-Foram adicionados **10 testes** em `tests/test_knowledge.py` (contrato 9.1), **8 testes** em `tests/test_knowledge_registry.py` (registo 9.2), **14 testes** em `tests/test_knowledge_metadata.py` (extracção 9.3) e **11 testes** em `tests/test_knowledge_index.py` (índice 9.4). A execução registou **466/466 testes aprovados**.
+Foram adicionados **10 testes** em `tests/test_knowledge.py` (contrato 9.1), **8 testes** em `tests/test_knowledge_registry.py` (registo 9.2), **14 testes** em `tests/test_knowledge_metadata.py` (extracção 9.3), **11 testes** em `tests/test_knowledge_index.py` (índice 9.4) e **8 testes** em `tests/test_knowledge_storage.py` (persistência 9.5). A execução registou **474/474 testes aprovados**.
 
 Foi também criado `.github/workflows/tests.yml` para executar a suíte em Python 3.12 no GitHub Actions. O estado remoto continua tratado como evidência P3 até existir confirmação de uma execução.
 
@@ -112,7 +113,7 @@ Model Intelligence     ██████████ 100%
 Provider Layer         ██████████ 100%
 Task Intelligence      ██████████ 100%
 Runtime Engine         ██████████ 100% (implementação)
-Knowledge Engine       ████░░░░░░ 40%  (contrato, registo, metadados, índice 9.1–9.4)
+Knowledge Engine       █████░░░░░ 50%  (9.1–9.5: contrato, registo, metadados, índice, SQLite)
 API                    ░░░░░░░░░░ 0%   (não iniciado)
 UI                     ░░░░░░░░░░ 0%   (não iniciado)
 ```
@@ -121,33 +122,35 @@ Estas barras não representam progresso global do projecto; representam maturida
 
 ## Estado Git
 
-As unidades 9.1–9.4 (contrato, registo, extracção de metadados e índice
-de conhecimento) foram registadas em `main` em commits coerentes: módulo
-`knowledge` (base, init, registry, metadata, index), testes,
-BASE-37/38/39/40 e documentação arquitectural/estado alinhados.
+As unidades 9.1–9.5 (contrato, registo, extracção de metadados, índice e
+persistência de conhecimento) foram registadas em `main` em commits
+coerentes: módulo `knowledge` (base, init, registry, metadata, index,
+storage), testes, BASE-37/38/39/40/41 e documentação arquitectural/estado
+alinhados.
 
 ## Regra de continuação
 
 **Fase 9 — Knowledge Engine EM CURSO.** As unidades **9.2 — Knowledge
-Registry**, **9.3 — Metadata Extraction** e **9.4 — In-Memory Index** foram
-executadas de forma autónoma (padrão autorizado; heurísticas e memória
-puras, sem I/O; a decisão da 9.4 foi consultada e documentada).
+Registry**, **9.3 — Metadata Extraction**, **9.4 — In-Memory Index** e
+**9.5 — SQLite Persistence** foram executadas (padrão autorizado;
+decisões 9.4 e 9.5 consultadas e documentadas).
 
 ```text
 9.1 contrato do subsistema ✓
 9.2 registo central — Knowledge Registry ✓
 9.3 extracção de metadados (heurística) ✓
 9.4 indexação — Knowledge In-Memory Index ✓ (decisão: memória pura)
+9.5 recuperação — Knowledge SQLite Persistence ✓ (decisão: SQLite local)
     ↓
-9.5 recuperação / construção de contexto — PODE INVOLVER I/O de
-   armazenamento ou motores de embeddings → EXIGE DECISÃO DOCUMENTADA
-   antes de qualquer persistência
-9.6 construção de contexto
+9.6 construção de contexto — montagem textual determinista a partir do
+   índice (9.4) e dos registos persistidos (9.5) — sem decisão material
+9.7/rolo seguinte — ingestão e extracção semântica real (ficheiros de
+   projecto, embeddings via Model/Provider) — exige planeamento próprio
+   e decisões documentadas; sessão dedicada.
 ```
 
-A etapa seguinte (9.5 — recuperação) fica **interrompida até decisão
-documentada** sobre a estratégia de armazenamento/embeddings (adiada na
-9.4 por decisão consultada), tratada no devido ritmo e mantendo a
-reversibilidade. Nenhum I/O, motor de embeddings ou armazenamento
-persistente é criado antes dessa decisão. Até ao ponto de decisão, a Fase
-9 está totalmente reversível.
+A unidade **9.6 — construção de contexto** é executável de forma autónoma
+na mesma sessão caso o `/wsai-run` continue (unidade pura e directamente
+dependente). A **ingestão semântica real** (ficheiros/embeddings) é o
+ponto de paragem seguinte e exige planeamento próprio. Nenhum motor de
+embeddings é criado antes dessa decisão.

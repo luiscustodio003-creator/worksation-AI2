@@ -1,5 +1,49 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-09 — Knowledge SQLite Persistence — Fase 9.5
+
+### Objectivo
+
+Tornar o conhecimento persistente entre execuções, com a **decisão da
+unidade consultada: persistência SQLite local** (estratégia de
+armazenamento da recuperação). Embeddings continuam fora desta unidade.
+
+### Realizado
+
+- `src/wsai2/knowledge/storage.py` (novo): `KnowledgeStore` — esquema
+  `knowledge_record` (id PK), `save`/`save_all` (upsert pelo id),
+  `delete`/`count`/`load` (ordenada por id), metadados serializados em
+  JSON (`ensure_ascii=False`), criação automática do directório pai;
+- `src/wsai2/knowledge/__init__.py` — exporta `KnowledgeStore`;
+- `tests/test_knowledge_storage.py` (novo, **8 testes**);
+- `ARCHITECTURE.md` — secção 3.9 actualizada com a persistência;
+- `docs/knowledge/BASE-41-knowledge-sqlite-persistence.md` — relatório da
+  base + registo da decisão de armazenamento.
+
+### Arquitectura abrangida
+
+Fase 9 — Knowledge Engine (subsistema 3.9). `storage.py` usa apenas
+stdlib (`sqlite3`, `json`, `pathlib`, `contextlib`) — transversal
+Windows/Linux; **nenhuma aresta nova** em `FRONTEIRAS`. I/O e estado
+persistente introduzidos pela decisão documentada (ficheiro `.db`;
+reversível ao nível da implementação).
+
+### Validação
+
+```text
+py -3.12 -m pytest   →   474 passed (466 anteriores + 8 armazenamento)
+```
+
+### Próximo passo
+
+Fase 9.6 — construção de contexto: montagem textual determinista a partir
+do índice (9.4) e dos registos persistidos (9.5) — unidade pura e
+directamente dependente, executável autonomamente. Ingestão semântica
+real (ficheiros/embeddings) é ponto de paragem seguinte com planeamento
+próprio.
+
+---
+
 ## 2026-09-09 — Knowledge In-Memory Index — Fase 9.4
 
 ### Objectivo
