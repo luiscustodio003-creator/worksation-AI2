@@ -122,6 +122,14 @@ UI                     ░░░░░░░░░░ 0%   (não iniciado)
 
 Estas barras não representam progresso global do projecto; representam maturidade/cobertura arquitectural de cada área. A conclusão de uma fase é determinada pelo estado e pelos gates, não pela soma das percentagens.
 
+## Migração do Kernel (Core / Execution & Intelligence Kernel)
+
+**Estado arquitectura: TRANSITION** (`docs/architecture/CORE_KERNEL_TARGET.md`
+vigente; `COMMAND_EXECUTION_CONTRACT.md` governa a transição).
+
+- **KERNEL-01 — CORE INVENTORY: CONCLUÍDA** (`docs/architecture/KERNEL-01-core-inventory.md`). Auditoria read-only: 79 módulos / 14 subsistemas; Kernel = `core`/`execution`/`resource`/`runtime_engine`/`security`; domínio = `hardware`/`runtime`/`capability`/`model`/`provider`/`task`/`knowledge`; infra = `platform`; addon = `extension`; sem Application. 22 arestas `FRONTEIRAS` válidas, grafo acíclico, **491/491 testes verdes**. Sem código alterado.
+- **Próxima unidade:** `/wsai-plan KERNEL-02` — mapa de dependências formal + proposta de fronteiras públicas (`core.public`).
+
 ## Estado Git
 
 As unidades 9.1–9.7 (contrato, registo, extracção, índice, persistência,
@@ -131,6 +139,24 @@ index, storage, context, ingest), testes, BASE-37/38/39/40/41/42/43 e
 documentação arquitectural/estado alinhados.
 
 ## Regra de continuação
+
+**Migração do Kernel — TRANSITION (KERNEL-01 concluída).**
+
+```text
+KERNEL-01  Inventário real da base            ✓ CONCLUÍDA (auditoria read-only)
+KERNEL-02  Mapa de dependências + core.public → PRÓXIMA UNIDADE (/wsai-plan)
+KERNEL-03  Core Public Contract
+KERNEL-04  Dependency Firewall
+KERNEL-05  Resource / Execution boundary
+KERNEL-06  Observability boundary
+KERNEL-07  Architecture contract tests
+KERNEL-08  Migração incremental de imports
+KERNEL-09  Core freeze
+KERNEL-10  Addon SDK / Projects foundation
+```
+
+O fecho da Fase 9 e a linha do Kernel coexistem: a migração não reverterá
+a ingestão 9.7 nem o fecho formal.
 
 **Fase 9 — Knowledge Engine — CONCLUÍDA (âmbito lexical, fecho formal em 2026-09-09).**
 
