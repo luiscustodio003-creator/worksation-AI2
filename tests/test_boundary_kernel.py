@@ -1,9 +1,10 @@
-"""Contratos de fronteira do kernel (KERNEL-05).
+"""Contratos de fronteira do kernel (KERNEL-05/06, consolidadas em KERNEL-07).
 
-Fixa as superfícies públicas de ``execution``, ``resource`` e ``security``:
-símbolos sancionados (``__all__``) e versão de contrato, e impõe que os
-consumidores em ``src`` importem apenas ao nível do pacote
-(``wsai2.<subsistema>``), nunca módulos internos.
+Fixa as superfícies públicas de ``execution``, ``resource``, ``security`` e
+``runtime_engine``: símbolos sancionados (``__all__``)) e versão de contrato,
+e impõe que os consumidores em ``src`` importem apenas ao nível do pacote
+(``wsai2.<subsistema>``), nunca módulos internos. As tabelas são importadas
+da fonte única de verdade (`architecture_contracts`).
 """
 
 import ast
@@ -16,93 +17,15 @@ import wsai2.resource
 import wsai2.runtime_engine
 import wsai2.security
 
+from .architecture_contracts import (
+    GOVERNO_SUPERFICIE,
+    OBSERVABILIDADE_SUPERFICIE,
+    SUPERFICIES_PUBLICAS,
+)
+
 RAIZ_SRC = pathlib.Path(wsai2.__file__).parent
 
-_SUBSISTEMAS_FRONTEIRA = ("execution", "resource", "security", "runtime_engine")
-
-# Superfícies públicas sancionadas (reflexo exacto dos `__all__` actuais).
-SUPERFICIES_PUBLICAS: dict[str, frozenset[str]] = {
-    "execution": frozenset(
-        {
-            "DeadlineGuard",
-            "RecoveryPolicy",
-            "RetryAttempt",
-            "TimeoutPolicy",
-            "execute_with_policies",
-            "run_with_recovery",
-            "run_with_timeout",
-        }
-    ),
-    "resource": frozenset(
-        {
-            "AllocationState",
-            "ResourceAllocation",
-            "ResourceBudgetResult",
-            "ResourceCheck",
-            "ResourceDimension",
-            "ResourceGovernor",
-            "ResourceVerdict",
-        }
-    ),
-    "security": frozenset(
-        {
-            "PolicyDecision",
-            "PolicyEngine",
-            "Principal",
-            "assert_same_project",
-            "denied_decision",
-            "require_project",
-        }
-    ),
-    "runtime_engine": frozenset(
-        {
-            "ExecutionMonitor",
-            "ExecutionReport",
-            "ExecutionSnapshot",
-            "ExecutionStatus",
-            "MonitorSnapshot",
-            "MultilayerExecutionQueue",
-            "QueueItem",
-            "QueueSnapshot",
-            "RuntimeManager",
-            "ScheduleOutcome",
-            "Scheduler",
-            "SchedulerReport",
-            "StepOutcome",
-            "StepRunner",
-            "StepStatus",
-            "priority_for_plan",
-        }
-    ),
-}
-
-# Subcontrato de observabilidade (KERNEL-06): a fracção da superfície de
-# governação que é a fronteira transversal de métricas (target sec. 3.5).
-OBSERVABILIDADE_SUPERFICIE: frozenset[str] = frozenset(
-    {
-        "ExecutionMonitor",
-        "ExecutionReport",
-        "ExecutionSnapshot",
-        "ExecutionStatus",
-        "MonitorSnapshot",
-        "ScheduleOutcome",
-        "SchedulerReport",
-        "StepOutcome",
-        "StepRunner",
-        "StepStatus",
-    }
-)
-
-GOVERNO_SUPERFICIE: frozenset[str] = frozenset(
-    {
-        "MultilayerExecutionQueue",
-        "QueueItem",
-        "QueueSnapshot",
-        "RuntimeManager",
-        "Scheduler",
-        "priority_for_plan",
-    }
-)
+_SUBSISTEMAS_FRONTEIRA = tuple(SUPERFICIES_PUBLICAS)
 
 _MODULOS_FRONTEIRA: dict[str, object] = {
     "execution": wsai2.execution,

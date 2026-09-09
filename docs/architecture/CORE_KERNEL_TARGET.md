@@ -344,8 +344,8 @@ KERNEL-03  Core Public Contract             ✓ CONCLUÍDA (KERNEL-03-core-publi
 KERNEL-04  Dependency Firewall              ✓ CONCLUÍDA (KERNEL-04-dependency-firewall.md)
 KERNEL-05  Resource / Execution boundary    ✓ CONCLUÍDA (KERNEL-05-execution-resource-boundary.md)
 KERNEL-06  Observability boundary            ✓ CONCLUÍDA (KERNEL-06-observability-boundary.md)
-KERNEL-07  Architecture contract tests      -> próxima unidade
-KERNEL-08  Migração incremental de imports  -> depois (superfície preservada; implementação pesada desce)
+KERNEL-07  Architecture contract tests      ✓ CONCLUÍDA (KERNEL-07-architecture-contract-tests.md)
+KERNEL-08  Migração incremental de imports  -> próxima unidade (superfície preservada; implementação pesada desce)
 KERNEL-09  Core freeze                       -> depois (superfície versionada; peso fora do núcleo)
 KERNEL-10  Addon SDK / Projects foundation  -> depois
 ```

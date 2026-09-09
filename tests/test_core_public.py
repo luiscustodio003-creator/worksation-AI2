@@ -12,26 +12,9 @@ import pathlib
 import wsai2.core as core
 import wsai2.core.public as public
 
-SUPERFICIE = frozenset(
-    {
-        "CORE_PUBLIC_CONTRACT_VERSION",
-        "CancellationToken",
-        "CapabilityError",
-        "CancellationError",
-        "ExecutionContext",
-        "ExecutionError",
-        "ExecutionPriority",
-        "ModelError",
-        "PermissionError",
-        "ProjectIsolationError",
-        "ProviderError",
-        "ResourceError",
-        "TimeoutError",
-        "ValidationError",
-        "WsaiError",
-    }
-)
+from .architecture_contracts import CORE_PUBLIC_SUPERFICIE
 
+SUPERFICIE = CORE_PUBLIC_SUPERFICIE
 CONTRATO = SUPERFICIE - {"CORE_PUBLIC_CONTRACT_VERSION"}
 
 

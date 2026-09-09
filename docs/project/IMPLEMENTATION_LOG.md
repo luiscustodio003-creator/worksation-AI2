@@ -1,5 +1,42 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-09 — KERNEL-07 — Architecture contract tests
+
+### Objectivo
+
+Consolidar os contratos de fronteira (KERNEL-03/04/05/06) numa fonte única
+de verdade para os testes de arquitectura e fechar a cobertura dos
+subsistemas do kernel.
+
+### Alterações
+
+- `tests/architecture_contracts.py` (novo) — tabelas únicas: FRONTEIRAS,
+  FIREWALL, SUBSISTEMAS_FUTUROS, ADAPTADORES_SO, KERNEL_SUBSISTEMAS,
+  superfícies (core.public + execution/resource/security/runtime_engine),
+  observabilidade/governação, MODULO_CONTRATO, CONTRATO_CONSTANTES,
+  CONTRACT_VERSIONES.
+- `tests/test_architecture_contract.py`, `tests/test_boundary_kernel.py`,
+  `tests/test_core_public.py` — literais removidos; import da fonte única
+  (imports relativos do pacote `tests`).
+- `test_kernel_todas_as_superficies_publicas_versionadas` — todos os
+  subsistemas do kernel com superfície versionada (bump deliberado
+  detectado no gate).
+- `docs/architecture/KERNEL-07-architecture-contract-tests.md`.
+- `docs/project/PROJECT_STATE.md`, `docs/architecture/CORE_KERNEL_TARGET.md`
+  (secção 12).
+
+### Validação
+
+```text
+py -3.12 -m pytest
+tests=502  failures=0  errors=0  skipped=0
+```
+
+### Próximo passo
+
+`/wsai-plan KERNEL-08` — Migração incremental de imports (implementação
+pesada desce; superfície preservada).
+
 ## 2026-09-09 — KERNEL-06 — Observability boundary
 
 ### Objectivo

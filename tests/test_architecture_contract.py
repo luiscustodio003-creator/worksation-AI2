@@ -1,4 +1,4 @@
-﻿"""Testes de contrato arquitectural (Fase 8.7 — hardening 11).
+"""Testes de contrato arquitectural (Fase 8.7 — hardening 11).
 
 Transformam regras da CONSTITUTION/AGENTS em testes executáveis sobre o
 repositório real:
@@ -25,73 +25,23 @@ fronteira a corrigir ou a justificar documentalmente.
 from __future__ import annotations
 
 import ast
+import importlib
 import pathlib
+import re
+
+from .architecture_contracts import (
+    ADAPTADORES_SO,
+    CONTRACT_VERSIONES,
+    CONTRATO_CONSTANTES,
+    FIREWALL,
+    FRONTEIRAS,
+    KERNEL_SUBSISTEMAS,
+    MODULO_CONTRATO,
+    SUBSISTEMAS_FUTUROS,
+)
 
 RAIZ_SRC = pathlib.Path(__file__).resolve().parents[1] / "src" / "wsai2"
 RAIZ_DOCS = pathlib.Path(__file__).resolve().parents[1] / "docs"
-
-# Aresta autorizada: subsistema origem -> subsistema destino.
-FRONTEIRAS: frozenset[tuple[str, str]] = frozenset(
-    {
-        ("capability", "hardware"),
-        ("capability", "runtime"),
-        ("core", "extension"),
-        ("execution", "core"),
-        ("execution", "resource"),
-        ("extension", "core"),
-        ("extension", "security"),
-        ("knowledge", "core"),
-        ("model", "capability"),
-        ("model", "hardware"),
-        ("model", "runtime"),
-        ("resource", "core"),
-        ("resource", "extension"),
-        ("resource", "hardware"),
-        ("resource", "runtime"),
-        ("runtime_engine", "core"),
-        ("runtime_engine", "execution"),
-        ("runtime_engine", "resource"),
-        ("runtime_engine", "security"),
-        ("runtime_engine", "task"),
-        ("security", "core"),
-        ("task", "capability"),
-        ("task", "hardware"),
-        ("task", "model"),
-        ("task", "provider"),
-        ("task", "runtime"),
-    }
-)
-
-# Subsistemas funcionais previstos mas ainda não iniciados (Fases 10–11);
-# knowledge foi autorizado na unidade 9.1 e saiu desta lista.
-SUBSISTEMAS_FUTUROS = ("api", "ui")
-
-# Adaptadores de plataforma: específicos de SO, de acesso reservado.
-_ADAPTADORES_SO = ("wsai2.platform.windows", "wsai2.platform.linux")
-
-# Dependências exactas permitidas POR SUBSISTEMA (Dependency Firewall,
-# KERNEL-04). Cada subsistema só pode importar dos destinos declarados;
-# qualquer aresta nova é detectada automaticamente. Extraído do grafo real
-# com imports TYPE_CHECKING incluídos (semântica idêntica ao FRONTEIRAS).
-# `core.public` é a superfície pública sancionada; sem MOVE físico na
-# migração (KERNEL-08).
-FIREWALL: dict[str, frozenset[str]] = {
-    "capability": frozenset({"hardware", "runtime"}),
-    "core": frozenset({"extension"}),
-    "execution": frozenset({"core", "resource"}),
-    "extension": frozenset({"core", "security"}),
-    "hardware": frozenset(),
-    "knowledge": frozenset({"core"}),
-    "model": frozenset({"capability", "hardware", "runtime"}),
-    "platform": frozenset(),
-    "provider": frozenset(),
-    "resource": frozenset({"core", "extension", "hardware", "runtime"}),
-    "runtime": frozenset(),
-    "runtime_engine": frozenset({"core", "execution", "resource", "security", "task"}),
-    "security": frozenset({"core"}),
-    "task": frozenset({"capability", "hardware", "model", "provider", "runtime"}),
-}
-
 
 def _ficheiros_src() -> list[pathlib.Path]:
     """Todos os ficheiros Python de ``src/wsai2`` (exclui __pycache__)."""
@@ -205,6 +155,29 @@ def test_artigo2_13_firewall_por_subsistema() -> None:
         assert ilegais == set(), f"firewall violado por {origem}: {sorted(ilegais)}"
 
 
+def test_kernel_todas_as_superficies_publicas_versionadas() -> None:
+    """Todos os subsistemas do kernel expõem superfície versionada (KERNEL-07).
+
+    O bump de versão (ex.: 1.0 -> 1.1) é uma alteração deliberada: exige
+    actualizar simultaneamente o código e esta tabela esperada.
+    """
+    for subsistema in KERNEL_SUBSISTEMAS:
+        modulo = importlib.import_module(MODULO_CONTRATO[subsistema])
+        nome_constante = CONTRATO_CONSTANTES[subsistema]
+        versao = getattr(modulo, nome_constante)
+        assert re.fullmatch(r"\d+\.\d+", versao), (
+            f"{subsistema}: versão não é major.minor: {versao!r}"
+        )
+        assert versao == CONTRACT_VERSIONES[subsistema], (
+            f"{subsistema}: versão {versao!r} != esperada "
+            f"{CONTRACT_VERSIONES[subsistema]!r}"
+        )
+        if subsistema != "core":
+            assert nome_constante not in set(getattr(modulo, "__all__", [])), (
+                f"{subsistema}: a versão não deve fazer parte da superfície"
+            )
+
+
 def test_artigo2_imports_apontam_para_subsistemas_reais() -> None:
     """O destino de cada import deve ser um subsistema existente."""
     conhecidos = set(_subsistemas_src())
@@ -223,7 +196,7 @@ def test_artigo4_adaptadores_os_acessiveis_so_na_plataforma() -> None:
         if ficheiro.parent.name == "platform":
             continue
         conteudo = ficheiro.read_text(encoding="utf-8")
-        for adaptador in _ADAPTADORES_SO:
+        for adaptador in ADAPTADORES_SO:
             if adaptador in conteudo:
                 infraccoes.append(f"{ficheiro.name}: {adaptador}")
     assert infraccoes == [], f"código de SO referido fora da plataforma: {infraccoes}"
@@ -232,7 +205,7 @@ def test_artigo4_adaptadores_os_acessiveis_so_na_plataforma() -> None:
 def test_artigo4_factory_e_o_ponto_unico_de_entrada_da_plataforma() -> None:
     """A API pública da plataforma não expõe os adaptadores directamente."""
     init_platform = (RAIZ_SRC / "platform" / "__init__.py").read_text(encoding="utf-8")
-    for adaptador in _ADAPTADORES_SO:
+    for adaptador in ADAPTADORES_SO:
         assert adaptador not in init_platform
     assert "get_platform" in init_platform
 
@@ -241,7 +214,7 @@ def test_artigo4_adaptadores_nao_se_importam_entre_si() -> None:
     """Windows e Linux devem depender apenas da base comum (base.py)."""
     for nome in ("windows.py", "linux.py"):
         conteudo = (RAIZ_SRC / "platform" / nome).read_text(encoding="utf-8")
-        for outro in _ADAPTADORES_SO:
+        for outro in ADAPTADORES_SO:
             assert outro not in conteudo, f"{nome} depende de {outro}"
 
 
