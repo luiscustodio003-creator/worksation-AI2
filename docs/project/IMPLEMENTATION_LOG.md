@@ -1,5 +1,42 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-09 — KERNEL-03 — Core Public Contract
+
+### Objectivo
+
+Materializar o contrato público do núcleo (`wsai2.core.public`) com
+decisão de localização resolvida: Opção A — fachada limitada aos
+contratos do leaf `core`.
+
+### Bloqueio resolvido em planeamento
+
+Um agregado único `core.public` de execution/resource/runtime_engine/
+security violaria a folha de `core` (Artigo 2) e introduziria ciclos
+(arestas não autorizadas em `FRONTEIRAS`). Opção A adoptada: as
+superfícies desses subsistemas emergem por fronteira (KERNEL-05/06).
+
+### Alterações
+
+- `src/wsai2/core/public.py` (novo) — `CORE_PUBLIC_CONTRACT_VERSION =
+  "1.0"` + re-exporto dos 14 símbolos estáveis (erros + contexto), com
+  `__all__`; sem lógica própria; sem novas arestas.
+- `tests/test_core_public.py` (novo, 5 testes) — versão do contrato,
+  superfície/`__all__` exacta, identidade com `wsai2.core`, firewall AST,
+  fachada sem classes/funções.
+- `docs/architecture/KERNEL-03-core-public-contract.md`.
+- `docs/project/PROJECT_STATE.md` — KERNEL-03 concluída; KERNEL-04 próximo.
+
+### Validação
+
+```text
+py -3.12 -m pytest
+tests=496  failures=0  errors=0  skipped=0
+```
+
+### Próximo passo
+
+`/wsai-plan KERNEL-04` — Dependency Firewall.
+
 ## 2026-09-09 — KERNEL-02 — Mapa de dependências e fronteiras públicas
 
 ### Objectivo
