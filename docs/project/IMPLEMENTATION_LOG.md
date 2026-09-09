@@ -1,5 +1,49 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-09 — Knowledge File Ingestion — Fase 9.7 (fecho do âmbito lexical)
+
+### Objectivo
+
+Ingerir os ficheiros de texto do projecto em registos do contrato 9.1
+(tipo `document`) com proveniência relativa e metadados derivados,
+fechando o âmbito **lexical** da Fase 9. Sem embeddings e sem decisão
+arquitectural material.
+
+### Realizado
+
+- `src/wsai2/knowledge/ingest.py` (novo): `FileIngestor` — rglob sobre as
+  extensões textuais suportadas, id por caminho relativo (`km.f.<path>`),
+  `KnowledgeMetadataExtractor` (9.3) a derivar idioma/etiquetas,
+  `limite_bytes`, binários/vazios/oversized ignorados, ordem determinista;
+- `src/wsai2/knowledge/__init__.py` — exporta `FileIngestor`;
+- `tests/test_knowledge_ingest.py` (novo, **9 testes**);
+- `ARCHITECTURE.md` — secção 3.9 actualizada com a ingestão;
+- `docs/knowledge/BASE-43-knowledge-file-ingestion.md` — relatório da
+  base.
+
+### Arquitectura abrangida
+
+Fase 9 — Knowledge Engine (subsistema 3.9). `ingest.py` depende de
+`knowledge.base` e `knowledge.metadata`; **nenhuma aresta nova** em
+`FRONTEIRAS`. Âmbito lexical completo: contrato → registo → metadados →
+índice → persistência → contexto → ingestão.
+
+### Validação
+
+```text
+py -3.12 -m pytest   →   491 passed (482 anteriores + 9 ingestão)
+```
+
+### Próximo passo
+
+**Decisão material terminal da Fase 9** — enriquecimento semântico
+(embeddings via Model/Provider): exige planeamento próprio e decisões
+documentadas (modelo/fornecedor, integração Provider/Runtime,
+aditividade sobre o índice léxico) antes de qualquer motor de embeddings
+(`PROJECT_STATE.md`, regra de continuação).
+
+---
+
 ## 2026-09-09 — Knowledge Context Builder — Fase 9.6 (fecho do núcleo)
 
 ### Objectivo
