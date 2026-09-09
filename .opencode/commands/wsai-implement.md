@@ -6,54 +6,55 @@ agent: build
 
 Implementar apenas a unidade `$ARGUMENTS` definida pela auditoria e pelo plano actual.
 
-## Antes de editar
+## CONTRATO DE TRANSIÇÃO
 
-- Confirmar `AGENTS.md`, estado persistente e documentação relevante.
-- Confirmar que a unidade está suficientemente definida.
-- Confirmar a branch e o estado Git.
-- Reavaliar ficheiros afectados se o estado do repositório tiver mudado.
+Ler `docs/architecture/COMMAND_EXECUTION_CONTRACT.md`.
+
+Durante `TRANSITION`, preservar comportamento validado e trabalhar por unidades pequenas e reversíveis.
+
+Antes de editar, confirmar:
+
+- `AGENTS.md`;
+- estado persistente;
+- arquitectura/contratos;
+- branch e Git;
+- consumidores dos componentes afectados;
+- classificação `CREATE/ADAPT/MOVE/SPLIT/MERGE/DEPRECATE/DELETE/FREEZE`.
 
 ## Regras
 
-1. Preservar o comportamento funcional já validado.
-2. Integrar antes de substituir.
-3. Criar apenas os ficheiros estritamente necessários.
-4. Respeitar as fronteiras Core/Application/Infrastructure.
-5. Não duplicar registries, engines, contratos ou responsabilidades existentes.
-6. Não introduzir dependências desnecessárias.
-7. Manter compatibilidade Windows/Linux quando aplicável.
-8. Criar/actualizar testes da unidade na mesma alteração.
+1. Integrar antes de substituir.
+2. Criar apenas o estritamente necessário.
+3. Não duplicar responsabilidades.
+4. Respeitar Core/Application/Infrastructure/Addons.
+5. Addon usa apenas Core Public API.
+6. Core não depende de Addons/Application.
+7. Não introduzir dependências desnecessárias.
+8. Criar/actualizar testes na mesma unidade.
 9. Não declarar concluído sem validação.
 
 ## Migração segura
 
-Quando uma responsabilidade existente precisar de evolução:
-
 ```text
-implementação actual
-        ↓
-adapter/integração compatível
-        ↓
-nova capacidade
-        ↓
-testes de regressão
-        ↓
-remoção posterior de código obsoleto, se justificada
+estado actual
+    ↓
+mapeamento de consumidores
+    ↓
+adapter/integração compatível, se necessário
+    ↓
+migração
+    ↓
+testes + validação
+    ↓
+remoção posterior da origem, apenas se segura
 ```
 
-Não apagar a implementação anterior apenas para simplificar a estrutura.
+Para `MOVE`, `SPLIT`, `MERGE` ou `DELETE`, não remover a origem antes de demonstrar que o destino funciona e que os consumidores foram migrados.
 
-## `wsai-run`
+## Protecção do wsai-run
 
-Se a unidade alterar componentes consumidos pelo `wsai-run`, preservar obrigatoriamente:
-
-- execução autónoma;
-- sequência lógica;
-- progresso visível;
-- paragem segura;
-- relatório final;
-- actualização de estado.
+Se afectar comandos, contratos ou governação, preservar execução autónoma, continuidade, progresso visível, paragem segura e estado persistente.
 
 ## Resultado
 
-No final, indicar ficheiros alterados, testes criados/actualizados, riscos residuais e o próximo passo. A documentação e o Git são tratados pelas etapas próprias, salvo se o plano exigir uma alteração mínima inseparável.
+Indicar ficheiros alterados, classificação da alteração, testes, validação, riscos residuais e próximo passo. Documentação/Git seguem as etapas próprias, salvo dependência inseparável definida no plano.
