@@ -1,5 +1,42 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-10 — APP-01 — Audit Application Boundary (Ramo A, unidade 1)
+
+### Objectivo
+
+Auditar a fronteira Application antes de qualquer criação de código:
+inventariar e classificar responsabilidades existentes, consumidores,
+contratos, serviços e adaptadores reutilizáveis pela camada
+Application/use-cases.
+
+### Alterações
+
+- `docs/application/APP-01-application-boundary-audit.md` — relatório
+  read-only: inventário real (85 ficheiros / 16 subsistemas), classificação
+  por camada, contratos versionados, serviços orquestradores existentes,
+  adaptadores, consumidores actuais, fronteira/firewall aplicável,
+  observações, riscos e recomendação.
+- Estado: `PROJECT_STATE.md`, `RUN_STATE.md` — APP-01 congelada, Ramo A
+  `IN_PROGRESS`, próxima unidade APP-02.
+
+### Fronteiras
+
+Unidade documental — **nenhum código funcional alterado**. A fronteira
+`application↔api` e as arestas da Application por recurso são decisão de
+APP-02 (ARQ), com base nesta auditoria.
+
+### Validação
+
+```text
+py -3.12 -m pytest
+tests=513  failures=0  errors=0  skipped=0   (exit 0, baseline real)
+```
+
+### Próximo passo
+
+APP-02 — Use-Case Contracts (definição de contratos de use-case por área,
+reutilizando as superfícies públicas listadas em APP-01).
+
 ## 2026-09-10 — API-01 — Fundação do subsistema API (Fase 10)
 
 ### Objectivo

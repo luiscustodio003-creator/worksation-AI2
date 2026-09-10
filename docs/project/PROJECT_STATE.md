@@ -12,17 +12,19 @@
 
 **KNOWLEDGE 9.1–9.7 CONCLUÍDA (âmbito lexical)** — enriquecimento semântico permanece como decisão material terminal e não deve ser iniciado sem planeamento próprio.
 
+**APP-01 CONCLUÍDA (Ramo A)** — auditoria da fronteira Application concluída (read-only), com inventário de responsabilidades, consumidores, contratos, serviços e adaptadores existentes: `docs/application/APP-01-application-boundary-audit.md`. Suíte **513/513 verdes**. Nenhum código alterado.
+
 ## Próximo ramo autorizado
 
 **BRANCH A — APPLICATION / USE-CASE BOUNDARY**
 
-Estado: **READY**
+Estado: **IN_PROGRESS** (APP-01 congelada)
 
 Próxima unidade:
 
-`APP-01 — Audit Application Boundary`
+`APP-02 — Use-Case Contracts`
 
-Esta unidade deve primeiro inventariar e classificar responsabilidades existentes, consumidores, contratos, serviços e adapters antes de qualquer criação de código.
+Esta unidade deve definir os contratos de use-case por área (system/platform, hardware, runtime, capabilities, models, tasks, knowledge, execution/status/cancelamento), reutilizando as superfícies públicas existentes e decidindo em ARQ a fronteira `application↔api` e as arestas de consumo por recurso.
 
 ## Governação do /wsai-run
 
@@ -99,6 +101,8 @@ KERNEL-01..KERNEL-10: **CONCLUÍDOS**.
 `docs/validation/KERNEL_CONSOLIDATION_REPORT.md` é a evidência persistente do fecho. O estado `TRANSITION` do Kernel terminou; qualquer futura reabertura deve ser controlada e justificada por BUG, REGRESSION, SECURITY, CONTRACT VIOLATION, REQUIREMENT CHANGE ou outra falha real que torne o estado incorrecto.
 
 ## Última unidade funcional
+
+`APP-01 — Audit Application Boundary` (Ramo A) — auditoria read-only da fronteira Application; suíte real confirmada: **513/513 verdes**.
 
 `API-01 — Fundação do subsistema API` — suíte registada no fecho: **513/513 verdes**.
 

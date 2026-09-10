@@ -155,7 +155,7 @@ O Kernel está consolidado e congelado. A partir deste ponto, o roadmap operacio
 
 ```text
 BRANCH A — APPLICATION / USE CASES
-    APP-01  Audit Application Boundary
+    APP-01  Audit Application Boundary           ✓ CONCLUÍDA (auditoria read-only)
     APP-02  Use-Case Contracts
     APP-03  System / Platform
     APP-04  Hardware
