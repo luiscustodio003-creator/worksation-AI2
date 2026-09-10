@@ -145,6 +145,7 @@ SUPERFICIES_PUBLICAS: dict[str, frozenset[str]] = {
             "SystemInfoService",
             "TaskAnalysisRequest",
             "TaskAnalysisResponse",
+            "TaskAnalysisService",
         }
     ),
     "execution": frozenset(

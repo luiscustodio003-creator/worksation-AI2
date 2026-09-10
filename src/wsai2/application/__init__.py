@@ -44,6 +44,7 @@ from .hardware_uc import HardwareProfileService
 from .models_uc import ModelsService
 from .runtime_uc import RuntimeProfileService
 from .system import SystemInfoService
+from .tasks_uc import TaskAnalysisService
 
 APPLICATION_CONTRACT_VERSION = "1.0"
 
@@ -73,4 +74,5 @@ __all__ = [
     "SystemInfoService",
     "TaskAnalysisRequest",
     "TaskAnalysisResponse",
+    "TaskAnalysisService",
 ]

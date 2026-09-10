@@ -95,7 +95,9 @@ em APP-06, `CapabilitiesService` constrói o relatório de compatibilidade
 via `build_compatibility` e filtra por domínio (associado em
 `CapabilityDefinition.domain`, com agrupamento `by_domain` no domínio);
 em APP-07, `ModelsService` avalia os modelos via `evaluate_models` e
-filtra por categoria (`category_for`).
+filtra por categoria (`category_for`); em APP-08, `TaskAnalysisService`
+compõe a análise de tarefa (classificação, requisitos, selecção de
+capacidades e plano) sem conhecer fornecedores.
 Este é o padrão dos serviços de use-case dos ramos posteriores.
 
 ### 3.11 UI

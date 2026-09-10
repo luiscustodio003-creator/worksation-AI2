@@ -162,7 +162,8 @@ BRANCH A — APPLICATION / USE CASES
     APP-05  Runtime                               ✓ CONCLUÍDA (RuntimeProfileService)
     APP-06  Capabilities                         ✓ CONCLUÍDA (CapabilitiesService)
     APP-07  Models                               ✓ CONCLUÍDA (ModelsService)
-    APP-08  Tasks
+    APP-08  Tasks                                ✓ CONCLUÍDA (TaskAnalysisService)
+    APP-09  Knowledge
     APP-06  Capabilities
     APP-07  Models
     APP-08  Tasks

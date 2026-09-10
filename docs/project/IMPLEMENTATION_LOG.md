@@ -1,5 +1,45 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-10 — APP-08 — Task Analysis (Ramo A, unidade 8)
+
+### Objectivo
+
+Resolver o use-case de análise de tarefa: montar o `TaskAnalysisResponse`
+a partir de `wsai2.task` — sem tomar decisões de execução nem conhecer
+fornecedores.
+
+### Alterações
+
+- `src/wsai2/application/tasks_uc.py` (novo): `TaskAnalysisService` com
+  `capability_registry_source`/`hardware_source`/`runtime_source`/
+  `model_registry_source` injectáveis; `resolve` encadeia
+  `classify_task` → `requirements_for` → `select_capabilities` →
+  `build_execution_plan` (sem `provider_health`).
+- `src/wsai2/application/__init__.py` — `TaskAnalysisService` na superfície
+  (28 símbolos); versão `"1.0"`.
+- `tests/architecture_contracts.py` — `SUPERFICIES_PUBLICAS["application"]`
+  + `TaskAnalysisService`.
+- `tests/test_application_tasks.py` (novo, 5 testes).
+- Docs: `docs/application/BASE-52-task-analysis-use-case.md`;
+  `ARCHITECTURE.md` (3.10); `ROADMAP.md`; `PROJECT_STATE.md`; `RUN_STATE.md`
+  (APP-08 congelada, APP-09 próxima).
+
+### Fronteiras
+
+Nenhuma aresta nova; `provider` permanece fora do FIREWALL da Application.
+
+### Validação
+
+```text
+py -m pytest
+tests=558  failures=0  errors=0  skipped=0   (553 + 5 novos APP-08)
+```
+
+### Próximo passo
+
+APP-09 — Knowledge: resolver o use-case de contexto de conhecimento
+(`KnowledgeContextRequest`/`KnowledgeContextResponse`).
+
 ## 2026-09-10 — APP-07 — Models (Ramo A, unidade 7)
 
 ### Objectivo

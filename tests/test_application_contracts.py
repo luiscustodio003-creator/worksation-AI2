@@ -94,6 +94,7 @@ def test_superficie_application_contem_20_contratos() -> None:
         "ModelsService",
         "RuntimeProfileService",
         "SystemInfoService",
+        "TaskAnalysisService",
     }
     assert set(NOMES_CONTRATOS) == esperados
     assert wsai2.application.APPLICATION_CONTRACT_VERSION == "1.0"
