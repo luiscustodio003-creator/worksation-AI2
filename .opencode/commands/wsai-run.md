@@ -1,108 +1,88 @@
 ---
-description: Orquestrar autonomamente uma unidade completa de desenvolvimento WSAI 2
+description: Orquestrar autonomamente o desenvolvimento WSAI 2 por unidades e ramos congeláveis
 ---
 # /wsai-run — ORQUESTRADOR AUTÓNOMO DO WORKSTATION AI 2
 
 ## Missão
 
-Executar a próxima unidade lógica de desenvolvimento do WorkStation AI 2 de forma controlada, respeitando arquitectura, contratos, documentação, testes e estado do repositório.
+Executar o trabalho autorizado do WorkStation AI 2 de forma autónoma, controlada, verificável e recuperável, respeitando arquitectura, contratos, testes, documentação, dependências e estado persistente.
 
-`/wsai-run` é o orquestrador de execução. Não deve assumir que a estrutura física actual é a arquitectura definitiva.
+O `/wsai-run` compõe `/wsai-audit`, `/wsai-plan`, `/wsai-implement`, `/wsai-test`, `/wsai-validate`, `/wsai-doc` e `/wsai-git`. Não duplicar as regras desses comandos.
 
-## CONTRATO DE TRANSIÇÃO ARQUITECTURAL
+## ESTADO ARQUITECTURAL ACTUAL
 
-Ler e respeitar obrigatoriamente:
+O Kernel/Core está **CONSOLIDADO / FROZEN**. Ler obrigatoriamente:
 
-`docs/architecture/COMMAND_EXECUTION_CONTRACT.md`
+- `docs/architecture/CORE_KERNEL_TARGET.md`
+- `docs/validation/KERNEL_CONSOLIDATION_REPORT.md`
+- `docs/project/RUN_GOVERNANCE.md`
+- `docs/project/PROJECT_STATE.md`
+- `docs/project/ROADMAP.md`
 
-Durante a reestruturação do Core/Kernel, considerar o projecto em estado `TRANSITION` salvo indicação explícita em documentação persistente.
+A antiga migração do Kernel em estado `TRANSITION` está encerrada. Não tratar o projecto como `TRANSITION` salvo evidência documental posterior que determine uma reabertura controlada.
 
-Antes de qualquer alteração estrutural, classificar a operação:
+## PROTECÇÃO DO KERNEL
 
-```text
-CREATE | ADAPT | MOVE | SPLIT | MERGE | DEPRECATE | DELETE | FREEZE
-```
-
-Aplicar `BEFORE EXTEND`: procurar primeiro uma responsabilidade equivalente já existente. Preferir reutilização/adaptação/adapter a duplicação.
-
-### Protecção de migração
-
-Em `TRANSITION`:
-
-- preservar comportamento já validado;
-- mapear consumidores antes de mover ou eliminar;
-- validar o destino antes de remover a origem;
-- executar alterações estruturais em unidades pequenas;
-- testar e validar cada unidade;
-- manter rollback possível;
-- não misturar alterações funcionais não relacionadas;
-- respeitar o Dependency Firewall;
-- não considerar a documentação futura como implementação existente.
-
-## VISIBILIDADE OBRIGATÓRIA DA EXECUÇÃO
-
-A autonomia não pode eliminar a observabilidade. No início e em mudanças relevantes, apresentar:
+Antes de alterar qualquer coisa relacionada com o Kernel, classificar:
 
 ```text
-╔══════════════════════════════════════════════════╗
-║ WSAI 2 — PROGRESSO                               ║
-╠══════════════════════════════════════════════════╣
-║ Fase:      ...                                   ║
-║ Unidade:   ...                                   ║
-║ Etapa:     ...                                   ║
-║ Progresso: ██████░░░░ ...%                       ║
-║ Estado:    LEGACY | TRANSITION | TARGET | FROZEN║
-║                                                  ║
-║ ✓ concluído                                      ║
-║ ● em execução                                    ║
-║ ○ pendente                                       ║
-║                                                  ║
-║ Próximo: ...                                     ║
-╚══════════════════════════════════════════════════╝
+BUG | REGRESSION | SECURITY | CONTRACT VIOLATION | REQUIREMENT CHANGE | NEW CAPABILITY
 ```
 
-Usar `EM EXECUÇÃO` quando não existir base real para percentagem. Nunca inventar progresso.
+`NEW CAPABILITY` não autoriza expansão do Kernel. Encaminhar a responsabilidade para Application, Infrastructure, Capability, API, UI ou Addon.
 
-## FAMÍLIA DE COMANDOS
+Só uma falha real que torne o Kernel incorrecto pode justificar reabertura controlada. Nunca reabrir por preferência de desenho, optimização especulativa ou nova funcionalidade.
+
+## REGRA BEFORE EXTEND
+
+Antes de `CREATE`, procurar sempre responsabilidade equivalente e preferir:
 
 ```text
-/wsai-audit
-/wsai-plan
-/wsai-implement
-/wsai-test
-/wsai-validate
-/wsai-doc
-/wsai-git
+REUSE -> ADAPT -> WRAP/ADAPTER -> EXTEND -> CREATE
 ```
 
-`/wsai-run` compõe estas responsabilidades. Não deve criar uma segunda versão das regras de cada comando.
+Inspeccionar consumidores, contratos, testes, fronteiras e documentação. Não criar módulos paralelos quando a responsabilidade já existir.
 
-## AUTORIDADE DE EXECUÇÃO
+## VISIBILIDADE OBRIGATÓRIA
 
-Uma unidade autorizada por `PROJECT_STATE.md`/`ROADMAP.md` pode avançar autonomamente quando for reversível, verificável e não introduzir decisão arquitectural material.
+No início e em mudanças relevantes apresentar:
 
-`READY TO IMPLEMENT`, `APPROVED` e `APPROVED WITH WARNINGS` não são pedidos de confirmação humana.
+```text
+WSAI 2 — PROGRESSO
 
-Só parar perante decisão arquitectural material, requisitos fundamentais alterados, risco significativo de perda/corrupção de dados, conflito Git inseguro, falha técnica sem solução segura ou violação do Dependency Firewall que exija decisão.
+Ramo:      ...
+Fase:      ...
+Unidade:   ...
+Etapa:     ...
+Estado:    ...
+
+✓ concluído
+● em execução
+○ pendente
+
+Próximo:   ...
+```
+
+Nunca inventar percentagens. Se não houver base mensurável, usar `EM EXECUÇÃO`.
 
 ## FASE A — PRE-FLIGHT
 
 Inspeccionar:
 
-1. directório actual;
-2. estrutura real;
-3. `AGENTS.md`;
-4. `docs/project/PROJECT_STATE.md`;
-5. `docs/project/ROADMAP.md`;
-6. arquitectura e contratos aplicáveis;
-7. `docs/architecture/COMMAND_EXECUTION_CONTRACT.md`;
-8. configuração OpenCode;
-9. estado Git;
-10. testes existentes.
+1. estrutura real;
+2. `AGENTS.md`;
+3. `docs/project/PROJECT_STATE.md`;
+4. `docs/project/ROADMAP.md`;
+5. `docs/project/RUN_GOVERNANCE.md`;
+6. arquitectura e constituição;
+7. contratos aplicáveis;
+8. estado Git;
+9. testes existentes;
+10. comandos/skills OpenCode relevantes.
 
 ## FASE B — SINCRONIZAÇÃO
 
-Verificar Git antes de alterar:
+Verificar:
 
 ```text
 git status
@@ -111,99 +91,238 @@ git remote -v
 git fetch --all --prune
 ```
 
-Nunca sobrescrever alterações locais/remotas sem compreender a divergência.
+Nunca sobrescrever alterações locais/remotas sem compreender a divergência. Não usar reset destrutivo nem force push como recuperação normal.
 
-## FASE C — DETERMINAÇÃO DA UNIDADE
+## FASE C — ESTADO E SELECÇÃO
 
-Basear a escolha em estado persistente, roadmap, dependências, testes e arquitectura real.
+Ler o estado persistente antes de seleccionar trabalho.
 
-Antes de executar uma unidade estrutural, identificar explicitamente:
+Determinar:
 
-- responsabilidade actual;
-- consumidores;
+- ramo activo;
+- fase;
+- unidade activa;
+- etapa actual;
+- unidades concluídas;
+- unidades congeladas;
+- ramos congelados;
 - dependências;
-- contrato;
-- destino;
-- classificação da alteração;
-- rollback.
+- bloqueios;
+- próximo trabalho autorizado.
 
-Não seleccionar uma unidade que dependa de base inexistente.
+Se existir uma unidade incompleta, retomar essa unidade no primeiro passo pendente. Não reiniciar trabalho já concluído.
 
-## FASE D — PLANEAMENTO
+## ESCOPOS
 
-Identificar objectivo, componentes existentes, ficheiros afectados, contratos, dependências, testes, documentação, riscos e estratégia de migração.
+### `/wsai-run`
 
-Se houver decisão arquitectural material nova, terminar em `BLOCKED`.
+Executar o próximo trabalho autorizado a partir do estado persistente.
 
-## FASE E — IMPLEMENTAÇÃO
+### `/wsai-run fase <X>`
 
-Implementar de forma incremental, preservando comportamento validado.
+Executar o ramo/fase indicado, unidade por unidade, até:
 
-Para `MOVE`, `SPLIT`, `MERGE` ou `DELETE`, exigir mapeamento de consumidores e validação antes da remoção da origem.
+1. todas as unidades do ramo estarem concluídas; ou
+2. surgir um bloqueio real.
 
-Não criar módulos paralelos quando a responsabilidade já existir.
+Não entrar automaticamente noutro ramo fora do escopo explícito.
 
-## FASE F — TESTE E VALIDAÇÃO
+## FASE D — CICLO DA UNIDADE
 
-Executar testes focados, integração e suíte completa quando a alteração for estrutural ou antes do fecho da unidade.
+Cada unidade passa obrigatoriamente por:
 
-Corrigir autonomamente falhas seguras relacionadas com a unidade e repetir a validação.
+```text
+AUDIT
+  ↓
+PLAN
+  ↓
+ARQ
+  ↓
+IMPLEMENT
+  ↓
+TEST
+  ↓
+VALIDATE
+  ↓
+DOC
+  ↓
+GIT
+  ↓
+FREEZE UNIT
+```
 
-Verificar especialmente, quando comandos/arquitectura são afectados:
+Uma unidade só passa a `COMPLETE / FROZEN` depois de evidência suficiente em todas as etapas aplicáveis.
 
-- execução autónoma;
-- continuidade;
-- progresso visível;
-- selecção da próxima unidade;
-- estado persistente;
-- Dependency Firewall;
-- ausência de regressões.
+## FASE E — CORRECÇÕES
 
-## FASE G — DOCUMENTAÇÃO E ESTADO
+Se testes ou validação detectarem falhas seguras e directamente relacionadas com a unidade, corrigir autonomamente e repetir o ciclo necessário.
+
+Não expandir o âmbito para resolver problemas não relacionados.
+
+## FASE F — FECHO DO RAMO
+
+Depois de concluir uma unidade:
+
+```text
+UNIT COMPLETE
+   ↓
+SAVE STATE
+   ↓
+NEXT UNIT?
+   ├── SIM → continuar
+   └── NÃO → BRANCH COMPLETE
+```
+
+Quando todas as unidades do ramo estiverem `COMPLETE`:
+
+```text
+BRANCH COMPLETE
+   ↓
+BRANCH FROZEN
+   ↓
+CHECK NEXT BRANCH DEPENDENCIES
+```
+
+Não reabrir automaticamente um ramo congelado.
+
+## FASE G — DEPENDENCY GATE
+
+Antes de iniciar outro ramo, verificar:
+
+- contratos necessários;
+- gates upstream;
+- dependências técnicas;
+- estado dos ramos dependentes;
+- ausência de bloqueios;
+- compatibilidade arquitectural.
+
+Se o próximo ramo estiver pronto:
+
+```text
+NEXT BRANCH READY
+→ iniciar
+```
+
+Se estiver bloqueado:
+
+```text
+BRANCH BLOCKED
+→ guardar estado
+→ parar
+→ indicar motivo e próxima acção
+```
+
+Não criar dependências artificiais apenas porque dois ramos aparecem próximos no roadmap.
+
+## FASE H — FREEZE E REABERTURA
+
+Unidade concluída:
+
+```text
+COMPLETE / FROZEN
+```
+
+Ramo totalmente concluído:
+
+```text
+COMPLETE / FROZEN
+```
+
+Reabrir apenas por:
+
+```text
+REGRESSION
+BUG
+SECURITY ISSUE
+FAILED INTEGRATION
+REQUIREMENT CHANGE
+DEPENDENCY CHANGE
+```
+
+A reabertura exige nova auditoria, planeamento, arquitectura quando aplicável, implementação, testes, validação, documentação e Git, terminando num novo freeze.
+
+## FASE I — DOCUMENTAÇÃO E ESTADO
 
 Actualizar, conforme aplicável:
 
 - documentação arquitectural;
-- documentação dos módulos;
+- documentação do módulo;
 - `PROJECT_STATE.md`;
+- `ROADMAP.md`;
+- `RUN_GOVERNANCE.md`;
 - `IMPLEMENTATION_LOG.md`;
 - relatórios de validação.
 
-Não marcar trabalho como concluído antes da evidência correspondente.
+Persistir pelo menos:
 
-## FASE H — GIT
+```text
+active_branch
+branch_status
+active_unit
+unit_status
+current_step
+last_completed_step
+next_action
+blocked_reason
+dependencies_checked
+frozen_units
+frozen_branches
+last_commit
+```
 
-Inspeccionar diff, confirmar âmbito, validar testes/documentação, criar commit coerente e efectuar push quando permitido.
+## FASE J — GIT
 
-Nunca fazer reset destrutivo ou force push como mecanismo normal de recuperação.
+Inspeccionar diff, confirmar âmbito, executar testes relevantes, confirmar documentação e criar commit coerente. Fazer push quando permitido.
 
-## FASE I — RESULTADO
+## FASE K — RESULTADO
 
 Produzir:
 
 ```text
-╔══════════════════════════════════════════════════╗
-║ WSAI 2 — RESULTADO DA UNIDADE                   ║
-╚══════════════════════════════════════════════════╝
+WSAI 2 — RESULTADO
 
-✓ Unidade: ...
-✓ Arquitectura: ...
-✓ Implementação: ...
-✓ Testes: ...
-✓ Validação: ...
-✓ Documentação: ...
-✓ Git: ...
-✓ GitHub: ...
+Ramo:      ...
+Fase:      ...
+Unidade:   ...
 
-ESTADO DA ARQUITECTURA
-...
+✓ Audit
+✓ Plan
+✓ Arq
+✓ Implement
+✓ Test
+✓ Validate
+✓ Doc
+✓ Git
+✓ Freeze
 
-PRÓXIMA UNIDADE
-...
+Estado do ramo: ...
+Próxima unidade: ...
+Próximo ramo: ...
+Bloqueio: ...
 ```
 
-## CONTINUIDADE
+## REGRA DE CONTINUIDADE
 
-Depois de concluir uma unidade, determinar a próxima a partir do estado actualizado. Continuar automaticamente se for pequena, directamente dependente, especificada e sem decisão arquitectural material.
+Depois de concluir uma unidade, determinar novamente a próxima a partir do estado real.
 
-Não avançar automaticamente para uma alteração estrutural maior apenas porque é a próxima no roadmap: primeiro executar o gate de planeamento correspondente.
+Se a próxima unidade estiver especificada, pronta, segura, reversível e sem decisão arquitectural material:
+
+```text
+CONTINUAR AUTOMATICAMENTE
+```
+
+Se estiver bloqueada ou exigir decisão material:
+
+```text
+PARAR
+GUARDAR ESTADO
+INDICAR PRÓXIMA ACÇÃO
+```
+
+Quando terminar o último item de um ramo, fechar e congelar o ramo antes de avaliar o próximo.
+
+Quando todos os ramos previstos estiverem congelados e não existir trabalho autorizado pendente, marcar o roadmap como concluído apenas com evidência correspondente.
+
+## PRINCÍPIO DE SEGURANÇA
+
+Autonomia não significa alterar tudo o que parece melhor. O `/wsai-run` deve preservar o que já foi validado, reutilizar o código existente, respeitar fronteiras e parar perante decisões materiais. O objectivo é avançar sem estragar trabalho consolidado.
