@@ -8,11 +8,15 @@ capacidades disponíveis).
 
 from __future__ import annotations
 
+from wsai2.hardware import CapabilityDomain
+
 from .base import CapabilityDefinition, CapabilityRequirements
 
 # Catálogo base de capacidades fundamentais do WorkStation AI 2.
 # Entradas puramente declarativas (dados, sem lógica) — servem de base
 # à avaliação de disponibilidade nas unidades seguintes da Fase 4.
+# Cada definição identifica o domínio de capacidade a que pertence
+# (CapabilityDomain, de wsai2.hardware).
 _DEFAULT_CAPABILITY_DEFINITIONS: tuple[CapabilityDefinition, ...] = (
     CapabilityDefinition(
         id="local_llm_inference",
@@ -25,6 +29,7 @@ _DEFAULT_CAPABILITY_DEFINITIONS: tuple[CapabilityDefinition, ...] = (
             min_ram_gb=8.0,
             min_cpu_cores=4,
         ),
+        domain=CapabilityDomain.COMPUTE,
     ),
     CapabilityDefinition(
         id="local_embeddings",
@@ -36,6 +41,7 @@ _DEFAULT_CAPABILITY_DEFINITIONS: tuple[CapabilityDefinition, ...] = (
             min_ram_gb=4.0,
             min_cpu_cores=2,
         ),
+        domain=CapabilityDomain.COMPUTE,
     ),
     CapabilityDefinition(
         id="accelerated_ml",
@@ -49,6 +55,7 @@ _DEFAULT_CAPABILITY_DEFINITIONS: tuple[CapabilityDefinition, ...] = (
             requires_gpu=True,
             min_cpu_cores=4,
         ),
+        domain=CapabilityDomain.GRAPHICS,
     ),
     CapabilityDefinition(
         id="lightweight_processing",
@@ -60,6 +67,7 @@ _DEFAULT_CAPABILITY_DEFINITIONS: tuple[CapabilityDefinition, ...] = (
             min_ram_gb=1.0,
             min_cpu_cores=1,
         ),
+        domain=CapabilityDomain.COMPUTE,
     ),
 )
 

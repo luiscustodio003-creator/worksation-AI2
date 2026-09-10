@@ -124,6 +124,7 @@ SUPERFICIES_PUBLICAS: dict[str, frozenset[str]] = {
             "CancellationResponse",
             "CapabilitiesRequest",
             "CapabilitiesResponse",
+            "CapabilitiesService",
             "ExecutionRequest",
             "ExecutionResponse",
             "ExecutionStatusRequest",

@@ -90,7 +90,10 @@ a UI. Em APP-03 foi resolvido o primeiro use-case: `SystemInfoService`
 monta o `SystemInfoResponse` com fontes injectáveis (`get_platform()` e
 `discover_runtime().uptime` por omissão); em APP-04, `HardwareProfileService` tipa o `HardwareProfileResponse` via
 `discover_hardware`; em APP-05, `RuntimeProfileService` tipa o estado
-momentâneo via `discover_runtime` (preservando a separação secção 4).
+momentâneo via `discover_runtime` (preservando a separação secção 4);
+em APP-06, `CapabilitiesService` constrói o relatório de compatibilidade
+via `build_compatibility` e filtra por domínio (associado em
+`CapabilityDefinition.domain`, com agrupamento `by_domain` no domínio).
 Este é o padrão dos serviços de use-case dos ramos posteriores.
 
 ### 3.11 UI

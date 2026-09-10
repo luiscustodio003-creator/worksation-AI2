@@ -11,6 +11,7 @@ from wsai2.capability import (
     create_default_registry,
     default_capabilities,
 )
+from wsai2.hardware import CapabilityDomain
 
 
 def test_capability_requirements_padrao() -> None:
@@ -71,6 +72,22 @@ def test_capacidades_default_ids_unicos() -> None:
     capabilities = default_capabilities()
     ids = [capability.id for capability in capabilities]
     assert len(ids) == len(set(ids))
+
+
+def test_capacidades_default_dominios() -> None:
+    """O catálogo base associa cada capacidade a um domínio."""
+    capabilities = default_capabilities()
+    dominios = {capability.domain for capability in capabilities}
+    assert CapabilityDomain.COMPUTE in dominios
+    assert CapabilityDomain.GRAPHICS in dominios
+    acelerado = next(c for c in capabilities if c.id == "accelerated_ml")
+    assert acelerado.domain is CapabilityDomain.GRAPHICS
+
+
+def test_definicao_dominio_padrao() -> None:
+    """Uma definição simples pertence por defeito ao domínio COMPUTE."""
+    definition = CapabilityDefinition(id="teste", name="Teste", description="Def. de teste.")
+    assert definition.domain is CapabilityDomain.COMPUTE
 
 
 def test_registo_registar_e_obter() -> None:

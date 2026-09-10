@@ -7,10 +7,10 @@ PROJECT_STATUS: ACTIVE
 KERNEL_STATUS: FROZEN
 ACTIVE_BRANCH: A — APPLICATION / USE CASES
 BRANCH_STATUS: IN_PROGRESS
-ACTIVE_UNIT: APP-06
+ACTIVE_UNIT: APP-07
 UNIT_STATUS: PENDING
 CURRENT_STEP: AUDIT
-NEXT_ACTION: Capabilities use-case
+NEXT_ACTION: Models use-case
 BLOCKED_REASON: NONE
 ```
 
@@ -18,7 +18,7 @@ BLOCKED_REASON: NONE
 
 | Ramo | Estado | Dependência | Próximo passo |
 |---|---|---|---|
-| A — Application / Use Cases | IN_PROGRESS | Kernel frozen | APP-06 (APP-01..05 congeladas) |
+| A — Application / Use Cases | IN_PROGRESS | Kernel frozen | APP-07 (APP-01..06 congeladas) |
 | B — API | PENDING | Application | API-02 |
 | C — UI | PENDING | API/Application | UI-01 |
 | D — Knowledge Semantic | BLOCKED | decisão material própria | KNOW-SEM-01 |
@@ -29,8 +29,8 @@ BLOCKED_REASON: NONE
 
 ```text
 BRANCH: A
-UNIT: APP-06
-DESCRIPTION: Capabilities use-case
+UNIT: APP-07
+DESCRIPTION: Models use-case
 STEP: AUDIT
 STATUS: PENDING
 ```
@@ -52,6 +52,9 @@ APP-04  Hardware                      COMPLETE / FROZEN
 APP-05  Runtime                       COMPLETE / FROZEN
         Evidência: docs/application/BASE-49-runtime-use-case.md
                 + docs/project/IMPLEMENTATION_LOG.md (APP-05)
+APP-06  Capabilities                  COMPLETE / FROZEN
+        Evidência: docs/application/BASE-50-capabilities-use-case.md
+                + docs/project/IMPLEMENTATION_LOG.md (APP-06)
 ```
 
 ## Regra de retoma

@@ -17,6 +17,7 @@ platform, runtime, runtime_engine e task — todas consumidas ao nível do
 pacote.
 """
 
+from .capabilities_uc import CapabilitiesService
 from .contract import (
     CancellationRequest,
     CancellationResponse,
@@ -50,6 +51,7 @@ __all__ = [
     "CancellationResponse",
     "CapabilitiesRequest",
     "CapabilitiesResponse",
+    "CapabilitiesService",
     "ExecutionRequest",
     "ExecutionResponse",
     "ExecutionStatusRequest",

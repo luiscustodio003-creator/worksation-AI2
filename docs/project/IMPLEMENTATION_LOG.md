@@ -1,5 +1,54 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-10 — APP-06 — Capabilities (Ramo A, unidade 6)
+
+### Objectivo
+
+Resolver o use-case de capacidades: montar o `CapabilitiesResponse` via
+`build_compatibility` e honrar o filtro opcional por domínio — sem lógica
+de avaliação na Application.
+
+### Decisão (utilizador, 2026-09-10)
+
+Adicionar ao `wsai2.capability` a associação de domínio: sem ela não há
+fonte de verdade para filtrar `CapabilitiesRequest.domain`.
+
+### Alterações
+
+- `src/wsai2/capability/base.py` — `CapabilityDefinition.domain:
+  CapabilityDomain` (de `wsai2.hardware`, aresta já autorizada) e
+  `CompatibilityReport.by_domain(domain)` (agrupamento no domínio).
+- `src/wsai2/capability/registry.py` — catálogo base classifica
+  `accelerated_ml` como `GRAPHICS`; restantes `COMPUTE`.
+- `src/wsai2/application/capabilities_uc.py` (novo): `CapabilitiesService`
+  com `registry_source`/`hardware_source`/`runtime_source` injectáveis;
+  `resolve` restringe entradas por `by_domain` quando o pedido o pede.
+- `src/wsai2/application/__init__.py` — `CapabilitiesService` na superfície
+  (26 símbolos); versão `"1.0"`.
+- `tests/architecture_contracts.py` — `SUPERFICIES_PUBLICAS["application"]`
+  + `CapabilitiesService`.
+- `tests/test_application_capabilities.py` (novo, 5 testes) e
+  `tests/test_capability.py` (+3 testes de domínio).
+- Docs: `docs/application/BASE-50-capabilities-use-case.md`; `ARCHITECTURE.md`
+  (3.10); `ROADMAP.md`; `PROJECT_STATE.md`; `RUN_STATE.md` (APP-06
+  congelada, APP-07 próxima) e relatório `docs/report`.
+
+### Fronteiras
+
+Aresta `capability → hardware` já autorizada; nenhuma aresta nova.
+
+### Validação
+
+```text
+py -m pytest
+tests=548  failures=0  errors=0  skipped=0   (541 + 3 domínio + 5 APP-06)
+```
+
+### Próximo passo
+
+APP-07 — Models: resolver o use-case de avaliação de modelos
+(`ModelsRequest`/`ModelsResponse`).
+
 ## 2026-09-10 — APP-05 — Runtime (Ramo A, unidade 5)
 
 ### Objectivo
@@ -122,7 +171,7 @@ tests=533  failures=0  errors=0  skipped=0   (528 + 5 novos APP-03)
 APP-04 — Hardware: resolver o use-case de perfil de hardware
 (`HardwareProfileRequest`/`HardwareProfileResponse`) via `discover_hardware`.
 
-## 2026-09-10 — RELATÓRIO DE FASES — Portefólio documental para explicação (docs/report)
+## 2026-09-10 — RELATÓRIO DE FASES — Portefólio documental para explicação
 
 ### Objectivo
 
@@ -134,15 +183,16 @@ documental — **nenhum código funcional alterado**.
 
 ### Alterações
 
-- `docs/report/00-visao-geral-e-indice.md` — visão, pipeline de
-  inteligência, índice das fases, mapa de subsistemas, guia de uso no
-  NotebookLM e roteiro de vídeos.
-- `docs/report/01-fase-0-fundacao-e-governanca.md` … `docs/report/12-fase-11-ui.md`
-  — um relatório por fase (0–11), com finalidade, arquitectura,
-  componentes, evidência e secção "Ideias-chave para vídeo".
-- `docs/report/13-pos-kernel-ramos-a-f.md` — consolidação do Kernel
-  (KERNEL-01..10) e modelo de ramos A–F (Application, API, UI, Knowledge
-  semântico, Addons, Projects).
+- Portefólio entregue **fora do repositório**, a pedido do utilizador, em
+  `C:\Users\DELL\Documents\projecto wsai2\relatorio-fases\`:
+  - `00-visao-geral-e-indice.md` — visão, pipeline de inteligência,
+    índice das fases, mapa de subsistemas, guia de uso no NotebookLM e
+    roteiro de vídeos;
+  - `01-fase-0-…` … `12-fase-11-` … — um relatório por fase (0–11), com
+    finalidade, arquitectura, componentes, evidência e secção
+    "Ideias-chave para vídeo";
+  - `13-pos-kernel-ramos-a-f.md` — consolidação do Kernel (KERNEL-01..10)
+    e modelo de ramos A–F.
 
 ### Fronteiras
 
@@ -150,6 +200,7 @@ Unidade documental — nada alterado em `src/` nem nos contratos. Estado
 real da suíte executado como referência no momento da medição (APP-02
 congelada; APP-03 a decorrer): **528/528 verdes**. O índice e o relatório
 dos ramos reflectem o estado persistido em `PROJECT_STATE.md` / `RUN_STATE.md`.
+Os ficheiros gerados mantêm-se fora do repositório, conforme pedido do utilizador.
 
 ### Próximo passo
 

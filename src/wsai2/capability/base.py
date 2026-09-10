@@ -15,6 +15,8 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from enum import Enum
 
+from wsai2.hardware import CapabilityDomain
+
 
 @dataclass(frozen=True)
 class CapabilityRequirements:
@@ -43,13 +45,15 @@ class CapabilityDefinition:
 
     Representa o contrato declarativo de uma capacidade que o
     WorkStation AI 2 pode disponibilizar, incluindo os requisitos
-    mínimos quantificados para a sua disponibilização.
+    mínimos quantificados para a sua disponibilização e o domínio de
+    capacidade a que pertence (COMPUTE, MEMORY, GRAPHICS, STORAGE).
     """
 
     id: str
     name: str
     description: str
     requirements: CapabilityRequirements = field(default_factory=CapabilityRequirements)
+    domain: CapabilityDomain = CapabilityDomain.COMPUTE
 
     @property
     def summary(self) -> str:
@@ -192,6 +196,12 @@ class CompatibilityReport:
     def _by_state(self, state: CapabilityState) -> tuple[CapabilityCompatibility, ...]:
         """Entradas do relatório num determinado estado."""
         return tuple(entry for entry in self.entries if entry.state is state)
+
+    def by_domain(
+        self, domain: CapabilityDomain
+    ) -> tuple[CapabilityCompatibility, ...]:
+        """Entradas do relatório num determinado domínio de capacidade."""
+        return tuple(entry for entry in self.entries if entry.definition.domain is domain)
 
     @property
     def available(self) -> tuple[CapabilityCompatibility, ...]:
