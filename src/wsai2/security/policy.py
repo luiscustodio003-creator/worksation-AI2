@@ -19,7 +19,7 @@ policy também não).
 
 from __future__ import annotations
 
-from wsai2.core.errors import PermissionError, ValidationError
+from wsai2.core.public import PermissionError, ValidationError
 
 from .base import PolicyDecision, Principal
 

@@ -32,9 +32,9 @@ import functools
 import time
 from typing import TYPE_CHECKING, Any, Callable
 
-from wsai2.core.context import ExecutionContext
-from wsai2.core.errors import (
+from wsai2.core.public import (
     CancellationError,
+    ExecutionContext,
     ExecutionError,
     TimeoutError,
     ValidationError,

@@ -12,8 +12,7 @@ import time
 from concurrent.futures import ThreadPoolExecutor
 from typing import TYPE_CHECKING, Callable, Mapping, Sequence
 
-from wsai2.core.context import ExecutionContext, ExecutionPriority
-from wsai2.core.errors import ValidationError
+from wsai2.core.public import ExecutionContext, ExecutionPriority, ValidationError
 from wsai2.security import PolicyEngine
 
 from .base import ExecutionReport, ScheduleOutcome, SchedulerReport, StepRunner

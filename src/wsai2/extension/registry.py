@@ -20,7 +20,7 @@ registo comporta-se exactamente como antes.
 
 from __future__ import annotations
 
-from wsai2.core.errors import ValidationError
+from wsai2.core.public import ValidationError
 from wsai2.security import PolicyEngine
 
 from .base import ExtensionContract, ExtensionLifecycleState

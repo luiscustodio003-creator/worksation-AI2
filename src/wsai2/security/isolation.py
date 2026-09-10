@@ -12,7 +12,7 @@ real do repositório.
 
 from __future__ import annotations
 
-from wsai2.core.errors import ProjectIsolationError, ValidationError
+from wsai2.core.public import ProjectIsolationError, ValidationError
 
 
 def require_project(project_id: str) -> str:

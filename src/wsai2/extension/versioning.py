@@ -21,7 +21,7 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass
 
-from wsai2.core.errors import ValidationError
+from wsai2.core.public import ValidationError
 
 # Versão de contrato de extensão suportada pelo núcleo nesta base.
 SUPPORTED_CONTRACT_VERSION = "1.0"

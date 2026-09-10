@@ -245,6 +245,39 @@ def test_artigo2_13_sem_ciclos_de_import_em_runtime() -> None:
     assert ciclos == [], f"ciclos de import em runtime: {ciclos}"
 
 
+def test_consumidores_core_apenas_via_public() -> None:
+    """KERNEL-08: o `core` é importado pelos consumidores só via `wsai2.core.public`.
+
+    Fora do pacote ``core`` não podem existir imports absolutos directos a
+    ``wsai2.core.errors`` ou ``wsai2.core.context`` — a taxonomia e o
+    contexto são alcançáveis exclusivamente através da superfície
+    versionada ``wsai2.core.public``.
+    """
+    proibidos = ("wsai2.core.errors", "wsai2.core.context")
+    fora_da_regra: list[str] = []
+    for ficheiro in _ficheiros_src():
+        if ficheiro.relative_to(RAIZ_SRC).parts[0] == "core":
+            continue
+        arvore = ast.parse(ficheiro.read_text(encoding="utf-8"))
+        infractores: list[str] = []
+        for no in ast.walk(arvore):
+            if isinstance(no, ast.ImportFrom) and no.module and no.module.startswith(proibidos):
+                infractores.append(
+                    f"{no.lineno}: from {no.module} import "
+                    f"{', '.join(a.name for a in no.names)}"
+                )
+            elif isinstance(no, ast.Import):
+                for alias in no.names:
+                    if alias.name.startswith(proibidos):
+                        infractores.append(f"{no.lineno}: import {alias.name}")
+        if infractores:
+            fora_da_regra.append(f"{ficheiro.relative_to(RAIZ_SRC.parents[0])}: {infractores}")
+    assert fora_da_regra == [], (
+        "consumidores do core devem importar apenas de 'wsai2.core.public': "
+        f"{fora_da_regra}"
+    )
+
+
 def test_artigo8_subsistemas_futuros_nao_antecipados() -> None:
     """API e UI não podem existir como pastas placeholder antes das Fases 10–11."""
     antecipados: list[str] = []

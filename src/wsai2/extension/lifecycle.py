@@ -23,7 +23,7 @@ from __future__ import annotations
 
 from dataclasses import replace
 
-from wsai2.core.errors import ValidationError
+from wsai2.core.public import ValidationError
 
 from .base import ExtensionContract, ExtensionLifecycleState
 

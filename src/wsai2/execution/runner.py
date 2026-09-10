@@ -22,8 +22,7 @@ import time
 from functools import partial
 from typing import TYPE_CHECKING, Any, Callable
 
-from wsai2.core.context import ExecutionContext
-from wsai2.core.errors import TimeoutError
+from wsai2.core.public import ExecutionContext, TimeoutError
 
 from .base import RecoveryPolicy, TimeoutPolicy, RetryAttempt
 

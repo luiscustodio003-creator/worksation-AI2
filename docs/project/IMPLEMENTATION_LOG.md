@@ -1,5 +1,47 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-09 — KERNEL-08 — Migração incremental de imports (via core.public)
+
+### Objectivo
+
+Fazer de `wsai2.core.public` o único ponto de entrada do core para todos
+os consumidores, com guarda de regressão.
+
+### Alterações
+
+- 13 módulos migrados de `wsai2.core.{errors,context}` para
+  `wsai2.core.public`: `execution/{base,runner}`, `runtime_engine/{base,
+  scheduler,queue,manager}`, `resource/governor`, `security/{policy,
+  isolation}`, `extension/{versioning,registry,lifecycle}`,
+  `knowledge/registry`. Mesmos objectos (re-export); zero arestas novas;
+  `FRONTEIRAS`/`FIREWALL` inalteradas.
+- Regra de contrato nova: `test_consumidores_core_apenas_via_public`
+  (scan AST de `src/wsai2` fora do pacote `core`).
+- Docstring de `core/public.py` actualizada (superfície = único ponto de
+  entrada do kernel/API/addons).
+- `docs/architecture/KERNEL-08-import-migration-core-public.md`;
+  `docs/project/PROJECT_STATE.md`; `docs/architecture/CORE_KERNEL_TARGET.md`
+  (secção 12).
+
+### Decisão em aberto
+
+A descida física da implementação pesada (governor/manager/scheduler/queue/
+monitoring para camada de infra-estrutura) não é antecipada — exige decisão
+arquitectural material e unidade própria (ciclo `execution ⇄ infra` bloqueia
+a descida do runner).
+
+### Validação
+
+```text
+py -3.12 -m pytest
+tests=503  failures=0  errors=0  skipped=0
+```
+
+### Próximo passo
+
+`/wsai-plan KERNEL-09` — Core freeze (superfície versionada; peso fora do
+núcleo).
+
 ## 2026-09-09 — KERNEL-07 — Architecture contract tests
 
 ### Objectivo

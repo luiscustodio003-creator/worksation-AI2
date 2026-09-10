@@ -20,8 +20,7 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import TYPE_CHECKING, Callable
 
-from wsai2.core.context import ExecutionPriority
-from wsai2.core.errors import WsaiError
+from wsai2.core.public import ExecutionPriority, WsaiError
 
 if TYPE_CHECKING:
     from wsai2.task import ExecutionPlan

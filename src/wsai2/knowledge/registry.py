@@ -12,7 +12,7 @@ unidades de ingestão posteriores usarão.
 
 from __future__ import annotations
 
-from wsai2.core.errors import ValidationError
+from wsai2.core.public import ValidationError
 
 from .base import KNOWLEDGE_CONTRACT_VERSION, KnowledgeRecord
 

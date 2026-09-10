@@ -1,8 +1,10 @@
 """Superfície pública do núcleo (KERNEL-03).
 
-Contrato versionado que expõe aos consumidores externos (futuros API/UI/
-addons) os contratos estáveis do `core` folha: a taxonomia transversal de
-erros e o contexto de execução com cancelamento cooperativo.
+Contrato versionado que é o **único ponto de entrada** dos consumidores
+(kernel, API/UI, addons) para os contratos estáveis do `core` folha: a
+taxonomia transversal de erros e o contexto de execução com
+cancelamento cooperativo (regra de contrato desde KERNEL-08 — os próprios
+subsistemas do kernel importam o `core` apenas através desta superfície).
 
 Esta fachada não introduz lógica nova nem altera fronteiras: depende
 apenas de `wsai2.core.errors` e `wsai2.core.context` — `core` permanece

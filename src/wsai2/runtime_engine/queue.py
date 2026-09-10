@@ -16,8 +16,7 @@ import threading
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Callable, Generic, Sequence, TypeVar
 
-from wsai2.core.context import ExecutionPriority
-from wsai2.core.errors import ValidationError
+from wsai2.core.public import ExecutionPriority, ValidationError
 
 if TYPE_CHECKING:
     from wsai2.task import ExecutionPlan

@@ -17,7 +17,7 @@ from __future__ import annotations
 import time
 from dataclasses import dataclass, field
 
-from wsai2.core.errors import ValidationError
+from wsai2.core.public import ValidationError
 
 
 @dataclass(frozen=True)

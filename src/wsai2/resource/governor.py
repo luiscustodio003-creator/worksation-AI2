@@ -35,7 +35,7 @@ import threading
 from dataclasses import replace
 from typing import TYPE_CHECKING
 
-from wsai2.core.errors import ResourceError
+from wsai2.core.public import ResourceError
 from wsai2.hardware import HardwareProfile
 from wsai2.runtime import RuntimeProfile
 
