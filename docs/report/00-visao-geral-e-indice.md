@@ -68,7 +68,7 @@ Esta cadeia está materializada em **fases de desenvolvimento** e, depois da con
 | `10-fase-9-...` | Fase 9 — Knowledge Engine | `wsai2.knowledge` | FECHADA (âmbito lexical 9.1–9.7) |
 | `11-fase-10-...` | Fase 10 — API | `wsai2.api` | API-01 CONCLUÍDA; API-02+ pendentes |
 | `12-fase-11-...` | Fase 11 — UI | `wsai2.ui` (futuro) | NÃO INICIADA |
-| `13-pos-kernel-...` | Pós-Kernel — Ramos A–F | Application, API, UI, Knowledge semântico, Addons, Projects | Ramo A em curso (APP-01..03 congeladas; APP-04 em implementação) |
+| `13-pos-kernel-...` | Pós-Kernel — Ramos A–F | Application, API, UI, Knowledge semântico, Addons, Projects | Ramo A em curso (APP-01..04 congeladas; APP-05 em implementação) |
 
 ---
 

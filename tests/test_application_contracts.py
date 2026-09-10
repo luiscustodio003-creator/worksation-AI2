@@ -88,7 +88,10 @@ def test_superficie_application_contem_20_contratos() -> None:
     A constante de versão não faz parte do ``__all__`` (padrão dos
     subsistemas congelados), e não existem símbolos fora da superfície.
     """
-    esperados = {c.__name__ for c in CONTRATOS} | {"SystemInfoService"}
+    esperados = {c.__name__ for c in CONTRATOS} | {
+        "HardwareProfileService",
+        "SystemInfoService",
+    }
     assert set(NOMES_CONTRATOS) == esperados
     assert wsai2.application.APPLICATION_CONTRACT_VERSION == "1.0"
     assert "APPLICATION_CONTRACT_VERSION" not in NOMES_CONTRATOS

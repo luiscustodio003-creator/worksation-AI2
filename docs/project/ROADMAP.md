@@ -158,7 +158,7 @@ BRANCH A — APPLICATION / USE CASES
     APP-01  Audit Application Boundary           ✓ CONCLUÍDA (auditoria read-only)
     APP-02  Use-Case Contracts                    ✓ CONCLUÍDA (contratos + fronteira sancionada)
     APP-03  System / Platform                     ✓ CONCLUÍDA (SystemInfoService)
-    APP-04  Hardware
+    APP-04  Hardware                              ✓ CONCLUÍDA (HardwareProfileService)
     APP-05  Runtime
     APP-06  Capabilities
     APP-07  Models

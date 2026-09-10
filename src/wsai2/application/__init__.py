@@ -39,6 +39,7 @@ from .contract import (
     TaskAnalysisRequest,
     TaskAnalysisResponse,
 )
+from .hardware_uc import HardwareProfileService
 from .system import SystemInfoService
 
 APPLICATION_CONTRACT_VERSION = "1.0"
@@ -54,6 +55,7 @@ __all__ = [
     "ExecutionStatusResponse",
     "HardwareProfileRequest",
     "HardwareProfileResponse",
+    "HardwareProfileService",
     "KnowledgeContextRequest",
     "KnowledgeContextResponse",
     "ModelsRequest",

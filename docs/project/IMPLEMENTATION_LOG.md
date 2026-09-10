@@ -1,5 +1,44 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-10 — APP-04 — Hardware (Ramo A, unidade 4)
+
+### Objectivo
+
+Resolver o use-case de perfil de hardware a partir dos contratos APP-02:
+tipar o `HardwareProfileResponse` com o perfil estrutural produzido por
+`wsai2.hardware` — sem lógica central de decisão.
+
+### Alterações
+
+- `src/wsai2/application/hardware_uc.py` (novo): `HardwareProfileService`
+  com fonte injectável `profile_source` (por omissão `discover_hardware`).
+- `src/wsai2/application/__init__.py` — `HardwareProfileService` na
+  superfície (22 símbolos); versão `"1.0"`.
+- `tests/architecture_contracts.py` —
+  `SUPERFICIES_PUBLICAS["application"]` + `HardwareProfileService`.
+- `tests/test_application_hardware.py` (novo, 4 testes): perfil real,
+  fonte injectada, capacidades estruturais, contrato congelado/igualdade.
+- `tests/test_application_contracts.py` — superfície esperada actualizada.
+- Docs: `docs/application/BASE-48-hardware-use-case.md`; `ARCHITECTURE.md`
+  (3.10); `ROADMAP.md`; `PROJECT_STATE.md`; `RUN_STATE.md` (APP-04
+  congelada, APP-05 próxima) e relatório `docs/report`.
+
+### Fronteiras
+
+Nenhuma aresta nova — `application → hardware` já autorizada.
+
+### Validação
+
+```text
+py -m pytest
+tests=537  failures=0  errors=0  skipped=0   (533 + 4 novos APP-04)
+```
+
+### Próximo passo
+
+APP-05 — Runtime: resolver o use-case de estado de runtime
+(`RuntimeProfileRequest`/`RuntimeProfileResponse`) via `discover_runtime`.
+
 ## 2026-09-10 — APP-03 — System / Platform (Ramo A, unidade 3)
 
 ### Objectivo

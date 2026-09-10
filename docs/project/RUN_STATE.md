@@ -7,10 +7,10 @@ PROJECT_STATUS: ACTIVE
 KERNEL_STATUS: FROZEN
 ACTIVE_BRANCH: A — APPLICATION / USE CASES
 BRANCH_STATUS: IN_PROGRESS
-ACTIVE_UNIT: APP-04
+ACTIVE_UNIT: APP-05
 UNIT_STATUS: PENDING
 CURRENT_STEP: AUDIT
-NEXT_ACTION: Hardware profile use-case
+NEXT_ACTION: Runtime state use-case
 BLOCKED_REASON: NONE
 ```
 
@@ -18,7 +18,7 @@ BLOCKED_REASON: NONE
 
 | Ramo | Estado | Dependência | Próximo passo |
 |---|---|---|---|
-| A — Application / Use Cases | IN_PROGRESS | Kernel frozen | APP-04 (APP-01..03 congeladas) |
+| A — Application / Use Cases | IN_PROGRESS | Kernel frozen | APP-05 (APP-01..04 congeladas) |
 | B — API | PENDING | Application | API-02 |
 | C — UI | PENDING | API/Application | UI-01 |
 | D — Knowledge Semantic | BLOCKED | decisão material própria | KNOW-SEM-01 |
@@ -29,8 +29,8 @@ BLOCKED_REASON: NONE
 
 ```text
 BRANCH: A
-UNIT: APP-04
-DESCRIPTION: Hardware profile use-case
+UNIT: APP-05
+DESCRIPTION: Runtime state use-case
 STEP: AUDIT
 STATUS: PENDING
 ```
@@ -46,6 +46,9 @@ APP-02  Use-Case Contracts            COMPLETE / FROZEN
 APP-03  System / Platform             COMPLETE / FROZEN
         Evidência: docs/application/BASE-47-system-platform-use-case.md
                 + docs/project/IMPLEMENTATION_LOG.md (APP-03)
+APP-04  Hardware                      COMPLETE / FROZEN
+        Evidência: docs/application/BASE-48-hardware-use-case.md
+                + docs/project/IMPLEMENTATION_LOG.md (APP-04)
 ```
 
 ## Regra de retoma
