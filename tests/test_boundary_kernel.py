@@ -13,11 +13,16 @@ import re
 
 import wsai2
 import wsai2.execution
+import wsai2.extension
 import wsai2.resource
 import wsai2.runtime_engine
 import wsai2.security
 
 from .architecture_contracts import (
+    ADDON_CONTRATO_CONSTANTE_VERSION,
+    ADDON_CONTRATO_MODULO,
+    ADDON_CONTRATO_SUPERFICIE,
+    ADDON_CONTRATO_VERSION,
     GOVERNO_SUPERFICIE,
     OBSERVABILIDADE_SUPERFICIE,
     SUPERFICIES_PUBLICAS,
@@ -105,6 +110,47 @@ def test_consumidores_apenas_ao_nivel_do_pacote():
                 ):
                     infraccoes.append(f"{ficheiro.name}: importa internos {alvo}")
     assert infraccoes == [], f"consumo de módulos internos: {infraccoes}"
+
+
+def test_contrato_de_addon_congelado():
+    """KERNEL-10: o contrato de addon (`wsai2.extension`) está congelado.
+
+    A superfície sancionada vale para quem autor addons: importar sempre de
+    ``wsai2.extension`` (nunca de módulos internos) e respeitar a versão
+    ``EXTENSION_CONTRACT_VERSION``.
+    """
+    assert ADDON_CONTRATO_MODULO == "wsai2.extension"
+    modulo = wsai2.extension
+    assert set(getattr(modulo, "__all__", [])) == ADDON_CONTRATO_SUPERFICIE, (
+        "contrato de addon: superfície divergente de "
+        f"{sorted(ADDON_CONTRATO_SUPERFICIE)}"
+    )
+    assert getattr(modulo, ADDON_CONTRATO_CONSTANTE_VERSION) == ADDON_CONTRATO_VERSION
+    assert ADDON_CONTRATO_CONSTANTE_VERSION not in ADDON_CONTRATO_SUPERFICIE, (
+        "contrato de addon: a versão não deve fazer parte da superfície"
+    )
+
+
+def test_consumidores_extension_apenas_nivel_pacote():
+    """KERNEL-10: consumidores de `wsai2.extension` importam só ao nível do pacote."""
+    infraccoes: list[str] = []
+    for ficheiro in _ficheiros_src():
+        arvore = ast.parse(ficheiro.read_text(encoding="utf-8"))
+        for no in ast.walk(arvore):
+            alvos: list[str] = []
+            if isinstance(no, ast.ImportFrom) and no.module:
+                alvos.append(no.module)
+            elif isinstance(no, ast.Import):
+                alvos.extend(alias.name for alias in no.names)
+            for alvo in alvos:
+                if alvo == ADDON_CONTRATO_MODULO or alvo.startswith(
+                    ADDON_CONTRATO_MODULO + "."
+                ):
+                    if alvo.count(".") != 1:
+                        infraccoes.append(
+                            f"{ficheiro.name}: importa módulo interno {alvo}"
+                        )
+    assert infraccoes == [], f"consumo de módulos internos de extension: {infraccoes}"
 
 
 def test_implementacao_pesada_fora_do_nucleo():

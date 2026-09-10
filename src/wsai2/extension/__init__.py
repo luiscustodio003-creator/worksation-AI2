@@ -17,6 +17,12 @@ from .lifecycle import can_transition, transition, valid_transitions
 from .registry import ExtensionRegistry
 from .versioning import SUPPORTED_CONTRACT_VERSION, ContractVersion
 
+# Versão do contrato de addon (KERNEL-10): a superfície deste pacote, tal como
+# exposta em ``__all__``, está congelada e versionada. Os autores de addons
+# devem importar apenas de ``wsai2.extension`` (nível do pacote) e respeitar
+# esta versão.
+EXTENSION_CONTRACT_VERSION = "1.0"
+
 __all__ = [
     "ContractVersion",
     "ExtensionContract",

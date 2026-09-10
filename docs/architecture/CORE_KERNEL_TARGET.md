@@ -347,7 +347,8 @@ KERNEL-06  Observability boundary            ✓ CONCLUÍDA (KERNEL-06-observabi
 KERNEL-07  Architecture contract tests      ✓ CONCLUÍDA (KERNEL-07-architecture-contract-tests.md)
 KERNEL-08  Migração incremental de imports  ✓ CONCLUÍDA (KERNEL-08-import-migration-core-public.md)
 KERNEL-09  Core freeze                       ✓ CONCLUÍDA (KERNEL-09-core-freeze-heavy-descend.md; implementação pesada em wsai2.infrastructure)
-KERNEL-10  Addon SDK / Projects foundation  -> próxima unidade
+KERNEL-10  Contrato de addon                 ✓ CONCLUÍDA (KERNEL-10-addon-contract-freeze.md; wsai2.extension congelada, EXTENSION_CONTRACT_VERSION 1.0; Projects declarado fora do núcleo)
+SEQUÊNCIA  KERNEL-01..KERNEL-10              ✓ CONCLUÍDA — contrato de addon pronto para consumidores (Projects/API/UI)
 ```
 
 A ordem pode ser alterada apenas após auditoria da unidade anterior e sem contrariar `PROJECT_STATE.md`.

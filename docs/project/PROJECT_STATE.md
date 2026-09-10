@@ -14,7 +14,7 @@
 
 ## Última unidade implementada
 
-Fase 9 — unidade 9.7: **Knowledge File Ingestion** (`docs/knowledge/BASE-43-knowledge-file-ingestion.md`). Criado `FileIngestor` (leitura lexical de ficheiros de texto do projecto — `.md`/`.py`/`.txt`/`.json`/`.toml`/`.yaml`/`.yml` — em registos `document` com proveniência relativa e metadados derivados pelo extractor 9.3; ordem determinista; binários/vazios/oversized ignorados). Sem embeddings e sem arestas novas em `FRONTEIRAS`. 9 novos testes.
+KERNEL-10 — **Contrato de addon** (`docs/architecture/KERNEL-10-addon-contract-freeze.md`). Superfície de `wsai2.extension` congelada por teste (10 símbolos) + `EXTENSION_CONTRACT_VERSION = "1.0"` (fora do `__all__`) + guarda de consumidores ao nível do pacote. `extension` continua fora de `KERNEL_SUBSISTEMAS` (camada addon). Sem novo subsistema SDK e sem código de Projects (decisão do plano; Projects = addon futuro do alvo, sec. 9). Suíte **506/506 verdes**.
 
 ## Estado dos residuais Via B
 
@@ -136,7 +136,8 @@ vigente; `COMMAND_EXECUTION_CONTRACT.md` governa a transição).
 - **KERNEL-07 — ARCHITECTURE CONTRACT TESTS: CONCLUÍDA** (`docs/architecture/KERNEL-07-architecture-contract-tests.md`). Fonte única de verdade `tests/architecture_contracts.py` (FRONTEIRAS, FIREWALL, superfícies, versões) + refactor dos 3 ficheiros de contrato (literais removidos) + `test_kernel_todas_as_superficies_publicas_versionadas` (os 5 subsistemas do kernel com superfície versionada; bumps deliberados detectados). Sem alteração de `src`. Suíte **502/502 verdes**.
 - **KERNEL-08 — IMPORT MIGRATION (via core.public): CONCLUÍDA** (`docs/architecture/KERNEL-08-import-migration-core-public.md`). Opção A do plano: os 13 consumidores migram de `wsai2.core.{errors,context}` para `wsai2.core.public` (mesmos objectos; zero arestas novas) + regra de contrato `test_consumidores_core_apenas_via_public` (scan AST: fora de `core`, só `core.public`). Descida física da implementação pesada fica como decisão em aberto. Suíte **503/503 verdes**.
 - **KERNEL-09 — CORE FREEZE (implementação pesada fora do núcleo): CONCLUÍDA** (`docs/architecture/KERNEL-09-core-freeze-heavy-descend.md`). Descida completa (opção B do plano KERNEL-08, confirmada): novo subsistema `wsai2.infrastructure` (7 módulos: base_resource, governor, base_runtime, manager, scheduler, queue, monitoring) recolhe a mecânica pesada; `resource`/`runtime_engine` viram shells de re-export (superfícies e versões intactas; `git mv` com histórico). Fronteiras recompostas (26 arestas: `resource→infrastructure`, `runtime_engine→infrastructure`, `infrastructure→{core,execution,extension,hardware,runtime,security,task}`); `execution`/`security` ficam no núcleo (ciclo `execution⇄infra` bloqueia o runner). Guarda nova `test_implementacao_pesada_fora_do_nucleo` + BASE-44 + excepção de shell nos placeholders. Suíte **504/504 verdes**.
-- **Próxima unidade:** `/wsai-plan KERNEL-10` — Addon SDK / Projects foundation.
+- **KERNEL-10 — CONTRATO DE ADDON: CONCLUÍDA** (`docs/architecture/KERNEL-10-addon-contract-freeze.md`). Superfície de `wsai2.extension` congelada por teste (10 símbolos) + `EXTENSION_CONTRACT_VERSION = "1.0"` (fora do `__all__`) + `test_consumidores_extension_apenas_nivel_pacote`. `extension` permanece fora de `KERNEL_SUBSISTEMAS` (camada addon, tabelas `ADDON_CONTRATO_*` na fonte única). Decisão de âmbito do plano: sem novo subsistema SDK (duplicação) e sem código de Projects (addon futuro do alvo, sec. 9 — só documental). Sem arestas novas. Suíte **506/506 verdes**; sequência KERNEL-01..KERNEL-10 **concluída**.
+- **Próxima unidade:** fecho do estado de transição do kernel (release notes) ou decisão sobre a primeira capacidade consumidora real do contrato de addon.
 - **Política de reconstrução do Core (regra de superfície vs. implementação):** registada em `CORE_KERNEL_TARGET.md` (sec. 2, 6, 10, 11, 12) e `COMMAND_EXECUTION_CONTRACT.md` (regras de migração): a reconstrução nunca remove superfícies públicas já versionadas; a implementação pesada (mecânica de execução) foi extraída do núcleo para `wsai2.infrastructure`, por trás dos contratos públicos, no KERNEL-09.
 
 ## Estado Git
@@ -149,7 +150,7 @@ documentação arquitectural/estado alinhados.
 
 ## Regra de continuação
 
-**Migração do Kernel — TRANSITION (KERNEL-01 a KERNEL-09 concluídas).**
+**Migração do Kernel — TRANSITION (KERNEL-01 a KERNEL-10 concluídas).**
 
 ```text
 KERNEL-01  Inventário real da base            ✓ CONCLUÍDA (auditoria read-only)
@@ -161,13 +162,8 @@ KERNEL-06  Observability boundary             ✓ CONCLUÍDA (fronteira de obser
 KERNEL-07  Architecture contract tests        ✓ CONCLUÍDA (fonte única de contratos; 502/502)
 KERNEL-08  Migração incremental de imports    ✓ CONCLUÍDA (consumidores só via core.public; 503/503)
 KERNEL-09  Core freeze                        ✓ CONCLUÍDA (implementação pesada em wsai2.infrastructure; 504/504)
-KERNEL-10  Addon SDK / Projects foundation    → PRÓXIMA UNIDADE (/wsai-plan)
-KERNEL-05  Resource / Execution boundary
-KERNEL-06  Observability boundary
-KERNEL-07  Architecture contract tests
-KERNEL-08  Migração incremental de imports
-KERNEL-09  Core freeze
-KERNEL-10  Addon SDK / Projects foundation
+KERNEL-10  Contrato de addon                  ✓ CONCLUÍDA (extension congelada e versionada; 506/506)
+SEQUÊNCIA KERNEL-01..KERNEL-10                ✓ CONCLUÍDA — contrato de addon pronto para consumidores
 ```
 
 O fecho da Fase 9 e a linha do Kernel coexistem: a migração não reverterá

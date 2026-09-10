@@ -1,5 +1,53 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-10 — KERNEL-10 — Contrato de addon (fecho da sequência do kernel)
+
+### Objectivo
+
+Congelar e versionar o contrato dos addons do WorkStation AI 2: a superfície
+pública de `wsai2.extension` fica fixada por teste, ganha a constante de
+versão da camada e impõe-se importação ao nível do pacote. Decisão de âmbito
+(plano /wsai-plan, confirmada pelo utilizador): sem novo subsistema SDK
+(duplicaria `extension`) e sem código de Projects (addon futuro que consome o
+Core — alvo, sec. 9).
+
+### Alterações
+
+- `tests/architecture_contracts.py` — tabelas novas na fonte única:
+  `ADDON_CONTRATO_MODULO = "wsai2.extension"`,
+  `ADDON_CONTRATO_SUPERFICIE` (10 símbolos do `__all__`),
+  `ADDON_CONTRATO_CONSTANTE_VERSION = "EXTENSION_CONTRACT_VERSION"`,
+  `ADDON_CONTRATO_VERSION = "1.0"`. `extension` continua fora de
+  `KERNEL_SUBSISTEMAS` — camada addon.
+- `src/wsai2/extension/__init__.py` — `EXTENSION_CONTRACT_VERSION = "1.0"`
+  (fora do `__all__`); `SUPPORTED_CONTRACT_VERSION` mantido na superfície
+  (número semântico addon→core).
+- `tests/test_boundary_kernel.py` — `test_contrato_de_addon_congelado`
+  (versão == "1.0"; `__all__` == superfície; constante de versão ausente de
+  `__all__`) e `test_consumidores_extension_apenas_nivel_pacote` (AST:
+  imports de `wsai2.extension` só ao nível do pacote).
+- `docs/architecture/KERNEL-10-addon-contract-freeze.md`;
+  `docs/project/PROJECT_STATE.md`; `docs/architecture/CORE_KERNEL_TARGET.md`
+  (sec. 12: KERNEL-10 ✓).
+
+### Fronteiras
+
+Sem alterações em `FRONTEIRAS`/`FIREWALL`; `extension→{core,security}` e
+`infrastructure→extension` já autorizadas. Nenhuma dependência funcional mudou.
+
+### Validação
+
+```text
+py -3.12 -m pytest
+tests=506  failures=0  errors=0  skipped=0
+```
+
+### Próximo passo
+
+Sequência KERNEL-01..KERNEL-10 concluída. Fecho do estado de transição
+(release notes do kernel) ou decisão sobre a primeira capacidade consumidora
+real do contrato de addon.
+
 ## 2026-09-09 — KERNEL-09 — Core freeze (implementação pesada fora do núcleo)
 
 ### Objectivo
@@ -46,6 +94,13 @@ tests=504  failures=0  errors=0  skipped=0
 ### Próximo passo
 
 `/wsai-plan KERNEL-10` — Addon SDK / Projects foundation.
+
+## 2026-09-10 — KERNEL-10 — Contrato de addon
+
+Continuação imediata do KERNEL-09: contrato de addon congelado e versionado
+(`EXTENSION_CONTRACT_VERSION = "1.0"`), consumidores ao nível do pacote e
+Projects declarado fora do núcleo. Detalhe no registo da entrada KERNEL-10
+acima.
 
 ## 2026-09-09 — KERNEL-08 — Migração incremental de imports (via core.public)
 

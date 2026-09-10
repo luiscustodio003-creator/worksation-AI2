@@ -202,3 +202,27 @@ CONTRACT_VERSIONES: dict[str, str] = {
     "runtime_engine": "1.0",
     "security": "1.0",
 }
+
+# Contrato de addon (KERNEL-10): superfície congelada de `wsai2.extension`,
+# a camada que define o contrato dos addons do WorkStation AI 2. Permanece
+# fora de `KERNEL_SUBSISTEMAS` — é a fronteira addon→kernel, não um subsistema
+# do núcleo. `SUPPORTED_CONTRACT_VERSION` fica na superfície por desígnio (é o
+# número semântico do contrato addon→core). Projects é um addon futuro (alvo,
+# sec. 9) e não recebe código do kernel.
+ADDON_CONTRATO_MODULO = "wsai2.extension"
+ADDON_CONTRATO_SUPERFICIE: frozenset[str] = frozenset(
+    {
+        "ContractVersion",
+        "ExtensionContract",
+        "ExtensionKind",
+        "ExtensionLifecycleState",
+        "ExtensionRegistry",
+        "ResourceLimit",
+        "SUPPORTED_CONTRACT_VERSION",
+        "can_transition",
+        "transition",
+        "valid_transitions",
+    }
+)
+ADDON_CONTRATO_CONSTANTE_VERSION = "EXTENSION_CONTRACT_VERSION"
+ADDON_CONTRATO_VERSION = "1.0"
