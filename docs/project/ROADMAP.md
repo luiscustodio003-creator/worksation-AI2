@@ -106,32 +106,25 @@ A Fase 8 começou pela **baseline e auditoria**, não por uma reescrita. O Runti
 - concorrência opcional entre planos;
 - filas multicamadas com prioridade, backlog e preempção de trabalho pendente.
 
-A ordem concreta das unidades e dos residuais é determinada pelo `PROJECT_STATE.md` e pelo plano de hardening, após auditoria de cada responsabilidade já existente.
-
-**Estado actual:** implementação funcional da Fase 8 concluída, incluindo os três residuais Via B (monitorização, concorrência e filas multicamadas). Gate de fundação executado com **🟡 APPROVED WITH WARNINGS** (2026-09-09) — a Fase 8 está **formalmente fechada** e o relatório persistente existe em `docs/validation/FOUNDATION_VALIDATION_REPORT.md`.
+**Estado actual:** implementação funcional da Fase 8 concluída, incluindo os três residuais Via B. Gate de fundação executado com **APPROVED WITH WARNINGS** (2026-09-09). A Fase 8 está formalmente fechada.
 
 ## Fase 9 — Knowledge Engine
 
-- contrato do subsistema (3.9) ✓ (unidade 9.1 — `wsai2.knowledge`);
-- registo central / admissão de conhecimento ✓ (unidade 9.2);
-- extracção de metadados (heurística) ✓ (unidade 9.3);
-- indexação em memória ✓ (unidade 9.4 — memória pura);
-- recuperação — persistência SQLite ✓ (unidade 9.5 — armazenamento local decidido);
-- construção de contexto ✓ (unidade 9.6);
-- ingestão de ficheiros de texto do projecto ✓ (unidade 9.7 — lexical, sem embeddings);
-- enriquecimento semântico (embeddings via Model/Provider) — decisão material terminal, planeamento próprio;
+- contrato do subsistema (3.9) ✓ (9.1);
+- registo central / admissão ✓ (9.2);
+- extracção de metadados ✓ (9.3);
+- indexação em memória ✓ (9.4);
+- persistência SQLite ✓ (9.5);
+- construção de contexto ✓ (9.6);
+- ingestão de ficheiros de texto ✓ (9.7);
+- enriquecimento semântico / embeddings — **decisão material terminal, planeamento próprio**;
 - extracção;
 - metadados;
 - indexação;
 - recuperação;
 - contexto.
 
-**Estado:** **fase concluída (âmbito lexical)** — fecho formal
-`APPROVED` (2026-09-09, `docs/validation/FASE9_VALIDATION_REPORT.md`),
-unidades 9.1–9.7 implementadas e sincronizadas. O **enriquecimento
-semântico** (embeddings via Model/Provider) é a **decisão material
-terminal** da Fase 9 e exige planeamento próprio e decisões
-documentadas antes de motores de embeddings.
+**Estado:** **CONCLUÍDA no âmbito lexical** — unidades 9.1–9.7 implementadas, testadas e sincronizadas. Embeddings permanecem fora da execução automática até existir decisão e plano próprios.
 
 ## Fase 10 — API
 
@@ -144,14 +137,7 @@ documentadas antes de motores de embeddings.
 - tasks;
 - knowledge.
 
-**Estado:** decisão material tomada (`NEXT-ARCHITECTURE-DECISION`: via Fase 10;
-estratégia **contract-first, transporte stdlib** — `docs/architecture/API-01-decision.md`).
-**API-01 (fundação) concluída** — `wsai2.api` autorizado (saiu de
-`SUBSISTEMAS_FUTUROS`), contrato `API_CONTRACT_VERSION = "1.0"`,
-`ApiGateway` injectável + `StdLibHttpGateway` (`http.server`, stdlib) e
-`health` como exemplo (BASE-45; suíte 513/513). Recursos de domínio
-(system/hardware/runtime/capabilities/models/tasks/knowledge) em unidades
-API-02+.
+**Estado:** estratégia contract-first com transporte stdlib definida. **API-01 concluída**: contrato `API_CONTRACT_VERSION = "1.0"`, `ApiRequest`, `ApiResponse`, `ApiGateway`, `StdLibHttpGateway` e health. API-02+ permanecem por executar.
 
 ## Fase 11 — UI
 
@@ -163,28 +149,126 @@ API-02+.
 - runtime;
 - conhecimento.
 
-## Política de execução
+## Modelo pós-Kernel — ramos de desenvolvimento
 
-Cada fase será dividida em unidades pequenas e verificáveis. O comando `/wsai-run` executa autonomamente uma unidade já determinada, passando por pre-flight, planeamento, implementação, validação, documentação e Git.
-
-Os comandos `/wsai-audit`, `/wsai-plan`, `/wsai-implement`, `/wsai-test`, `/wsai-validate`, `/wsai-doc` e `/wsai-git` permitem executar essas etapas individualmente.
-
-Nenhuma nova responsabilidade deve ser criada sem primeiro verificar se já existe um componente responsável. Alterações estruturais devem ser incrementais e reversíveis.
-
-### Regra de transição entre fases
+O Kernel está consolidado e congelado. A partir deste ponto, o roadmap operacional passa a usar ramos controlados. Um ramo só é fechado depois de todas as suas unidades passarem pelo ciclo completo e serem congeladas.
 
 ```text
-ROADMAP — fase macro
+BRANCH A — APPLICATION / USE CASES
+    APP-01  Audit Application Boundary
+    APP-02  Use-Case Contracts
+    APP-03  System / Platform
+    APP-04  Hardware
+    APP-05  Runtime
+    APP-06  Capabilities
+    APP-07  Models
+    APP-08  Tasks
+    APP-09  Knowledge
+    APP-10  Execution / Status / Cancellation
+    APP-11  Application Integration Gate
+
+BRANCH B — API
+    API-02  System
+    API-03  Hardware
+    API-04  Runtime
+    API-05  Capabilities
+    API-06  Models
+    API-07  Tasks
+    API-08  Knowledge
+    API-09  Execution / Status
+    API-10  API Integration Gate
+
+BRANCH C — UI
+    UI-01  Application Shell
+    UI-02  Dashboard
+    UI-03  Hardware
+    UI-04  Models
+    UI-05  Capabilities
+    UI-06  Tasks
+    UI-07  Runtime
+    UI-08  Knowledge
+    UI-09  Execution / Status
+    UI-10  UI Integration Gate
+
+BRANCH D — KNOWLEDGE SEMANTIC
+    KNOW-SEM-01  Architecture Decision
+    KNOW-SEM-02  Model / Provider Design
+    KNOW-SEM-03  Embedding Contract
+    KNOW-SEM-04  Implementation
+    KNOW-SEM-05  Persistence / Index Strategy
+    KNOW-SEM-06  Validation Gate
+
+BRANCH E — ADDON ECOSYSTEM
+    ADDON-01  Discovery
+    ADDON-02  Admission
+    ADDON-03  Lifecycle
+    ADDON-04  Compatibility
+    ADDON-05  Permissions
+    ADDON-06  Resource Requirements
+    ADDON-07  Integration Gate
+
+BRANCH F — PROJECTS ADDON
+    PROJECT-01  Project Contract
+    PROJECT-02  Project State / Isolation
+    PROJECT-03  Project Knowledge Integration
+    PROJECT-04  Skills / Commands Integration
+    PROJECT-05  Project Integration Gate
+```
+
+Estas unidades são **mapa de trabalho**, não autorização para implementar tudo antecipadamente. Antes de cada unidade, o `/wsai-run` deve auditar o código real e reutilizar o que já existir.
+
+## Dependências entre ramos
+
+```text
+APPLICATION ─────► API ─────► UI
+     │
+     ├────────────► PROJECTS
+     │
+     └────────────► ADDON ECOSYSTEM
+
+KNOWLEDGE SEMANTIC ──► ADDONS/consumidores quando aplicável
+```
+
+A seta representa uma dependência impeditiva potencial, não uma ordem artificial. O `/wsai-run` deve confirmar a dependência real através dos contratos, gates e código antes de iniciar o ramo seguinte. Ramos sem dependência impeditiva podem avançar quando estiverem `READY`.
+
+## Política de execução por ramo
+
+Cada unidade segue:
+
+```text
+AUDIT → PLAN → ARQ → IMPLEMENT → TEST → VALIDATE → DOC → GIT → FREEZE
+```
+
+Depois da última unidade sem erros:
+
+```text
+BRANCH COMPLETE → BRANCH FROZEN → DEPENDENCY GATE → NEXT READY BRANCH
+```
+
+Se houver bloqueio:
+
+```text
+BLOCKED → SAVE STATE → STOP → REPORT NEXT ACTION
+```
+
+Uma nova chamada ao `/wsai-run` retoma do primeiro trabalho incompleto. Um ramo congelado não é reaberto automaticamente.
+
+## Regra de transição entre fases
+
+```text
+ROADMAP — ramo/fase macro
       ↓
 PROJECT_STATE — unidade concreta / estado real
       ↓
 Código + testes + documentação
       ↓
-/wsai-validate foundation
+Gate de validação aplicável
       ↓
-FOUNDATION APPROVED
+BRANCH COMPLETE / FROZEN
       ↓
-próxima fase
+Dependency Gate
+      ↓
+próximo ramo READY
 ```
 
-O Roadmap define as fases macro. O `PROJECT_STATE.md` define a unidade concreta e a ordem operacional dentro de uma fase. Esta separação evita que uma alteração incremental e previamente decidida dentro da Fase 8 seja confundida com avanço prematuro para a Fase 9.
+O roadmap define o mapa macro. O `PROJECT_STATE.md` e `RUN_GOVERNANCE.md` definem o estado operacional. A implementação real e os testes continuam a ser a fonte primária de evidência.
