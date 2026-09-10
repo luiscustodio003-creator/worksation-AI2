@@ -93,7 +93,9 @@ monta o `SystemInfoResponse` com fontes injectáveis (`get_platform()` e
 momentâneo via `discover_runtime` (preservando a separação secção 4);
 em APP-06, `CapabilitiesService` constrói o relatório de compatibilidade
 via `build_compatibility` e filtra por domínio (associado em
-`CapabilityDefinition.domain`, com agrupamento `by_domain` no domínio).
+`CapabilityDefinition.domain`, com agrupamento `by_domain` no domínio);
+em APP-07, `ModelsService` avalia os modelos via `evaluate_models` e
+filtra por categoria (`category_for`).
 Este é o padrão dos serviços de use-case dos ramos posteriores.
 
 ### 3.11 UI

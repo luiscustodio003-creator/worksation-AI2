@@ -1,5 +1,48 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-10 — APP-07 — Models (Ramo A, unidade 7)
+
+### Objectivo
+
+Resolver o use-case de avaliação de modelos: montar o `ModelsResponse` via
+`evaluate_models` e honrar o filtro opcional por categoria — sem lógica de
+avaliação ou selecção na Application.
+
+### Alterações
+
+- `src/wsai2/application/models_uc.py` (novo): `ModelsService` com
+  `model_registry_source`/`capability_registry_source`/`hardware_source`/
+  `runtime_source` injectáveis; `resolve` restringe veredictos por
+  categoria via `category_for` (função do domínio).
+- `src/wsai2/application/__init__.py` — `ModelsService` na superfície
+  (27 símbolos); versão `"1.0"`.
+- `tests/architecture_contracts.py` — `SUPERFICIES_PUBLICAS["application"]`
+  + `ModelsService`.
+- `tests/test_application_models.py` (novo, 5 testes).
+- Docs: `docs/application/BASE-51-models-use-case.md`; `ARCHITECTURE.md`
+  (3.10); `ROADMAP.md`; `PROJECT_STATE.md`; `RUN_STATE.md` (APP-07
+  congelada, APP-08 próxima).
+
+**Nota:** `docs/report/` foi eliminado na working tree por unidade
+paralela — este commit não toca nesses ficheiros.
+
+### Fronteiras
+
+Nenhuma aresta nova — `application → capability, hardware, model, runtime`
+já autorizadas.
+
+### Validação
+
+```text
+py -m pytest
+tests=553  failures=0  errors=0  skipped=0   (548 + 5 novos APP-07)
+```
+
+### Próximo passo
+
+APP-08 — Tasks: resolver o use-case de análise de tarefa
+(`TaskAnalysisRequest`/`TaskAnalysisResponse`).
+
 ## 2026-09-10 — APP-06 — Capabilities (Ramo A, unidade 6)
 
 ### Objectivo

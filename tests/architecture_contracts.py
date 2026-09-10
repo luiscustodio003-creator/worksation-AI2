@@ -136,6 +136,7 @@ SUPERFICIES_PUBLICAS: dict[str, frozenset[str]] = {
             "KnowledgeContextResponse",
             "ModelsRequest",
             "ModelsResponse",
+            "ModelsService",
             "RuntimeProfileRequest",
             "RuntimeProfileResponse",
             "RuntimeProfileService",

@@ -91,6 +91,7 @@ def test_superficie_application_contem_20_contratos() -> None:
     esperados = {c.__name__ for c in CONTRATOS} | {
         "CapabilitiesService",
         "HardwareProfileService",
+        "ModelsService",
         "RuntimeProfileService",
         "SystemInfoService",
     }

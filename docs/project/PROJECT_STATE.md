@@ -12,19 +12,19 @@
 
 **KNOWLEDGE 9.1–9.7 CONCLUÍDA (âmbito lexical)** — enriquecimento semântico permanece como decisão material terminal e não deve ser iniciado sem planeamento próprio.
 
-**APP-06 CONCLUÍDA (Ramo A)** — use-case Capabilities resolvido: `CapabilitiesService` em `wsai2.application.capabilities_uc` constrói o `CapabilitiesResponse` via `build_compatibility` e honra o filtro `CapabilitiesRequest.domain`. Por decisão do utilizador, `wsai2.capability` passou a associar `domain` às definições (`CapabilityDefinition.domain`) e ganhou `CompatibilityReport.by_domain` — a lógica de agrupamento vive no domínio. Superfície de `wsai2.application` com 26 símbolos. Suíte **548/548 verdes** (541 + 3 domínio + 5 APP-06).
+**APP-07 CONCLUÍDA (Ramo A)** — use-case Models resolvido: `ModelsService` em `wsai2.application.models_uc` constrói o `ModelsResponse` via `evaluate_models` e honra o filtro `ModelsRequest.category` via `category_for` (REUSE total de `wsai2.model`, nenhuma alteração ao domínio). Superfície de `wsai2.application` com 27 símbolos. Suíte **553/553 verdes** (548 + 5 APP-07).
 
 ## Próximo ramo autorizado
 
 **BRANCH A — APPLICATION / USE-CASE BOUNDARY**
 
-Estado: **IN_PROGRESS** (APP-01..APP-06 congeladas)
+Estado: **IN_PROGRESS** (APP-01..APP-07 congeladas)
 
 Próxima unidade:
 
-`APP-07 — Models`
+`APP-08 — Tasks`
 
-Esta unidade deve resolver o use-case de avaliação/modelos (satisfazendo `ModelsRequest`/`ModelsResponse`), reutilizando `wsai2.model` e o filtro opcional por categoria.
+Esta unidade deve resolver o use-case de análise de tarefa (satisfazendo `TaskAnalysisRequest`/`TaskAnalysisResponse`), reutilizando `wsai2.task` (classificação) e `wsai2.model` — a Application monta a análise sem tomar decisões de execução.
 
 ## Governação do /wsai-run
 
@@ -81,7 +81,7 @@ Os ramos são um mapa operacional e não uma autorização para criar todas as u
 - Task Intelligence — implementada.
 - Runtime Engine — implementada e fechada.
 - Knowledge Engine — fechada no âmbito lexical (9.1–9.7).
-- Application / Use Cases (Ramo A) — APP-01..06 concluídas (auditoria + contratos + System + Hardware + Runtime + Capabilities); APP-07+ pendentes.
+- Application / Use Cases (Ramo A) — APP-01..07 concluídas (auditoria + contratos + System + Hardware + Runtime + Capabilities + Models); APP-08+ pendentes.
 - API — API-01 concluída; API-02+ pendentes.
 - UI — ainda não iniciada.
 
@@ -102,6 +102,8 @@ KERNEL-01..KERNEL-10: **CONCLUÍDOS**.
 `docs/validation/KERNEL_CONSOLIDATION_REPORT.md` é a evidência persistente do fecho. O estado `TRANSITION` do Kernel terminou; qualquer futura reabertura deve ser controlada e justificada por BUG, REGRESSION, SECURITY, CONTRACT VIOLATION, REQUIREMENT CHANGE ou outra falha real que torne o estado incorrecto.
 
 ## Última unidade funcional
+
+`APP-07 — Models` (Ramo A) — `ModelsService` resolve o use-case de modelos (`ModelsRequest`/`ModelsResponse`) via `evaluate_models`, com filtro por categoria (`category_for`); suíte real confirmada: **553/553 verdes**.
 
 `APP-06 — Capabilities` (Ramo A) — `CapabilitiesService` resolve o use-case de capacidades (`CapabilitiesRequest`/`CapabilitiesResponse`) via `build_compatibility`, com filtro por domínio (`CapabilityDefinition.domain` + `CompatibilityReport.by_domain` no módulo de domínio); suíte real confirmada: **548/548 verdes**.
 

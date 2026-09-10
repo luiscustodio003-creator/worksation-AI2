@@ -41,6 +41,7 @@ from .contract import (
     TaskAnalysisResponse,
 )
 from .hardware_uc import HardwareProfileService
+from .models_uc import ModelsService
 from .runtime_uc import RuntimeProfileService
 from .system import SystemInfoService
 
@@ -63,6 +64,7 @@ __all__ = [
     "KnowledgeContextResponse",
     "ModelsRequest",
     "ModelsResponse",
+    "ModelsService",
     "RuntimeProfileRequest",
     "RuntimeProfileResponse",
     "RuntimeProfileService",
