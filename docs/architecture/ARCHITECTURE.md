@@ -86,7 +86,10 @@ públicas do núcleo e dos domínios, com
 `APPLICATION_CONTRACT_VERSION = "1.0"`. A Application consome os domínios
 ao nível do pacote (`application → capability, core, hardware, knowledge,
 model, platform, runtime, runtime_engine, task`) e não conhece a API nem
-a UI.
+a UI. Em APP-03 foi resolvido o primeiro use-case: `SystemInfoService`
+monta o `SystemInfoResponse` com fontes injectáveis (`get_platform()` e
+`discover_runtime().uptime` por omissão) — o padrão dos serviços de
+use-case dos ramos posteriores.
 
 ### 3.11 UI
 

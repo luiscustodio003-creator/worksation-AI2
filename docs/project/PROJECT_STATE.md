@@ -12,19 +12,19 @@
 
 **KNOWLEDGE 9.1–9.7 CONCLUÍDA (âmbito lexical)** — enriquecimento semântico permanece como decisão material terminal e não deve ser iniciado sem planeamento próprio.
 
-**APP-02 CONCLUÍDA (Ramo A)** — contratos de use-case definidos e sancionados: subsistema `wsai2.application` com 20 mensagens puras de pedido/resposta por área (system/platform, hardware, runtime, capabilities, models, tasks, knowledge, execution/status/cancelamento), `APPLICATION_CONTRACT_VERSION = "1.0"`, fronteiras `application → {capability, core, hardware, knowledge, model, platform, runtime, runtime_engine, task}` autorizadas na fonte única. A Application reutiliza as superfícies públicas de domínio (REUSE) e não contém lógica central de negócio. Suíte **528/528 verdes** (513 + 15 novos).
+**APP-03 CONCLUÍDA (Ramo A)** — use-case System/Platform resolvido: `SystemInfoService` em `wsai2.application.system` monta o `SystemInfoResponse` a partir de `get_platform().detect()` e `discover_runtime().uptime`, com fontes injectáveis (determinismo e isolamento de SO). Superfície de `wsai2.application` agora com 21 símbolos (`APPLICATION_CONTRACT_VERSION = "1.0"`). Suíte **533/533 verdes** (528 + 5 novos).
 
 ## Próximo ramo autorizado
 
 **BRANCH A — APPLICATION / USE-CASE BOUNDARY**
 
-Estado: **IN_PROGRESS** (APP-01, APP-02 congeladas)
+Estado: **IN_PROGRESS** (APP-01..APP-03 congeladas)
 
 Próxima unidade:
 
-`APP-03 — System / Platform`
+`APP-04 — Hardware`
 
-Esta unidade deve implementar o adaptador do use-case de informação do sistema (satisfazendo `SystemInfoRequest`/`SystemInfoResponse`), reutilizando `wsai2.platform` e `wsai2.runtime` e integrando os serviços de domínio já existentes.
+Esta unidade deve resolver o use-case de perfil de hardware (satisfazendo `HardwareProfileRequest`/`HardwareProfileResponse`), reutilizando `wsai2.hardware` (`discover_hardware`) e integrando as capacidades estruturais já existentes.
 
 ## Governação do /wsai-run
 
@@ -81,7 +81,7 @@ Os ramos são um mapa operacional e não uma autorização para criar todas as u
 - Task Intelligence — implementada.
 - Runtime Engine — implementada e fechada.
 - Knowledge Engine — fechada no âmbito lexical (9.1–9.7).
-- Application / Use Cases (Ramo A) — APP-01/02 concluídas (auditoria + contratos); APP-03+ pendentes.
+- Application / Use Cases (Ramo A) — APP-01..03 concluídas (auditoria + contratos + System/Platform); APP-04+ pendentes.
 - API — API-01 concluída; API-02+ pendentes.
 - UI — ainda não iniciada.
 
@@ -102,6 +102,8 @@ KERNEL-01..KERNEL-10: **CONCLUÍDOS**.
 `docs/validation/KERNEL_CONSOLIDATION_REPORT.md` é a evidência persistente do fecho. O estado `TRANSITION` do Kernel terminou; qualquer futura reabertura deve ser controlada e justificada por BUG, REGRESSION, SECURITY, CONTRACT VIOLATION, REQUIREMENT CHANGE ou outra falha real que torne o estado incorrecto.
 
 ## Última unidade funcional
+
+`APP-03 — System / Platform` (Ramo A) — `SystemInfoService` resolve o use-case de informação do sistema (`SystemInfoRequest`/`SystemInfoResponse`) a partir das superfícies de `platform` e `runtime`, com fontes injectáveis; suíte real confirmada: **533/533 verdes**.
 
 `APP-02 — Use-Case Contracts` (Ramo A) — contratos de use-case da camada Application (`wsai2.application`, 20 mensagens), fronteira sancionada e `PlatformInfo` exposto na superfície `wsai2.platform`; suíte real confirmada: **528/528 verdes**.
 

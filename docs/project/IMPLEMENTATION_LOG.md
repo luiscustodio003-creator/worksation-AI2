@@ -1,5 +1,49 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-10 — APP-03 — System / Platform (Ramo A, unidade 3)
+
+### Objectivo
+
+Resolver o primeiro use-case do Ramo A a partir dos contratos APP-02:
+montar o `SystemInfoResponse` reutilizando `wsai2.platform` e
+`wsai2.runtime` — plataforma e uptime como payloads de domínio tipados,
+sem lógica central de decisão.
+
+### Alterações
+
+- `src/wsai2/application/system.py` (novo): `SystemInfoService` com fontes
+  injectáveis `provider`/`uptime_source` (`get_platform()` e
+  `discover_runtime().uptime` por omissão) e `resolve(request)`.
+- `src/wsai2/application/__init__.py` — `SystemInfoService` na superfície
+  (21 símbolos); versão permanece `"1.0"`.
+- `tests/architecture_contracts.py` — `SUPERFICIES_PUBLICAS["application"]`
+  + `SystemInfoService`.
+- `tests/test_application_system.py` (novo, 5 testes): plataforma do
+  sistema real, provider fixo, uptime injectado e por omissão, igualdade e
+  imutabilidade do contrato.
+- `tests/test_application_contracts.py` — superfície esperada: 20 contratos
+  + `SystemInfoService`.
+- Docs: `docs/application/BASE-47-system-platform-use-case.md`;
+  `ARCHITECTURE.md` (3.10); `ROADMAP.md`; `PROJECT_STATE.md`;
+  `RUN_STATE.md` (APP-03 congelada, APP-04 próxima).
+
+### Fronteiras
+
+Nenhuma aresta nova — `application → platform` e `application → runtime`
+já autorizadas (firewall APP-02); imports ao nível do pacote.
+
+### Validação
+
+```text
+py -m pytest
+tests=533  failures=0  errors=0  skipped=0   (528 + 5 novos APP-03)
+```
+
+### Próximo passo
+
+APP-04 — Hardware: resolver o use-case de perfil de hardware
+(`HardwareProfileRequest`/`HardwareProfileResponse`) via `discover_hardware`.
+
 ## 2026-09-10 — RELATÓRIO DE FASES — Portefólio documental para explicação (docs/report)
 
 ### Objectivo
@@ -32,6 +76,8 @@ dos ramos reflectem o estado persistido em `PROJECT_STATE.md` / `RUN_STATE.md`.
 ### Próximo passo
 
 APP-03 — System / Platform: adaptador do use-case de informação do sistema.
+
+## 2026-09-10 — APP-02 — Use-Case Contracts (Ramo A, unidade 2)
 
 ### Objectivo
 

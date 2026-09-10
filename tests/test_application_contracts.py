@@ -83,12 +83,13 @@ NOMES_CONTRATOS = frozenset(wsai2.application.__all__)
 
 
 def test_superficie_application_contem_20_contratos() -> None:
-    """APP-02: a superfície de `wsai2.application` expõe 20 contratos + versão.
+    """APP-02/03: a superfície expõe os 20 contratos + o serviço System.
 
     A constante de versão não faz parte do ``__all__`` (padrão dos
     subsistemas congelados), e não existem símbolos fora da superfície.
     """
-    assert set(NOMES_CONTRATOS) == {c.__name__ for c in CONTRATOS}
+    esperados = {c.__name__ for c in CONTRATOS} | {"SystemInfoService"}
+    assert set(NOMES_CONTRATOS) == esperados
     assert wsai2.application.APPLICATION_CONTRACT_VERSION == "1.0"
     assert "APPLICATION_CONTRACT_VERSION" not in NOMES_CONTRATOS
     for nome in NOMES_CONTRATOS:

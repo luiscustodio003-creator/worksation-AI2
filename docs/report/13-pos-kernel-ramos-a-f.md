@@ -2,7 +2,7 @@
 
 ## A CONSOLIDAÇÃO DO NÚCLEO E OS RAMOS DE DESENVOLVIMENTO A–F
 
-**Estado actual:** Kernel CONSOLIDADO e FROZEN; **Ramo A — Application/Use-Cases** em curso (APP-01 congelada; APP-02 em implementação).
+**Estado actual:** Kernel CONSOLIDADO e FROZEN; **Ramo A — Application/Use-Cases** em curso (APP-01..APP-03 congeladas; APP-04 em implementação).
 **Referência:** `docs/validation/KERNEL_CONSOLIDATION_REPORT.md`, `docs/project/RUN_GOVERNANCE.md`
 
 ---
@@ -59,8 +59,8 @@ Quando a última unidade do ramo termina: `BRANCH COMPLETE → BRANCH FROZEN →
 
 ```text
 APP-01  Audit Application Boundary       ✓ CONCLUÍDA (auditoria read-only)
-APP-02  Use-Case Contracts               EM IMPLEMENTAÇÃO
-APP-03  System / Platform
+APP-02  Use-Case Contracts               ✓ CONCLUÍDA (congelada)
+APP-03  System / Platform                ✓ CONCLUÍDA (SystemInfoService)
 APP-04  Hardware
 APP-05  Runtime
 APP-06  Capabilities
@@ -71,7 +71,7 @@ APP-10  Execution / Status / Cancellation
 APP-11  Application Integration Gate
 ```
 
-A camada Application define a **fronteira estável dos use-cases** — mensagens puras de pedido/resposta por área, reutilizando os tipos públicos de domínio. **Não contém** lógica central de negócio. No estado actual, APP-02 já criou o contrato `wsai2.application.contract` com pedidos/respostas para as 8 áreas (System, Hardware, Runtime, Capabilities, Models, Tasks, Knowledge, Execution/Status/Cancellation) — ainda por congelar.
+A camada Application define a **fronteira estável dos use-cases** — mensagens puras de pedido/resposta por área, reutilizando os tipos públicos de domínio. **Não contém** lógica central de negócio. No estado actual: APP-02 congelada com o contrato `wsai2.application.contract` (20 mensagens para as 8 áreas: System, Hardware, Runtime, Capabilities, Models, Tasks, Knowledge, Execution/Status/Cancellation) e APP-03 congelada com o adaptador do use-case de informação do sistema (`system.py`, `SystemInfoService`).
 
 ### Ramo B — API
 

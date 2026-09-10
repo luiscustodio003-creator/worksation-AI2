@@ -138,6 +138,7 @@ SUPERFICIES_PUBLICAS: dict[str, frozenset[str]] = {
             "RuntimeProfileResponse",
             "SystemInfoRequest",
             "SystemInfoResponse",
+            "SystemInfoService",
             "TaskAnalysisRequest",
             "TaskAnalysisResponse",
         }

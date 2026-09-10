@@ -39,6 +39,7 @@ from .contract import (
     TaskAnalysisRequest,
     TaskAnalysisResponse,
 )
+from .system import SystemInfoService
 
 APPLICATION_CONTRACT_VERSION = "1.0"
 
@@ -61,6 +62,7 @@ __all__ = [
     "RuntimeProfileResponse",
     "SystemInfoRequest",
     "SystemInfoResponse",
+    "SystemInfoService",
     "TaskAnalysisRequest",
     "TaskAnalysisResponse",
 ]
