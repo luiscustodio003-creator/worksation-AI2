@@ -12,6 +12,7 @@ import pathlib
 import re
 
 import wsai2
+import wsai2.api
 import wsai2.execution
 import wsai2.extension
 import wsai2.resource
@@ -23,6 +24,7 @@ from .architecture_contracts import (
     ADDON_CONTRATO_MODULO,
     ADDON_CONTRATO_SUPERFICIE,
     ADDON_CONTRATO_VERSION,
+    CONTRACT_VERSIONES,
     GOVERNO_SUPERFICIE,
     OBSERVABILIDADE_SUPERFICIE,
     SUPERFICIES_PUBLICAS,
@@ -33,6 +35,7 @@ RAIZ_SRC = pathlib.Path(wsai2.__file__).parent
 _SUBSISTEMAS_FRONTEIRA = tuple(SUPERFICIES_PUBLICAS)
 
 _MODULOS_FRONTEIRA: dict[str, object] = {
+    "api": wsai2.api,
     "execution": wsai2.execution,
     "resource": wsai2.resource,
     "security": wsai2.security,
@@ -40,6 +43,7 @@ _MODULOS_FRONTEIRA: dict[str, object] = {
 }
 
 _VERSIONES: dict[str, str] = {
+    "api": getattr(wsai2.api, "API_CONTRACT_VERSION"),
     "execution": getattr(wsai2.execution, "EXECUTION_CONTRACT_VERSION"),
     "resource": getattr(wsai2.resource, "RESOURCE_CONTRACT_VERSION"),
     "security": getattr(wsai2.security, "SECURITY_CONTRACT_VERSION"),
@@ -77,6 +81,22 @@ def test_superficies_publicas_congeladas():
         assert getattr(modulo, nome_constante) not in superficie, (
             f"{subsistema}: a versão não deve fazer parte da superfície"
         )
+
+
+def test_api_superficie_versionada():
+    """API-01: a superfície da camada Application é versionada na fonte única.
+
+    A versão segue major.minor e coincide com a sancionada em
+    ``CONTRACT_VERSIONES``; a constante não faz parte do ``__all__``.
+    """
+    modulo = wsai2.api
+    assert set(getattr(modulo, "__all__", [])) == SUPERFICIES_PUBLICAS["api"]
+    versao = getattr(modulo, "API_CONTRACT_VERSION")
+    assert re.fullmatch(r"\d+\.\d+", versao)
+    assert versao == CONTRACT_VERSIONES["api"], (
+        f"api: versão {versao!r} != esperada {CONTRACT_VERSIONES['api']!r}"
+    )
+    assert "API_CONTRACT_VERSION" not in SUPERFICIES_PUBLICAS["api"]
 
 
 def test_subcontrato_de_observabilidade():

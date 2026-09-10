@@ -14,7 +14,7 @@
 
 ## Última unidade implementada
 
-KERNEL-10 — **Contrato de addon** (`docs/architecture/KERNEL-10-addon-contract-freeze.md`). Superfície de `wsai2.extension` congelada por teste (10 símbolos) + `EXTENSION_CONTRACT_VERSION = "1.0"` (fora do `__all__`) + guarda de consumidores ao nível do pacote. `extension` continua fora de `KERNEL_SUBSISTEMAS` (camada addon). Sem novo subsistema SDK e sem código de Projects (decisão do plano; Projects = addon futuro do alvo, sec. 9). Suíte **506/506 verdes**.
+API-01 — **Fundação do subsistema API (Fase 10)** (`docs/architecture/API-01-decision.md` + `docs/api/BASE-45-api-contract-foundation.md`). Decisão material `NEXT-ARCHITECTURE-DECISION` resolvida (via Fase 10; contract-first, transporte stdlib). Criado `wsai2.api`: `ApiRequest`/`ApiResponse` puros, porte `ApiGateway` injectável, adapter `StdLibHttpGateway` (`http.server` — zero dependências novas) e endpoint de exemplo `health` (versões de contrato API/core). Autorização na fonte única: `SUBSISTEMAS_FUTUROS = ("ui",)`; `FIREWALL["api"]={"core"}`; aresta `("api","core")`; `SUPERFICIES_PUBLICAS["api"]` + `API_CONTRACT_VERSION = "1.0"`. Suíte **513/513 verdes**.
 
 ## Estado dos residuais Via B
 
@@ -49,6 +49,7 @@ KERNEL-10 — **Contrato de addon** (`docs/architecture/KERNEL-10-addon-contract
 - Knowledge SQLite Persistence (Fase 9, subsistema 3.9 — armazenamento local decidido)
 - Knowledge Context Builder (Fase 9, subsistema 3.9 — pacote de contexto determinista)
 - Knowledge File Ingestion (Fase 9, subsistema 3.9 — ficheiros de texto do projecto)
+- API — Application (Fase 10, API-01: contrato + porte de transporte + adapter stdlib + health)
 
 ## Filas multicamadas — contrato
 
@@ -116,7 +117,7 @@ Provider Layer         ██████████ 100%
 Task Intelligence      ██████████ 100%
 Runtime Engine         ██████████ 100% (implementação)
 Knowledge Engine       ███████░░░ 70%  (9.1–9.7 lexical completo; embeddings em decisão)
-API                    ░░░░░░░░░░ 0%   (não iniciado)
+API                    ██░░░░░░░░ 10%  (API-01: contrato + porte + adapter stdlib; recursos por unidade)
 UI                     ░░░░░░░░░░ 0%   (não iniciado)
 ```
 
@@ -139,7 +140,8 @@ e `docs/validation/KERNEL_CONSOLIDATION_REPORT.md` vigentes;
 - **KERNEL-09 — CORE FREEZE (implementação pesada fora do núcleo): CONCLUÍDA** (`docs/architecture/KERNEL-09-core-freeze-heavy-descend.md`). Descida completa (opção B do plano KERNEL-08, confirmada): novo subsistema `wsai2.infrastructure` (7 módulos: base_resource, governor, base_runtime, manager, scheduler, queue, monitoring) recolhe a mecânica pesada; `resource`/`runtime_engine` viram shells de re-export (superfícies e versões intactas; `git mv` com histórico). Fronteiras recompostas (26 arestas: `resource→infrastructure`, `runtime_engine→infrastructure`, `infrastructure→{core,execution,extension,hardware,runtime,security,task}`); `execution`/`security` ficam no núcleo (ciclo `execution⇄infra` bloqueia o runner). Guarda nova `test_implementacao_pesada_fora_do_nucleo` + BASE-44 + excepção de shell nos placeholders. Suíte **504/504 verdes**.
 - **KERNEL-10 — CONTRATO DE ADDON: CONCLUÍDA** (`docs/architecture/KERNEL-10-addon-contract-freeze.md`). Superfície de `wsai2.extension` congelada por teste (10 símbolos) + `EXTENSION_CONTRACT_VERSION = "1.0"` (fora do `__all__`) + `test_consumidores_extension_apenas_nivel_pacote`. `extension` permanece fora de `KERNEL_SUBSISTEMAS` (camada addon, tabelas `ADDON_CONTRATO_*` na fonte única). Decisão de âmbito do plano: sem novo subsistema SDK (duplicação) e sem código de Projects (addon futuro do alvo, sec. 9 — só documental). Sem arestas novas. Suíte **506/506 verdes**; sequência KERNEL-01..KERNEL-10 **concluída**.
 - **KERNEL-CONSOLIDATION-CLOSE: CONCLUÍDA** (`docs/validation/KERNEL_CONSOLIDATION_REPORT.md`). Fecho formal da transição: sequência KERNEL-01..10 consolidada em `main` por *fast-forward* (sem conflitos), com gate **506/506** e documentação persistente do marco. Nenhum código funcional alterado (unidade de processo/estado). O kernel deixa o estado TRANSITION e passa a CONSOLIDADO.
-- **Próxima decisão (material, a planeamento próprio):** Fase 10 — API (framework HTTP) ou addon Projects (primeiro consumidor real do contrato de addon); Fase 9 embeddings continua registada como decisão material terminal.
+- **API-01 — FUNDAÇÃO DA API (Fase 10): CONCLUÍDA** (`docs/architecture/API-01-decision.md`, `docs/api/BASE-45-api-contract-foundation.md`). Decisão material `NEXT-ARCHITECTURE-DECISION` resolvida: via **Fase 10 — API**, estratégia **contract-first + transporte stdlib**. `wsai2.api` autorizado (saiu de `SUBSISTEMAS_FUTUROS`; fica `("ui",)`), fronteira `api→core` (via `core.public`), `API_CONTRACT_VERSION = "1.0"`, `ApiGateway` injectável + `StdLibHttpGateway` e `health` de exemplo. Suíte **513/513 verdes**.
+- **Próxima unidade:** API-02 — recursos de domínio (health funcional/system/hardware) com arestas específicas justificadas. Decisões materiais em aberto (não bloqueiam): addon Projects (1º consumidor do contrato de addon), embeddings da Fase 9, UI (Fase 11).
 - **Política de reconstrução do Core (regra de superfície vs. implementação):** registada em `CORE_KERNEL_TARGET.md` (sec. 2, 6, 10, 11, 12) e `COMMAND_EXECUTION_CONTRACT.md` (regras de migração): a reconstrução nunca remove superfícies públicas já versionadas; a implementação pesada (mecânica de execução) foi extraída do núcleo para `wsai2.infrastructure`, por trás dos contratos públicos, no KERNEL-09.
 
 ## Estado Git

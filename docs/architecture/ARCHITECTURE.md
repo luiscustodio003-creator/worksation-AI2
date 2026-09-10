@@ -64,6 +64,18 @@ Trata a gestão de conhecimento: ingestão de ficheiros, extracção, metadados,
 
 Expõe capacidades reais do sistema através de contratos estáveis.
 
+Na unidade API-01 (Fase 10), após a decisão NEXT-ARCHITECTURE-DECISION
+(contract-first, transporte stdlib), foi criada a fundação do subsistema
+`wsai2.api`: contrato puro de mensagens (`ApiRequest`/`ApiResponse`),
+porte de transporte injectável (`ApiGateway`) e adapter stdlib
+(`StdLibHttpGateway`, sobre `http.server`, sem dependências externas),
+com o serviço de exemplo `health` (versões de contrato do núcleo/API) e
+`API_CONTRACT_VERSION = "1.0"`. A fronteira é `api → core` (apenas via
+`wsai2.core.public`, regra KERNEL-08); os recursos de domínio
+(system/hardware/runtime/capabilities/models/tasks/knowledge) entram por
+unidades API-02+ com arestas específicas justificadas. A Application não
+contém lógica central de decisão — expõe as superfícies públicas do núcleo.
+
 ### 3.11 UI
 
 Apresenta informação e operações disponibilizadas pela aplicação. Não contém a lógica central de decisão.

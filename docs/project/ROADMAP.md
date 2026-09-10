@@ -144,6 +144,15 @@ documentadas antes de motores de embeddings.
 - tasks;
 - knowledge.
 
+**Estado:** decisão material tomada (`NEXT-ARCHITECTURE-DECISION`: via Fase 10;
+estratégia **contract-first, transporte stdlib** — `docs/architecture/API-01-decision.md`).
+**API-01 (fundação) concluída** — `wsai2.api` autorizado (saiu de
+`SUBSISTEMAS_FUTUROS`), contrato `API_CONTRACT_VERSION = "1.0"`,
+`ApiGateway` injectável + `StdLibHttpGateway` (`http.server`, stdlib) e
+`health` como exemplo (BASE-45; suíte 513/513). Recursos de domínio
+(system/hardware/runtime/capabilities/models/tasks/knowledge) em unidades
+API-02+.
+
 ## Fase 11 — UI
 
 - dashboard;

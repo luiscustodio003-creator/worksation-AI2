@@ -1,5 +1,49 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-10 — API-01 — Fundação do subsistema API (Fase 10)
+
+### Objectivo
+
+Resolver a decisão material `NEXT-ARCHITECTURE-DECISION` (via Fase 10 — API,
+estratégia contract-first com transporte stdlib) e criar a fundação da
+camada Application `wsai2.api` com zero dependências novas.
+
+### Alterações
+
+- Novo subsistema `src/wsai2/api/`: `contract.py` (`ApiRequest`/`ApiResponse`
+  imutáveis), `base.py` (`ApiGateway` porte injectável + `health`),
+  `transport_stdlib.py` (`StdLibHttpGateway` sobre `http.server`; JSON;
+  404/405 antes de qualquer handler), `__init__.py`
+  (`API_CONTRACT_VERSION = "1.0"`, `__all__` com 5 símbolos).
+- Fonte única `tests/architecture_contracts.py`: `api` sai de
+  `SUBSISTEMAS_FUTUROS` (fica `("ui",)`); `FIREWALL["api"]={"core"}`;
+  aresta `("api","core")`; `SUPERFICIES_PUBLICAS["api"]`;
+  `MODULO_CONTRATO`/`CONTRATO_CONSTANTES`/`CONTRACT_VERSIONES["api"]`.
+- `tests/test_boundary_kernel.py`: `api` nos mapas de fronteira +
+  `test_api_superficie_versionada`.
+- `tests/test_api_gateway.py` (6 testes): contrato imutável; health 200;
+  404; 405; handle directo; health puro.
+- Docs: `docs/architecture/API-01-decision.md`;
+  `docs/api/BASE-45-api-contract-foundation.md`; `ARCHITECTURE.md` 3.10;
+  `ROADMAP.md` (Fase 10); `PROJECT_STATE.md`.
+
+### Fronteiras
+
+`api → core` (apenas `wsai2.core.public`, regra KERNEL-08). Serviço de
+exemplo sem domínio; recursos de domínio ficam para API-02+.
+
+### Validação
+
+```text
+py -3.12 -m pytest
+tests=513  failures=0  errors=0  skipped=0
+```
+
+### Próximo passo
+
+API-02 — recursos de domínio (system/hardware/runtime) com arestas
+específicas justificadas.
+
 ## 2026-09-10 — KERNEL-CONSOLIDATION-CLOSE — Fecho da transição do kernel
 
 ### Objectivo
