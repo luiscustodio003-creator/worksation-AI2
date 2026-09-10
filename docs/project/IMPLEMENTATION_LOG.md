@@ -1,5 +1,46 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-10 — APP-10 — Execution / Status / Cancellation (Ramo A, unidade 10)
+
+### Objectivo
+
+Resolver os use-cases de execução, estado e cancelamento a partir de
+`wsai2.runtime_engine` — a Application compõe a execução observada, sem
+implementar o motor.
+
+### Alterações
+
+- `src/wsai2/application/execution_uc.py` (novo): `ExecutionService`
+  (gestor/monitor/análise injectáveis; reusa o plano de `TaskAnalysisService`),
+  `ExecutionStatusService` (monitor injectável) e `CancellationService`
+  (fonte injectável; por omissão sem efeito — o runtime_engine não expõe
+  cancelamento por id, Kernel congelado).
+- `src/wsai2/application/__init__.py` — três serviços na superfície
+  (30 símbolos); versão `"1.0"`.
+- `tests/architecture_contracts.py` — `SUPERFICIES_PUBLICAS["application"]`
+  + 3 serviços.
+- `tests/test_application_execution.py` (novo, 8 testes).
+- Docs: `docs/application/BASE-54-execution-status-cancellation-use-cases.md`;
+  `ARCHITECTURE.md` (3.10); `ROADMAP.md`; `PROJECT_STATE.md`; `RUN_STATE.md`
+  (APP-10 congelada, APP-11 próxima).
+
+### Fronteiras
+
+Nenhuma aresta nova — `application → runtime_engine, task` já autorizadas.
+
+### Validação
+
+```text
+py -m pytest
+tests=570  failures=0  errors=0  skipped=0   (562 + 8 novos APP-10)
+```
+
+### Próximo passo
+
+APP-11 — Application Integration Gate: validar a coerência do Ramo A
+(contratos ↔ serviços ↔ domínios ↔ fronteiras) antes de declarar o ramo
+`COMPLETE / FROZEN`.
+
 ## 2026-09-10 — APP-09 — Knowledge Context (Ramo A, unidade 9)
 
 ### Objectivo

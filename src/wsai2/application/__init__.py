@@ -40,6 +40,11 @@ from .contract import (
     TaskAnalysisRequest,
     TaskAnalysisResponse,
 )
+from .execution_uc import (
+    CancellationService,
+    ExecutionService,
+    ExecutionStatusService,
+)
 from .hardware_uc import HardwareProfileService
 from .knowledge_uc import KnowledgeContextService
 from .models_uc import ModelsService
@@ -52,13 +57,16 @@ APPLICATION_CONTRACT_VERSION = "1.0"
 __all__ = [
     "CancellationRequest",
     "CancellationResponse",
+    "CancellationService",
     "CapabilitiesRequest",
     "CapabilitiesResponse",
     "CapabilitiesService",
     "ExecutionRequest",
     "ExecutionResponse",
+    "ExecutionService",
     "ExecutionStatusRequest",
     "ExecutionStatusResponse",
+    "ExecutionStatusService",
     "HardwareProfileRequest",
     "HardwareProfileResponse",
     "HardwareProfileService",

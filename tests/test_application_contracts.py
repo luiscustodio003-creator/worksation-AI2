@@ -89,7 +89,10 @@ def test_superficie_application_contem_20_contratos() -> None:
     subsistemas congelados), e não existem símbolos fora da superfície.
     """
     esperados = {c.__name__ for c in CONTRATOS} | {
+        "CancellationService",
         "CapabilitiesService",
+        "ExecutionService",
+        "ExecutionStatusService",
         "HardwareProfileService",
         "KnowledgeContextService",
         "ModelsService",

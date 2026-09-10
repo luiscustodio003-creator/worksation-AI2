@@ -99,7 +99,10 @@ filtra por categoria (`category_for`); em APP-08, `TaskAnalysisService`
 compõe a análise de tarefa (classificação, requisitos, selecção de
 capacidades e plano) sem conhecer fornecedores; em APP-09,
 `KnowledgeContextService` indexa e pesquisa o conhecimento fornecendo o
-contexto da consulta.
+contexto da consulta; em APP-10, `ExecutionService`,
+`ExecutionStatusService` e `CancellationService` compõem a execução
+observada do `runtime_engine` (monitor partilhado; cancelamento delegado
+a fonte injectável).
 Este é o padrão dos serviços de use-case dos ramos posteriores.
 
 ### 3.11 UI

@@ -7,10 +7,10 @@ PROJECT_STATUS: ACTIVE
 KERNEL_STATUS: FROZEN
 ACTIVE_BRANCH: A — APPLICATION / USE CASES
 BRANCH_STATUS: IN_PROGRESS
-ACTIVE_UNIT: APP-10
+ACTIVE_UNIT: APP-11
 UNIT_STATUS: PENDING
 CURRENT_STEP: AUDIT
-NEXT_ACTION: Execution/Status/Cancellation use-cases
+NEXT_ACTION: Application Integration Gate
 BLOCKED_REASON: NONE
 ```
 
@@ -18,7 +18,7 @@ BLOCKED_REASON: NONE
 
 | Ramo | Estado | Dependência | Próximo passo |
 |---|---|---|---|
-| A — Application / Use Cases | IN_PROGRESS | Kernel frozen | APP-10 (APP-01..09 congeladas) |
+| A — Application / Use Cases | IN_PROGRESS | Kernel frozen | APP-11 (APP-01..10 congeladas) |
 | B — API | PENDING | Application | API-02 |
 | C — UI | PENDING | API/Application | UI-01 |
 | D — Knowledge Semantic | BLOCKED | decisão material própria | KNOW-SEM-01 |
@@ -29,8 +29,8 @@ BLOCKED_REASON: NONE
 
 ```text
 BRANCH: A
-UNIT: APP-10
-DESCRIPTION: Execution/Status/Cancellation use-cases
+UNIT: APP-11
+DESCRIPTION: Application Integration Gate
 STEP: AUDIT
 STATUS: PENDING
 ```
@@ -64,6 +64,9 @@ APP-08  Task Analysis                 COMPLETE / FROZEN
 APP-09  Knowledge Context              COMPLETE / FROZEN
         Evidência: docs/application/BASE-53-knowledge-context-use-case.md
                 + docs/project/IMPLEMENTATION_LOG.md (APP-09)
+APP-10  Exec/Status/Cancellation         COMPLETE / FROZEN
+        Evidência: docs/application/BASE-54-execution-status-cancellation-use-cases.md
+                + docs/project/IMPLEMENTATION_LOG.md (APP-10)
 ```
 
 ## Regra de retoma
