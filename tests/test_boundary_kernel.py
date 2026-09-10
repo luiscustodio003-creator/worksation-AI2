@@ -13,6 +13,7 @@ import re
 
 import wsai2
 import wsai2.api
+import wsai2.application
 import wsai2.execution
 import wsai2.extension
 import wsai2.resource
@@ -36,6 +37,7 @@ _SUBSISTEMAS_FRONTEIRA = tuple(SUPERFICIES_PUBLICAS)
 
 _MODULOS_FRONTEIRA: dict[str, object] = {
     "api": wsai2.api,
+    "application": wsai2.application,
     "execution": wsai2.execution,
     "resource": wsai2.resource,
     "security": wsai2.security,
@@ -44,6 +46,7 @@ _MODULOS_FRONTEIRA: dict[str, object] = {
 
 _VERSIONES: dict[str, str] = {
     "api": getattr(wsai2.api, "API_CONTRACT_VERSION"),
+    "application": getattr(wsai2.application, "APPLICATION_CONTRACT_VERSION"),
     "execution": getattr(wsai2.execution, "EXECUTION_CONTRACT_VERSION"),
     "resource": getattr(wsai2.resource, "RESOURCE_CONTRACT_VERSION"),
     "security": getattr(wsai2.security, "SECURITY_CONTRACT_VERSION"),

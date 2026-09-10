@@ -1,5 +1,58 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-10 — APP-02 — Use-Case Contracts (Ramo A, unidade 2)
+
+### Objectivo
+
+Definir e sancionar a fronteira estável de use-cases da camada Application:
+contratos puros de pedido/resposta por área, reutilizando as superfícies
+públicas do núcleo e dos domínios — sem lógica central de negócio, sem I/O
+e sem tocar no kernel congelado. Decisão ARQ material: a API consome estes
+contratos (constituição art. 7; roadmap ramo A→B); a Application não
+conhece a API.
+
+### Alterações
+
+- Novo subsistema `src/wsai2/application/`: `contract.py` (20 mensagens
+  `@dataclass(frozen=True)` para system, hardware, runtime, capabilities,
+  models, tasks, knowledge e execution/status/cancellation; validação
+  mínima de forma em `__post_init__`) e `__init__.py`
+  (`APPLICATION_CONTRACT_VERSION = "1.0"`, `__all__` com 20 símbolos).
+- `src/wsai2/platform/__init__.py` — `PlatformInfo` passa a fazer parte da
+  superfície pública do pacote (necessário para consumo ao nível do pacote).
+- Fonte única `tests/architecture_contracts.py`: arestas `("api",
+  "application")`; `FIREWALL["application"] = {capability, core, hardware,
+  knowledge, model, platform, runtime, runtime_engine, task}`;
+  `SUPERFICIES_PUBLICAS["application"]`; `MODULO_CONTRATO`/
+  `CONTRATO_CONSTANTES`/`CONTRACT_VERSIONES["application"] = "1.0"`.
+- `tests/test_boundary_kernel.py` — `application` no módulo de import, nos
+  mapas de fronteira e versões.
+- `tests/test_application_contracts.py` (novo, 15 testes): superfície e
+  versão, imutabilidade, reutilização dos tipos de domínio e validações.
+- Docs: `docs/application/BASE-46-application-use-case-contracts.md`;
+  `ARCHITECTURE.md` (3.10 + estado); `ROADMAP.md`; `PROJECT_STATE.md`;
+  `RUN_STATE.md` (APP-02 congelada, APP-03 próxima).
+
+### Fronteiras
+
+`application → {capability, core, hardware, knowledge, model, platform,
+runtime, runtime_engine, task}` — todas ao nível do pacote, sem imports
+internos (regra KERNEL de fronteira). Nenhuma aresta nova fora do firewall;
+kernel permanece congelado; `core` continua só via `wsai2.core.public`.
+
+### Validação
+
+```text
+py -m pytest
+tests=528  failures=0  errors=0  skipped=0   (513 + 15 novos APP-02)
+```
+
+### Próximo passo
+
+APP-03 — System / Platform: adaptador do use-case de informação do sistema
+(satisfaz `SystemInfoRequest`/`SystemInfoResponse`), reutilizando
+`wsai2.platform` e `wsai2.runtime`.
+
 ## 2026-09-10 — APP-01 — Audit Application Boundary (Ramo A, unidade 1)
 
 ### Objectivo

@@ -7,10 +7,10 @@ PROJECT_STATUS: ACTIVE
 KERNEL_STATUS: FROZEN
 ACTIVE_BRANCH: A — APPLICATION / USE CASES
 BRANCH_STATUS: IN_PROGRESS
-ACTIVE_UNIT: APP-02
+ACTIVE_UNIT: APP-03
 UNIT_STATUS: PENDING
 CURRENT_STEP: AUDIT
-NEXT_ACTION: Use-Case Contracts
+NEXT_ACTION: System / Platform adapter
 BLOCKED_REASON: NONE
 ```
 
@@ -18,7 +18,7 @@ BLOCKED_REASON: NONE
 
 | Ramo | Estado | Dependência | Próximo passo |
 |---|---|---|---|
-| A — Application / Use Cases | IN_PROGRESS | Kernel frozen | APP-02 (APP-01 audit congelada) |
+| A — Application / Use Cases | IN_PROGRESS | Kernel frozen | APP-03 (APP-01/02 congeladas) |
 | B — API | PENDING | Application | API-02 |
 | C — UI | PENDING | API/Application | UI-01 |
 | D — Knowledge Semantic | BLOCKED | decisão material própria | KNOW-SEM-01 |
@@ -29,8 +29,8 @@ BLOCKED_REASON: NONE
 
 ```text
 BRANCH: A
-UNIT: APP-02
-DESCRIPTION: Use-Case Contracts
+UNIT: APP-03
+DESCRIPTION: System / Platform use-case
 STEP: AUDIT
 STATUS: PENDING
 ```
@@ -40,6 +40,9 @@ STATUS: PENDING
 ```text
 APP-01  Audit Application Boundary    COMPLETE / FROZEN
         Evidência: docs/application/APP-01-application-boundary-audit.md
+APP-02  Use-Case Contracts            COMPLETE / FROZEN
+        Evidência: docs/application/BASE-46-application-use-case-contracts.md
+                + docs/project/IMPLEMENTATION_LOG.md (APP-02)
 ```
 
 ## Regra de retoma

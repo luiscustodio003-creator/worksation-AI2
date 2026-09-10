@@ -8,11 +8,12 @@ Daqui exporta-se a interface pública `get_platform()` destinada ao resto
 da aplicação.
 """
 
-from .base import OperatingSystem, PlatformName, PlatformProvider
+from .base import OperatingSystem, PlatformInfo, PlatformName, PlatformProvider
 from .factory import get_platform
 
 __all__ = [
     "OperatingSystem",
+    "PlatformInfo",
     "PlatformName",
     "PlatformProvider",
     "get_platform",

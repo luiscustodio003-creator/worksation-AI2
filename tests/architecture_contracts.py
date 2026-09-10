@@ -12,7 +12,17 @@ gate de forma automática.
 # pacotes resource/runtime_engine tornaram-se shells de re-export.
 FRONTEIRAS: frozenset[tuple[str, str]] = frozenset(
     {
+        ("api", "application"),
         ("api", "core"),
+        ("application", "capability"),
+        ("application", "core"),
+        ("application", "hardware"),
+        ("application", "knowledge"),
+        ("application", "model"),
+        ("application", "platform"),
+        ("application", "runtime"),
+        ("application", "runtime_engine"),
+        ("application", "task"),
         ("capability", "hardware"),
         ("capability", "runtime"),
         ("core", "extension"),
@@ -53,7 +63,8 @@ ADAPTADORES_SO = ("wsai2.platform.windows", "wsai2.platform.linux")
 # Dependências exactas permitidas POR SUBSISTEMA (Dependency Firewall,
 # KERNEL-04), com imports TYPE_CHECKING incluídos.
 FIREWALL: dict[str, frozenset[str]] = {
-    "api": frozenset({"core"}),
+    "api": frozenset({"application", "core"}),
+    "application": frozenset({"capability", "core", "hardware", "knowledge", "model", "platform", "runtime", "runtime_engine", "task"}),
     "capability": frozenset({"hardware", "runtime"}),
     "core": frozenset({"extension"}),
     "execution": frozenset({"core", "resource"}),
@@ -95,8 +106,8 @@ CORE_PUBLIC_SUPERFICIE: frozenset[str] = frozenset(
     }
 )
 
-# Superfícies públicas dos subsistemas do kernel não-folha (KERNEL-05/06)
-# e da camada Application (API-01).
+# Superfícies públicas dos subsistemas do kernel não-folha (KERNEL-05/06),
+# da camada Application (APP-02) e da API (API-01).
 SUPERFICIES_PUBLICAS: dict[str, frozenset[str]] = {
     "api": frozenset(
         {
@@ -105,6 +116,30 @@ SUPERFICIES_PUBLICAS: dict[str, frozenset[str]] = {
             "ApiResponse",
             "StdLibHttpGateway",
             "health",
+        }
+    ),
+    "application": frozenset(
+        {
+            "CancellationRequest",
+            "CancellationResponse",
+            "CapabilitiesRequest",
+            "CapabilitiesResponse",
+            "ExecutionRequest",
+            "ExecutionResponse",
+            "ExecutionStatusRequest",
+            "ExecutionStatusResponse",
+            "HardwareProfileRequest",
+            "HardwareProfileResponse",
+            "KnowledgeContextRequest",
+            "KnowledgeContextResponse",
+            "ModelsRequest",
+            "ModelsResponse",
+            "RuntimeProfileRequest",
+            "RuntimeProfileResponse",
+            "SystemInfoRequest",
+            "SystemInfoResponse",
+            "TaskAnalysisRequest",
+            "TaskAnalysisResponse",
         }
     ),
     "execution": frozenset(
@@ -193,6 +228,7 @@ GOVERNO_SUPERFICIE: frozenset[str] = frozenset(
 # e da camada Application.
 MODULO_CONTRATO: dict[str, str] = {
     "api": "wsai2.api",
+    "application": "wsai2.application",
     "core": "wsai2.core.public",
     "execution": "wsai2.execution",
     "resource": "wsai2.resource",
@@ -203,6 +239,7 @@ MODULO_CONTRATO: dict[str, str] = {
 # Nome da constante de versão por subsistema do kernel.
 CONTRATO_CONSTANTES: dict[str, str] = {
     "api": "API_CONTRACT_VERSION",
+    "application": "APPLICATION_CONTRACT_VERSION",
     "core": "CORE_PUBLIC_CONTRACT_VERSION",
     "execution": "EXECUTION_CONTRACT_VERSION",
     "resource": "RESOURCE_CONTRACT_VERSION",
@@ -213,6 +250,7 @@ CONTRATO_CONSTANTES: dict[str, str] = {
 # Versões sancionadas esperadas por subsistema do kernel (bumps deliberados).
 CONTRACT_VERSIONES: dict[str, str] = {
     "api": "1.0",
+    "application": "1.0",
     "core": "1.0",
     "execution": "1.0",
     "resource": "1.0",

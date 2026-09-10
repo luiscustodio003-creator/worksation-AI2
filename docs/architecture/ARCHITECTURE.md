@@ -70,11 +70,23 @@ Na unidade API-01 (Fase 10), após a decisão NEXT-ARCHITECTURE-DECISION
 porte de transporte injectável (`ApiGateway`) e adapter stdlib
 (`StdLibHttpGateway`, sobre `http.server`, sem dependências externas),
 com o serviço de exemplo `health` (versões de contrato do núcleo/API) e
-`API_CONTRACT_VERSION = "1.0"`. A fronteira é `api → core` (apenas via
-`wsai2.core.public`, regra KERNEL-08); os recursos de domínio
-(system/hardware/runtime/capabilities/models/tasks/knowledge) entram por
-unidades API-02+ com arestas específicas justificadas. A Application não
-contém lógica central de decisão — expõe as superfícies públicas do núcleo.
+`API_CONTRACT_VERSION = "1.0"`. As fronteiras da API são
+`api → core` (apenas via `wsai2.core.public`, regra KERNEL-08) e
+`api → application` (a API consome os contratos de use-case); os recursos
+de domínio (system/hardware/runtime/capabilities/models/tasks/knowledge)
+entram por unidades API-02+ com arestas específicas justificadas. A
+Application não contém lógica central de decisão — expõe as superfícies
+públicas do núcleo.
+
+Em APP-02 (Ramo A), a camada Application ganhou a fronteira estável de
+use-cases `wsai2.application`: contratos puros de pedido/resposta por área
+(system/platform, hardware, runtime, capabilities, models, tasks,
+knowledge e execution/status/cancellation) que reutilizam as superfícies
+públicas do núcleo e dos domínios, com
+`APPLICATION_CONTRACT_VERSION = "1.0"`. A Application consome os domínios
+ao nível do pacote (`application → capability, core, hardware, knowledge,
+model, platform, runtime, runtime_engine, task`) e não conhece a API nem
+a UI.
 
 ### 3.11 UI
 
@@ -141,6 +153,8 @@ Resultado
 As fases Platform Foundation, Hardware Intelligence, Runtime Intelligence, Capability Engine, Model Intelligence, Provider Layer, Task Intelligence e **Fase 8 — Runtime Engine** encontram-se concluídas (8.1–8.9, monitorização contínua, concorrência entre planos e filas multicamadas). A Fase 8 foi **formalmente fechada** pelo gate de validação da fundação (consulta `docs/validation/FOUNDATION_VALIDATION_REPORT.md`).
 
 A **Fase 9 — Knowledge Engine** está em curso: a unidade 9.1 define o contrato declarativo do subsistema 3.9 (`wsai2.knowledge`).
+
+A **Fase 10 — API** arrancou com a fundação contract-first (API-01: `wsai2.api`, `API_CONTRACT_VERSION = "1.0"`). No **Ramo A**, a fronteira de use-cases (`wsai2.application`, APP-02) está definida: contratos puros de pedido/resposta por área, reutilizando as superfícies públicas dos domínios — a base estável que a API consumirá nas unidades API-02+.
 
 A fonte de verdade para o progresso, estado de validação e próxima fase é `docs/project/PROJECT_STATE.md`. A arquitectura e os planos de hardening devem reflectir o estado real do código e dos testes; não devem manter como “futuro” um componente já implementado e coberto por testes.
 
