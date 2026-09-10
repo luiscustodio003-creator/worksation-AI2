@@ -124,8 +124,9 @@ Estas barras não representam progresso global do projecto; representam maturida
 
 ## Migração do Kernel (Core / Execution & Intelligence Kernel)
 
-**Estado arquitectura: TRANSITION** (`docs/architecture/CORE_KERNEL_TARGET.md`
-vigente; `COMMAND_EXECUTION_CONTRACT.md` governa a transição).
+**Estado arquitectura: CONSOLIDADO** (`docs/architecture/CORE_KERNEL_TARGET.md`
+e `docs/validation/KERNEL_CONSOLIDATION_REPORT.md` vigentes;
+`COMMAND_EXECUTION_CONTRACT.md` governou a transição, concluída).
 
 - **KERNEL-01 — CORE INVENTORY: CONCLUÍDA** (`docs/architecture/KERNEL-01-core-inventory.md`). Auditoria read-only: 79 módulos / 14 subsistemas; Kernel = `core`/`execution`/`resource`/`runtime_engine`/`security`; domínio = `hardware`/`runtime`/`capability`/`model`/`provider`/`task`/`knowledge`; infra = `platform`; addon = `extension`; sem Application. 22 arestas `FRONTEIRAS` válidas, grafo acíclico, **491/491 testes verdes**. Sem código alterado.
 - **KERNEL-02 — MAPA DE DEPENDÊNCIAS: CONCLUÍDA** (`docs/architecture/KERNEL-02-dependency-map.md`). Mapa formal (22 arestas, consumidores reais por scan AST) + candidata a `core.public` (símbolos públicos reais do núcleo). Documental, sem código alterado; decisão do conjunto definitivo fica no KERNEL-03.
@@ -137,7 +138,8 @@ vigente; `COMMAND_EXECUTION_CONTRACT.md` governa a transição).
 - **KERNEL-08 — IMPORT MIGRATION (via core.public): CONCLUÍDA** (`docs/architecture/KERNEL-08-import-migration-core-public.md`). Opção A do plano: os 13 consumidores migram de `wsai2.core.{errors,context}` para `wsai2.core.public` (mesmos objectos; zero arestas novas) + regra de contrato `test_consumidores_core_apenas_via_public` (scan AST: fora de `core`, só `core.public`). Descida física da implementação pesada fica como decisão em aberto. Suíte **503/503 verdes**.
 - **KERNEL-09 — CORE FREEZE (implementação pesada fora do núcleo): CONCLUÍDA** (`docs/architecture/KERNEL-09-core-freeze-heavy-descend.md`). Descida completa (opção B do plano KERNEL-08, confirmada): novo subsistema `wsai2.infrastructure` (7 módulos: base_resource, governor, base_runtime, manager, scheduler, queue, monitoring) recolhe a mecânica pesada; `resource`/`runtime_engine` viram shells de re-export (superfícies e versões intactas; `git mv` com histórico). Fronteiras recompostas (26 arestas: `resource→infrastructure`, `runtime_engine→infrastructure`, `infrastructure→{core,execution,extension,hardware,runtime,security,task}`); `execution`/`security` ficam no núcleo (ciclo `execution⇄infra` bloqueia o runner). Guarda nova `test_implementacao_pesada_fora_do_nucleo` + BASE-44 + excepção de shell nos placeholders. Suíte **504/504 verdes**.
 - **KERNEL-10 — CONTRATO DE ADDON: CONCLUÍDA** (`docs/architecture/KERNEL-10-addon-contract-freeze.md`). Superfície de `wsai2.extension` congelada por teste (10 símbolos) + `EXTENSION_CONTRACT_VERSION = "1.0"` (fora do `__all__`) + `test_consumidores_extension_apenas_nivel_pacote`. `extension` permanece fora de `KERNEL_SUBSISTEMAS` (camada addon, tabelas `ADDON_CONTRATO_*` na fonte única). Decisão de âmbito do plano: sem novo subsistema SDK (duplicação) e sem código de Projects (addon futuro do alvo, sec. 9 — só documental). Sem arestas novas. Suíte **506/506 verdes**; sequência KERNEL-01..KERNEL-10 **concluída**.
-- **Próxima unidade:** fecho do estado de transição do kernel (release notes) ou decisão sobre a primeira capacidade consumidora real do contrato de addon.
+- **KERNEL-CONSOLIDATION-CLOSE: CONCLUÍDA** (`docs/validation/KERNEL_CONSOLIDATION_REPORT.md`). Fecho formal da transição: sequência KERNEL-01..10 consolidada em `main` por *fast-forward* (sem conflitos), com gate **506/506** e documentação persistente do marco. Nenhum código funcional alterado (unidade de processo/estado). O kernel deixa o estado TRANSITION e passa a CONSOLIDADO.
+- **Próxima decisão (material, a planeamento próprio):** Fase 10 — API (framework HTTP) ou addon Projects (primeiro consumidor real do contrato de addon); Fase 9 embeddings continua registada como decisão material terminal.
 - **Política de reconstrução do Core (regra de superfície vs. implementação):** registada em `CORE_KERNEL_TARGET.md` (sec. 2, 6, 10, 11, 12) e `COMMAND_EXECUTION_CONTRACT.md` (regras de migração): a reconstrução nunca remove superfícies públicas já versionadas; a implementação pesada (mecânica de execução) foi extraída do núcleo para `wsai2.infrastructure`, por trás dos contratos públicos, no KERNEL-09.
 
 ## Estado Git
@@ -148,9 +150,14 @@ commits coerentes: módulo `knowledge` (base, init, registry, metadata,
 index, storage, context, ingest), testes, BASE-37/38/39/40/41/42/43 e
 documentação arquitectural/estado alinhados.
 
+No KERNEL-CONSOLIDATION-CLOSE (2026-09-10), a sequência KERNEL-01..KERNEL-10
+(commits `d74e55d..7f0b2aa` em `core-hardening-foundation`) foi consolidada
+em `main` por *fast-forward* sem conflitos, com gate **506/506** — o kernel
+deixa o estado TRANSITION e fica CONSOLIDADO.
+
 ## Regra de continuação
 
-**Migração do Kernel — TRANSITION (KERNEL-01 a KERNEL-10 concluídas).**
+**Migração do Kernel — CONSOLIDADO (KERNEL-01 a KERNEL-10 concluídas; fecho da transição).**
 
 ```text
 KERNEL-01  Inventário real da base            ✓ CONCLUÍDA (auditoria read-only)

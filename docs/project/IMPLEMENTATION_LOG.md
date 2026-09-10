@@ -1,5 +1,37 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-10 — KERNEL-CONSOLIDATION-CLOSE — Fecho da transição do kernel
+
+### Objectivo
+
+Consolidar a sequência KERNEL-01..KERNEL-10 (branch
+`core-hardening-foundation`) em `main` e registar o fecho formal da
+transição do kernel. Unidade de processo/estado — **nenhum código funcional
+alterado**.
+
+### Alterações
+
+- `docs/validation/KERNEL_CONSOLIDATION_REPORT.md` — relatório persistente do
+  marco (matriz KERNEL-01..10, resultado executivo, residuais encaminhados).
+- `docs/project/PROJECT_STATE.md` — estado do kernel: TRANSITION →
+  **CONSOLIDADO**; unidade KERNEL-CONSOLIDATION-CLOSE registada; secção
+  "Estado Git" actualizada.
+- Git: *fast-forward* `main ← core-hardening-foundation` (sem conflitos;
+  `main` era ançestre estrito); push de `main`.
+
+### Validação
+
+```text
+py -3.12 -m pytest
+tests=506  failures=0  errors=0  skipped=0   (no commit consolidado)
+```
+
+### Próximo passo
+
+Decisão material em planeamento próprio: Fase 10 — API (framework HTTP),
+addon Projects (1º consumidor do contrato de addon) ou enriquecimento
+semântico da Fase 9 (embeddings).
+
 ## 2026-09-10 — KERNEL-10 — Contrato de addon (fecho da sequência do kernel)
 
 ### Objectivo
