@@ -40,6 +40,7 @@ from .contract import (
     TaskAnalysisResponse,
 )
 from .hardware_uc import HardwareProfileService
+from .runtime_uc import RuntimeProfileService
 from .system import SystemInfoService
 
 APPLICATION_CONTRACT_VERSION = "1.0"
@@ -62,6 +63,7 @@ __all__ = [
     "ModelsResponse",
     "RuntimeProfileRequest",
     "RuntimeProfileResponse",
+    "RuntimeProfileService",
     "SystemInfoRequest",
     "SystemInfoResponse",
     "SystemInfoService",

@@ -1,5 +1,44 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-10 — APP-05 — Runtime (Ramo A, unidade 5)
+
+### Objectivo
+
+Resolver o use-case de estado de runtime: tipar o `RuntimeProfileResponse`
+com o estado momentâneo produzido por `wsai2.runtime` — preservando a
+separação Hardware Capability vs Runtime State.
+
+### Alterações
+
+- `src/wsai2/application/runtime_uc.py` (novo): `RuntimeProfileService` com
+  fonte injectável `profile_source` (por omissão `discover_runtime`).
+- `src/wsai2/application/__init__.py` — `RuntimeProfileService` na
+  superfície (23 símbolos); versão `"1.0"`.
+- `tests/architecture_contracts.py` —
+  `SUPERFICIES_PUBLICAS["application"]` + `RuntimeProfileService`.
+- `tests/test_application_runtime.py` (novo, 4 testes): estado real, fonte
+  injectada, uptime/disponibilidade, contrato congelado/igualdade.
+- `tests/test_application_contracts.py` — superfície esperada actualizada.
+- Docs: `docs/application/BASE-49-runtime-use-case.md`; `ARCHITECTURE.md`
+  (3.10); `ROADMAP.md`; `PROJECT_STATE.md`; `RUN_STATE.md` (APP-05
+  congelada, APP-06 próxima) e relatório `docs/report`.
+
+### Fronteiras
+
+Nenhuma aresta nova — `application → runtime` já autorizada.
+
+### Validação
+
+```text
+py -m pytest
+tests=541  failures=0  errors=0  skipped=0   (537 + 4 novos APP-05)
+```
+
+### Próximo passo
+
+APP-06 — Capabilities: resolver o use-case de capacidades
+(`CapabilitiesRequest`/`CapabilitiesResponse`) via `build_compatibility`.
+
 ## 2026-09-10 — APP-04 — Hardware (Ramo A, unidade 4)
 
 ### Objectivo

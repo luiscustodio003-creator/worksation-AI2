@@ -2,7 +2,7 @@
 
 ## A CONSOLIDAÇÃO DO NÚCLEO E OS RAMOS DE DESENVOLVIMENTO A–F
 
-**Estado actual:** Kernel CONSOLIDADO e FROZEN; **Ramo A — Application/Use-Cases** em curso (APP-01..APP-04 congeladas; APP-05 em implementação).
+**Estado actual:** Kernel CONSOLIDADO e FROZEN; **Ramo A — Application/Use-Cases** em curso (APP-01..APP-05 congeladas; APP-06 em implementação).
 **Referência:** `docs/validation/KERNEL_CONSOLIDATION_REPORT.md`, `docs/project/RUN_GOVERNANCE.md`
 
 ---
@@ -62,7 +62,8 @@ APP-01  Audit Application Boundary       ✓ CONCLUÍDA (auditoria read-only)
 APP-02  Use-Case Contracts               ✓ CONCLUÍDA (congelada)
 APP-03  System / Platform                ✓ CONCLUÍDA (SystemInfoService)
 APP-04  Hardware                         ✓ CONCLUÍDA (HardwareProfileService)
-APP-05  Runtime
+APP-05  Runtime                          ✓ CONCLUÍDA (RuntimeProfileService)
+APP-06  Capabilities
 APP-05  Runtime
 APP-06  Capabilities
 APP-07  Models

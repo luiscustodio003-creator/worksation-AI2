@@ -90,6 +90,7 @@ def test_superficie_application_contem_20_contratos() -> None:
     """
     esperados = {c.__name__ for c in CONTRATOS} | {
         "HardwareProfileService",
+        "RuntimeProfileService",
         "SystemInfoService",
     }
     assert set(NOMES_CONTRATOS) == esperados

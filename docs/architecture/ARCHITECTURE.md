@@ -88,9 +88,10 @@ ao nível do pacote (`application → capability, core, hardware, knowledge,
 model, platform, runtime, runtime_engine, task`) e não conhece a API nem
 a UI. Em APP-03 foi resolvido o primeiro use-case: `SystemInfoService`
 monta o `SystemInfoResponse` com fontes injectáveis (`get_platform()` e
-`discover_runtime().uptime` por omissão); em APP-04, `HardwareProfileService`
-tipa o `HardwareProfileResponse` via `discover_hardware`. Este é o padrão
-dos serviços de use-case dos ramos posteriores.
+`discover_runtime().uptime` por omissão); em APP-04, `HardwareProfileService` tipa o `HardwareProfileResponse` via
+`discover_hardware`; em APP-05, `RuntimeProfileService` tipa o estado
+momentâneo via `discover_runtime` (preservando a separação secção 4).
+Este é o padrão dos serviços de use-case dos ramos posteriores.
 
 ### 3.11 UI
 

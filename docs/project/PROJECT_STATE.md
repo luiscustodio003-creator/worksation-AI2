@@ -12,19 +12,19 @@
 
 **KNOWLEDGE 9.1–9.7 CONCLUÍDA (âmbito lexical)** — enriquecimento semântico permanece como decisão material terminal e não deve ser iniciado sem planeamento próprio.
 
-**APP-04 CONCLUÍDA (Ramo A)** — use-case Hardware resolvido: `HardwareProfileService` em `wsai2.application.hardware_uc` monta o `HardwareProfileResponse` a partir de `discover_hardware`, com fonte injectável. Superfície de `wsai2.application` agora com 22 símbolos (`APPLICATION_CONTRACT_VERSION = "1.0"`). Suíte **537/537 verdes** (533 + 4 novos).
+**APP-05 CONCLUÍDA (Ramo A)** — use-case Runtime resolvido: `RuntimeProfileService` em `wsai2.application.runtime_uc` monta o `RuntimeProfileResponse` a partir de `discover_runtime`, com fonte injectável — preservando a separação Hardware Capability vs Runtime State. Superfície de `wsai2.application` agora com 23 símbolos (`APPLICATION_CONTRACT_VERSION = "1.0"`). Suíte **541/541 verdes** (537 + 4 novos).
 
 ## Próximo ramo autorizado
 
 **BRANCH A — APPLICATION / USE-CASE BOUNDARY**
 
-Estado: **IN_PROGRESS** (APP-01..APP-04 congeladas)
+Estado: **IN_PROGRESS** (APP-01..APP-05 congeladas)
 
 Próxima unidade:
 
-`APP-05 — Runtime`
+`APP-06 — Capabilities`
 
-Esta unidade deve resolver o use-case de estado de runtime (satisfazendo `RuntimeProfileRequest`/`RuntimeProfileResponse`), reutilizando `wsai2.runtime` (`discover_runtime`) — estado momentâneo, preservando a separação Hardware Capability vs Runtime State.
+Esta unidade deve resolver o use-case de capacidades (satisfazendo `CapabilitiesRequest`/`CapabilitiesResponse`), reutilizando `wsai2.capability` (`build_compatibility`) e preservando a distinção capacidade vs estado.
 
 ## Governação do /wsai-run
 
@@ -81,7 +81,7 @@ Os ramos são um mapa operacional e não uma autorização para criar todas as u
 - Task Intelligence — implementada.
 - Runtime Engine — implementada e fechada.
 - Knowledge Engine — fechada no âmbito lexical (9.1–9.7).
-- Application / Use Cases (Ramo A) — APP-01..04 concluídas (auditoria + contratos + System/Platform + Hardware); APP-05+ pendentes.
+- Application / Use Cases (Ramo A) — APP-01..05 concluídas (auditoria + contratos + System + Hardware + Runtime); APP-06+ pendentes.
 - API — API-01 concluída; API-02+ pendentes.
 - UI — ainda não iniciada.
 
@@ -102,6 +102,8 @@ KERNEL-01..KERNEL-10: **CONCLUÍDOS**.
 `docs/validation/KERNEL_CONSOLIDATION_REPORT.md` é a evidência persistente do fecho. O estado `TRANSITION` do Kernel terminou; qualquer futura reabertura deve ser controlada e justificada por BUG, REGRESSION, SECURITY, CONTRACT VIOLATION, REQUIREMENT CHANGE ou outra falha real que torne o estado incorrecto.
 
 ## Última unidade funcional
+
+`APP-05 — Runtime` (Ramo A) — `RuntimeProfileService` resolve o use-case de estado de runtime (`RuntimeProfileRequest`/`RuntimeProfileResponse`) via `discover_runtime`, com fonte injectável; suíte real confirmada: **541/541 verdes**.
 
 `APP-04 — Hardware` (Ramo A) — `HardwareProfileService` resolve o use-case de perfil de hardware (`HardwareProfileRequest`/`HardwareProfileResponse`) via `discover_hardware`, com fonte injectável; suíte real confirmada: **537/537 verdes**.
 
