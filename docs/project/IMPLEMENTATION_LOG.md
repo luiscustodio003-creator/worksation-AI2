@@ -1,6 +1,37 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
-## 2026-09-10 — APP-02 — Use-Case Contracts (Ramo A, unidade 2)
+## 2026-09-10 — RELATÓRIO DE FASES — Portefólio documental para explicação (docs/report)
+
+### Objectivo
+
+Criar uma colecção de documentos autónomos que descrevem cada fase do
+projecto (finalidade, arquitectura, componentes, estado e conexão com o
+documento de visão Reformulado), preparada para servir de base a
+materiais de explicação (vídeos NotebookLM) e apresentações. Unidade
+documental — **nenhum código funcional alterado**.
+
+### Alterações
+
+- `docs/report/00-visao-geral-e-indice.md` — visão, pipeline de
+  inteligência, índice das fases, mapa de subsistemas, guia de uso no
+  NotebookLM e roteiro de vídeos.
+- `docs/report/01-fase-0-fundacao-e-governanca.md` … `docs/report/12-fase-11-ui.md`
+  — um relatório por fase (0–11), com finalidade, arquitectura,
+  componentes, evidência e secção "Ideias-chave para vídeo".
+- `docs/report/13-pos-kernel-ramos-a-f.md` — consolidação do Kernel
+  (KERNEL-01..10) e modelo de ramos A–F (Application, API, UI, Knowledge
+  semântico, Addons, Projects).
+
+### Fronteiras
+
+Unidade documental — nada alterado em `src/` nem nos contratos. Estado
+real da suíte executado como referência no momento da medição (APP-02
+congelada; APP-03 a decorrer): **528/528 verdes**. O índice e o relatório
+dos ramos reflectem o estado persistido em `PROJECT_STATE.md` / `RUN_STATE.md`.
+
+### Próximo passo
+
+APP-03 — System / Platform: adaptador do use-case de informação do sistema.
 
 ### Objectivo
 
