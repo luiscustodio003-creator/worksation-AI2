@@ -4,13 +4,40 @@
 
 Esta skill governa o desenvolvimento incremental do WorkStation AI 2. Não substitui a arquitectura do produto. Garante trabalho coerente, verificável, observável e sincronizado com o estado real do código.
 
-## Fonte de verdade operacional
+## Fontes de verdade
 
-A implementação real do repositório tem precedência sobre documentação desactualizada. Cruzar sempre código, testes, `PROJECT_STATE.md`, `ROADMAP.md`, arquitectura/constituição e Git.
+A implementação real do repositório e os testes têm precedência sobre documentação desactualizada. Cruzar sempre código, testes, `PROJECT_STATE.md`, `ROADMAP.md`, arquitectura/constituição, estado de execução e Git.
+
+`docs/project/RUN_GOVERNANCE.md` define as regras persistentes de continuidade, dependências e freeze do `/wsai-run`.
+
+## Kernel fechado
+
+O Kernel/Core está **CONSOLIDADO / FROZEN** conforme `docs/architecture/CORE_KERNEL_TARGET.md` e `docs/validation/KERNEL_CONSOLIDATION_REPORT.md`.
+
+O desenvolvimento normal NÃO pode adicionar novas responsabilidades ao Kernel.
+
+Antes de qualquer proposta de alteração no Kernel, classificar a necessidade:
+
+```text
+BUG | REGRESSION | SECURITY | CONTRACT VIOLATION | REQUIREMENT CHANGE | NEW CAPABILITY
+```
+
+`NEW CAPABILITY` não é motivo para reabrir o Kernel. Deve ser encaminhada para Application, Infrastructure, Capability, API, UI ou Addon conforme a responsabilidade.
 
 ## Visibilidade obrigatória
 
-Durante qualquer comando de desenvolvimento deve ser possível identificar no fluxo visível: fase, unidade, etapa, concluído, pendente e próximo passo. Usar blocos de progresso em mudanças relevantes; não inventar percentagens.
+Durante qualquer comando de desenvolvimento deve ser possível identificar no fluxo visível:
+
+- ramo;
+- fase;
+- unidade;
+- etapa;
+- estado;
+- concluído;
+- pendente;
+- próximo passo.
+
+Usar blocos de progresso em mudanças relevantes; não inventar percentagens.
 
 ## Sequência obrigatória
 
@@ -18,21 +45,24 @@ Durante qualquer comando de desenvolvimento deve ser possível identificar no fl
 2. ler `AGENTS.md`;
 3. ler `PROJECT_STATE.md`;
 4. consultar `ROADMAP.md`;
-5. consultar arquitectura;
-6. verificar Git;
-7. identificar unidade actual;
-8. identificar dependências;
-9. auditar responsabilidades existentes;
-10. seleccionar estratégia/modelo adequado;
-11. implementar apenas a unidade autorizada;
-12. criar/actualizar testes;
-13. executar validação da unidade;
-14. executar `/wsai-validate` quando existir gate;
-15. rever alterações;
-16. actualizar documentação;
-17. actualizar estado;
-18. produzir relatório;
-19. sincronizar Git quando permitido.
+5. consultar `RUN_GOVERNANCE.md`;
+6. consultar arquitectura e contratos aplicáveis;
+7. verificar Git;
+8. identificar ramo e unidade actual;
+9. identificar dependências;
+10. auditar responsabilidades existentes;
+11. seleccionar estratégia/modelo adequado;
+12. implementar apenas a unidade autorizada;
+13. criar/actualizar testes;
+14. executar validação da unidade;
+15. executar gates aplicáveis;
+16. rever alterações;
+17. actualizar documentação;
+18. actualizar estado persistente;
+19. produzir relatório;
+20. sincronizar Git quando permitido;
+21. congelar a unidade concluída;
+22. determinar a próxima unidade/ramo.
 
 ## Família oficial de comandos
 
@@ -50,58 +80,172 @@ Durante qualquer comando de desenvolvimento deve ser possível identificar no fl
 
 `/wsai-run` é a composição autónoma destas responsabilidades. Os comandos individuais mantêm as suas próprias regras quando executados isoladamente.
 
-## Regra de autorização dentro do /wsai-run
+## Modelo de execução por ramo
 
-Uma unidade explicitamente prevista no `PROJECT_STATE.md`/`ROADMAP.md`, sem decisão arquitectural material nova, está autorizada para execução pelo `/wsai-run`.
+Cada ramo é uma sequência de unidades pequenas e verificáveis.
 
-Dentro do `/wsai-run`, `READY TO IMPLEMENT` é suficiente para avançar. Não introduzir uma aprovação humana adicional entre planear e implementar.
+```text
+BRANCH
+  -> UNIT
+      -> AUDIT
+      -> PLAN
+      -> ARQ
+      -> IMPLEMENT
+      -> TEST
+      -> VALIDATE
+      -> DOC
+      -> GIT
+      -> FREEZE UNIT
+  -> NEXT UNIT
+  -> BRANCH COMPLETE
+  -> BRANCH FROZEN
+  -> DEPENDENCY GATE
+  -> NEXT READY BRANCH
+```
 
-Um gate `APPROVED` é consumido pelo orquestrador como autorização para a transição definida no roadmap. Não é uma pergunta ao utilizador.
+Quando todas as unidades de um ramo estiverem concluídas sem bloqueios, o ramo é fechado e congelado. Não reabrir automaticamente.
 
-Um `NOT APPROVED` deve ser classificado. P0/P1, decisão arquitectural material, mudança de requisitos fundamentais, risco de perda de dados ou conflito Git não resolvível interrompem. P2 documental/processual inequívoco, localizado e sem impacto funcional/arquitectural pode ser corrigido autonomamente pelo `/wsai-run` através de uma unidade mínima e revalidado.
+## Estados persistentes
+
+O Run deve preservar, no mínimo:
+
+```text
+active_branch
+branch_status
+active_unit
+unit_status
+current_step
+last_completed_step
+next_action
+blocked_reason
+dependencies_checked
+frozen_units
+frozen_branches
+last_commit
+```
+
+Uma nova chamada a `/wsai-run` retoma o primeiro trabalho incompleto a partir desse estado; não reinicia uma unidade já concluída.
+
+## Dependências entre ramos
+
+A ordem do roadmap não é suficiente para assumir dependência.
+
+Antes de mudar de ramo, verificar contratos, gates e dependências reais. Se o próximo ramo estiver pronto, avançar. Se estiver bloqueado, parar, guardar o estado e indicar o bloqueio.
+
+Ramos independentes podem ser executados sem criar dependências artificiais. Ramos dependentes só iniciam depois de os requisitos upstream estarem satisfeitos.
+
+## Escopos do /wsai-run
+
+```text
+/wsai-run
+```
+Executa o próximo trabalho autorizado pelo estado persistente.
+
+```text
+/wsai-run fase <X>
+```
+Executa autonomamente o ramo/fase indicado, unidade a unidade, até concluir o ramo ou encontrar um bloqueio real.
+
+O Run não deve ultrapassar o escopo solicitado para iniciar outro ramo sem que a política de transição o autorize.
+
+## Regra de autorização
+
+Uma unidade prevista no `PROJECT_STATE.md`/`ROADMAP.md`, com dependências satisfeitas e sem decisão arquitectural material nova, está autorizada para execução.
+
+Dentro do `/wsai-run`, `READY TO IMPLEMENT` é suficiente. Não introduzir uma aprovação humana adicional entre planear e implementar.
+
+`APPROVED` e `APPROVED WITH WARNINGS` são estados de gate, não pedidos de confirmação humana.
 
 ## Auditoria antes de expansão
 
-Antes de criar novo módulo, registry, manager ou abstraction: localizar equivalentes, verificar fronteiras, consumidores, testes e documentação. Preferir evolução aditiva e reversível.
+Antes de `CREATE`, localizar primeiro:
+
+- responsabilidade equivalente;
+- contrato existente;
+- serviço existente;
+- adapter/facade reutilizável;
+- consumidores;
+- testes;
+- documentação.
+
+Preferência:
+
+```text
+REUSE -> ADAPT -> WRAP/ADAPTER -> EXTEND -> CREATE
+```
+
+Não criar módulos paralelos para uma responsabilidade já existente.
 
 ## Validação e qualidade
 
-VALIDAR NÃO É IMPLEMENTAR. `/wsai-validate` confirma o estado sem alterar código funcional. Uma aprovação considera comportamento, contratos, fronteiras, integração, recuperação, segurança e consistência documental, não apenas contagem de testes.
+VALIDAR NÃO É IMPLEMENTAR. `/wsai-validate` confirma o estado sem alterar código funcional.
+
+Uma aprovação considera comportamento, contratos, fronteiras, integração, recuperação, segurança e consistência documental, não apenas contagem de testes.
 
 Ciclo formal:
 
 ```text
-AUDIT → PLAN → IMPLEMENT → TEST → VALIDATE → DOC → GIT
+AUDIT → PLAN → ARQ → IMPLEMENT → TEST → VALIDATE → DOC → GIT
 ```
 
-No `/wsai-run`, o ciclo pode repetir-se automaticamente para correcções seguras e para a próxima unidade autorizada.
+O ciclo pode repetir-se automaticamente para correcções seguras relacionadas com a unidade.
 
-## Autonomia controlada e continuidade
+## Paragem obrigatória
 
-Depois de concluir, validar, documentar e sincronizar uma unidade, determinar novamente a próxima unidade a partir de `PROJECT_STATE.md` e `ROADMAP.md`.
+Parar quando existir:
 
-Se estiver claramente definida, directamente dependente e não introduzir decisão arquitectural material, **DEVE continuar automaticamente no mesmo `/wsai-run`**. Não terminar apenas para mostrar "PRÓXIMA UNIDADE".
+- decisão arquitectural material;
+- requisito fundamental alterado;
+- risco significativo de perda/corrupção de dados;
+- conflito Git inseguro;
+- falha técnica sem solução segura;
+- dependência não satisfeita;
+- violação do Dependency Firewall;
+- tentativa de introduzir nova responsabilidade no Kernel.
 
-Se uma fase formal for aprovada:
+Correcções P2 documentais/processuais inequívocas, localizadas e sem impacto funcional/arquitectural podem ser tratadas autonomamente e revalidadas.
+
+## Freeze e reabertura
+
+Uma unidade validada, documentada e sincronizada fica `COMPLETE` e `FROZEN`.
+
+Um ramo com todas as unidades `FROZEN` passa a `BRANCH COMPLETE / FROZEN`.
+
+Só reabrir por:
 
 ```text
-GATE APPROVED
-↓
-PROJECT_STATE actualizado
-↓
-ROADMAP consultado
-↓
-PRÓXIMA UNIDADE determinada
-↓
-PLAN → IMPLEMENT → TEST → VALIDATE → DOC → GIT
+REGRESSION
+BUG
+SECURITY ISSUE
+FAILED INTEGRATION
+REQUIREMENT CHANGE
+DEPENDENCY CHANGE
 ```
 
-Parar apenas perante uma condição real de bloqueio ou decisão humana necessária.
+A reabertura reinicia o ciclo completo e termina num novo freeze.
 
-## Critério de conclusão de uma base
+## Critério de conclusão
 
-Uma base só é concluída com implementação completa do âmbito, testes adequados, validação, documentação, relatório, estado arquitectural actualizado e Git coerente/verificável.
+Uma unidade só é concluída com implementação adequada ao âmbito, testes, validação, documentação, estado persistente e Git coerente/verificável.
+
+Um ramo só é concluído quando todas as suas unidades estão concluídas e sem bloqueios.
+
+O projecto só pode ser marcado como concluído quando todos os ramos previstos estiverem fechados/frozen e não existir trabalho pendente autorizado.
 
 ## Relatório obrigatório
 
-Cada conclusão relevante deve indicar o que foi implementado, enquadramento arquitectural, finalidade, módulos/dependências, testes, problemas/prioridades, validação, estado da fase e próximo passo.
+Cada conclusão relevante deve indicar:
+
+- ramo e fase;
+- unidade;
+- o que foi implementado;
+- reutilização realizada;
+- enquadramento arquitectural;
+- módulos/dependências;
+- testes;
+- problemas/prioridades;
+- validação;
+- estado do ramo;
+- freeze;
+- próximo ramo/unidade;
+- eventual bloqueio.
