@@ -97,7 +97,9 @@ via `build_compatibility` e filtra por domínio (associado em
 em APP-07, `ModelsService` avalia os modelos via `evaluate_models` e
 filtra por categoria (`category_for`); em APP-08, `TaskAnalysisService`
 compõe a análise de tarefa (classificação, requisitos, selecção de
-capacidades e plano) sem conhecer fornecedores.
+capacidades e plano) sem conhecer fornecedores; em APP-09,
+`KnowledgeContextService` indexa e pesquisa o conhecimento fornecendo o
+contexto da consulta.
 Este é o padrão dos serviços de use-case dos ramos posteriores.
 
 ### 3.11 UI

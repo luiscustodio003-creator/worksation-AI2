@@ -163,7 +163,8 @@ BRANCH A — APPLICATION / USE CASES
     APP-06  Capabilities                         ✓ CONCLUÍDA (CapabilitiesService)
     APP-07  Models                               ✓ CONCLUÍDA (ModelsService)
     APP-08  Tasks                                ✓ CONCLUÍDA (TaskAnalysisService)
-    APP-09  Knowledge
+    APP-09  Knowledge                           ✓ CONCLUÍDA (KnowledgeContextService)
+    APP-10  Execution/Status/Cancellation
     APP-06  Capabilities
     APP-07  Models
     APP-08  Tasks

@@ -12,19 +12,19 @@
 
 **KNOWLEDGE 9.1–9.7 CONCLUÍDA (âmbito lexical)** — enriquecimento semântico permanece como decisão material terminal e não deve ser iniciado sem planeamento próprio.
 
-**APP-08 CONCLUÍDA (Ramo A)** — use-case Task Analysis resolvido: `TaskAnalysisService` em `wsai2.application.tasks_uc` encadeia `classify_task` → `requirements_for` → `select_capabilities` → `build_execution_plan` (sem `provider_health`). Superfície de `wsai2.application` com 28 símbolos. Suíte **558/558 verdes** (553 + 5 APP-08).
+**APP-09 CONCLUÍDA (Ramo A)** — use-case Knowledge Context resolvido: `KnowledgeContextService` em `wsai2.application.knowledge_uc` indexa o registo (`KnowledgeIndex`), pesquisa com limite/filtro por `KnowledgeKind` e constrói contexto (`ContextBuilder`). Superfície de `wsai2.application` com 29 símbolos. Suíte **562/562 verdes** (558 + 4 APP-09).
 
 ## Próximo ramo autorizado
 
 **BRANCH A — APPLICATION / USE-CASE BOUNDARY**
 
-Estado: **IN_PROGRESS** (APP-01..APP-08 congeladas)
+Estado: **IN_PROGRESS** (APP-01..APP-09 congeladas)
 
 Próxima unidade:
 
-`APP-09 — Knowledge`
+`APP-10 — Execution / Status / Cancellation`
 
-Esta unidade deve resolver o use-case de contexto de conhecimento (satisfazendo `KnowledgeContextRequest`/`KnowledgeContextResponse`), reutilizando `wsai2.knowledge` (pesquisa/consulta) sem alterar a política semântica.
+Esta unidade deve resolver os use-cases de execução, estado e cancelamento (satisfazendo `ExecutionRequest`/`ExecutionResponse`, `ExecutionStatusRequest`/`ExecutionStatusResponse`, `CancellationRequest`/`CancellationResponse`), reutilizando `wsai2.runtime_engine` sem quebrar a fronteira do Kernel.
 
 ## Governação do /wsai-run
 
@@ -81,7 +81,7 @@ Os ramos são um mapa operacional e não uma autorização para criar todas as u
 - Task Intelligence — implementada.
 - Runtime Engine — implementada e fechada.
 - Knowledge Engine — fechada no âmbito lexical (9.1–9.7).
-- Application / Use Cases (Ramo A) — APP-01..08 concluídas (auditoria + contratos + System + Hardware + Runtime + Capabilities + Models + Tasks); APP-09+ pendentes.
+- Application / Use Cases (Ramo A) — APP-01..09 concluídas (auditoria + contratos + System + Hardware + Runtime + Capabilities + Models + Tasks + Knowledge); APP-10/11 pendentes.
 - API — API-01 concluída; API-02+ pendentes.
 - UI — ainda não iniciada.
 
@@ -102,6 +102,8 @@ KERNEL-01..KERNEL-10: **CONCLUÍDOS**.
 `docs/validation/KERNEL_CONSOLIDATION_REPORT.md` é a evidência persistente do fecho. O estado `TRANSITION` do Kernel terminou; qualquer futura reabertura deve ser controlada e justificada por BUG, REGRESSION, SECURITY, CONTRACT VIOLATION, REQUIREMENT CHANGE ou outra falha real que torne o estado incorrecto.
 
 ## Última unidade funcional
+
+`APP-09 — Knowledge Context` (Ramo A) — `KnowledgeContextService` resolve o use-case de contexto de conhecimento (`KnowledgeContextRequest`/`KnowledgeContextResponse`) via `wsai2.knowledge`, com fonte de registo injectável; suíte real confirmada: **562/562 verdes**.
 
 `APP-08 — Task Analysis` (Ramo A) — `TaskAnalysisService` resolve o use-case de análise de tarefa (`TaskAnalysisRequest`/`TaskAnalysisResponse`) via `wsai2.task`, sem conhecer fornecedores; suíte real confirmada: **558/558 verdes**.
 

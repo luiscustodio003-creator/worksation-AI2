@@ -1,5 +1,46 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-10 — APP-09 — Knowledge Context (Ramo A, unidade 9)
+
+### Objectivo
+
+Resolver o use-case de contexto de conhecimento: indexar, pesquisar
+(com limite e filtro por tipo) e construir contexto via `wsai2.knowledge`
+— sem decisões de armazenamento nem política semântica na Application.
+
+### Alterações
+
+- `src/wsai2/application/knowledge_uc.py` (novo): `KnowledgeContextService`
+  com `registry_source` injectável (por omissão registo vazio); `resolve`
+  encadeia `KnowledgeIndex().build` → `search` → filtro por
+  `request.kind` → `ContextBuilder().build`.
+- `src/wsai2/application/__init__.py` — `KnowledgeContextService` na
+  superfície (29 símbolos); versão `"1.0"`.
+- `tests/architecture_contracts.py` — `SUPERFICIES_PUBLICAS["application"]`
+  + `KnowledgeContextService`.
+- `tests/test_application_knowledge.py` (novo, 4 testes).
+- Docs: `docs/application/BASE-53-knowledge-context-use-case.md`;
+  `ARCHITECTURE.md` (3.10); `ROADMAP.md`; `PROJECT_STATE.md`; `RUN_STATE.md`
+  (APP-09 congelada, APP-10 próxima).
+
+### Fronteiras
+
+Nenhuma aresta nova — `application → knowledge` já autorizada.
+
+### Validação
+
+```text
+py -m pytest
+tests=562  failures=0  errors=0  skipped=0   (558 + 4 novos APP-09)
+```
+
+### Próximo passo
+
+APP-10 — Execution/Status/Cancellation: resolver os use-cases de
+execução (`ExecutionRequest`/`ExecutionResponse`,
+`ExecutionStatusRequest`/`ExecutionStatusResponse`,
+`CancellationRequest`/`CancellationResponse`).
+
 ## 2026-09-10 — APP-08 — Task Analysis (Ramo A, unidade 8)
 
 ### Objectivo
