@@ -313,9 +313,9 @@ Não deve existir uma grande migração única.
 
 **Regra de reconstrução.** Cada unidade preserva a superfície pública já
 versionada e move apenas peso: a implementação pesada do núcleo (incluindo
-o que estiver em `execution.runner`, `resource.governor` e
-`runtime_engine.{manager,scheduler,queue,monitoring}`) desce para
-infra-estrutura por trás dos contratos públicos (KERNEL-08/09). Nenhuma
+execution.runner, resource.governor e runtime_engine.{manager,scheduler,
+queue,monitoring}) desceu para infra-estrutura por trás dos contratos
+públicos (**concluída no KERNEL-09** — `wsai2.infrastructure`). Nenhuma
 superfície é removida; apenas se retira implementação pesada do núcleo.
 
 ## 11. Critérios de qualidade do Kernel
@@ -345,9 +345,9 @@ KERNEL-04  Dependency Firewall              ✓ CONCLUÍDA (KERNEL-04-dependency
 KERNEL-05  Resource / Execution boundary    ✓ CONCLUÍDA (KERNEL-05-execution-resource-boundary.md)
 KERNEL-06  Observability boundary            ✓ CONCLUÍDA (KERNEL-06-observability-boundary.md)
 KERNEL-07  Architecture contract tests      ✓ CONCLUÍDA (KERNEL-07-architecture-contract-tests.md)
-KERNEL-08  Migração incremental de imports  ✓ CONCLUÍDA (KERNEL-08-import-migration-core-public.md; descida da implementação pesada fica como decisão em aberto)
-KERNEL-09  Core freeze                       -> próxima unidade (superfície versionada; peso fora do núcleo)
-KERNEL-10  Addon SDK / Projects foundation  -> depois
+KERNEL-08  Migração incremental de imports  ✓ CONCLUÍDA (KERNEL-08-import-migration-core-public.md)
+KERNEL-09  Core freeze                       ✓ CONCLUÍDA (KERNEL-09-core-freeze-heavy-descend.md; implementação pesada em wsai2.infrastructure)
+KERNEL-10  Addon SDK / Projects foundation  -> próxima unidade
 ```
 
 A ordem pode ser alterada apenas após auditoria da unidade anterior e sem contrariar `PROJECT_STATE.md`.

@@ -1,5 +1,9 @@
 """Scheduler do Runtime Engine (hardening 07 — Fase 8.5).
 
+Implementação pesada do kernel (KERNEL-09): vive em ``wsai2.infrastructure``,
+por trás do contrato público `wsai2.runtime_engine`, que re-exporta o
+``Scheduler``.
+
 Determina a ordem de execução de planos de forma determinística e executa-os
 através do ``RuntimeManager``. A via histórica permanece directa e sequencial
 por omissão; a fila multicamada é uma camada aditiva e opt-in.
@@ -15,7 +19,7 @@ from typing import TYPE_CHECKING, Callable, Mapping, Sequence
 from wsai2.core.public import ExecutionContext, ExecutionPriority, ValidationError
 from wsai2.security import PolicyEngine
 
-from .base import ExecutionReport, ScheduleOutcome, SchedulerReport, StepRunner
+from .base_runtime import ExecutionReport, ScheduleOutcome, SchedulerReport, StepRunner
 from .manager import RuntimeManager
 from .queue import MultilayerExecutionQueue
 

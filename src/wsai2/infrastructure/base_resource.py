@@ -1,5 +1,8 @@
 """Contratos e tipos fundamentais da Governação de Recursos.
 
+Implementação pesada do kernel (KERNEL-09): vive em ``wsai2.infrastructure``,
+por trás do contrato público `wsai2.resource`, que os re-exporta.
+
 Este módulo contém apenas definições de tipos e dataclasses — não
 implementa lógica de validação nem accounting. Garante que a governação
 depende de contratos estáveis (hardening 05 do CORE_HARDENING_PLAN),

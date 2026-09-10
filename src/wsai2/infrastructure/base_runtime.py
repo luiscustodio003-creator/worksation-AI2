@@ -1,5 +1,8 @@
 """Contratos do Runtime Engine (subsistema 3.8 — Fase 8.5).
 
+Implementação pesada do kernel (KERNEL-09): vive em ``wsai2.infrastructure``,
+por trás do contrato público `wsai2.runtime_engine`, que os re-exporta.
+
 Fecha o hardening 07 do CORE_HARDENING_PLAN: o gestor de execução e o
 scheduler consomem o ``ExecutionPlan`` já produzido pelo Task
 Intelligence (Fase 7) e aplicam sobre ele as políticas centralizadas da

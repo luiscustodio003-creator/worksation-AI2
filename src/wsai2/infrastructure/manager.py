@@ -1,5 +1,9 @@
 """Gestor de execução de planos (hardening 07 do CORE_HARDENING_PLAN).
 
+Implementação pesada do kernel (KERNEL-09): vive em ``wsai2.infrastructure``,
+por trás do contrato público `wsai2.runtime_engine`, que re-exporta o
+``RuntimeManager``.
+
 O ``RuntimeManager`` executa um ``ExecutionPlan`` produzido pelo Task
 Intelligence (Fase 7). O plano inteiro é executado numa única chamada a
 ``execute_with_policies`` (Fase 8.4): o checkpoint inicial, o timeout
@@ -44,12 +48,12 @@ from wsai2.execution import execute_with_policies
 from wsai2.security import PolicyEngine, denied_decision
 from wsai2.task import ExecutionPlan
 
-from .base import ExecutionReport, ExecutionStatus, StepOutcome, StepRunner, StepStatus
+from .base_runtime import ExecutionReport, ExecutionStatus, StepOutcome, StepRunner, StepStatus
 
 if TYPE_CHECKING:
     from wsai2.execution import RecoveryPolicy, TimeoutPolicy
-    from wsai2.resource import ResourceGovernor
     from wsai2.security import PolicyDecision
+    from .governor import ResourceGovernor
     from .monitoring import ExecutionMonitor
 
 

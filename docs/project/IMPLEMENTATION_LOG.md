@@ -1,5 +1,52 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-09 — KERNEL-09 — Core freeze (implementação pesada fora do núcleo)
+
+### Objectivo
+
+Fechar o "Core freeze": a mecânica pesada deixa de residir nos pacotes do
+kernel e passa a viver em infra-estrutura especializada, por trás dos
+contratos públicos (decisão em aberto do KERNEL-08, opção de descida
+completa confirmada).
+
+### Alterações
+
+- Novo subsistema `wsai2.infrastructure` (git mv, histórico preservado):
+  `base_resource.py`, `governor.py`, `base_runtime.py`, `manager.py`,
+  `scheduler.py`, `queue.py`, `monitoring.py` + `__init__.py` (agregação,
+  sem contrato — sem versão/`__all__`).
+- `resource/` e `runtime_engine/` → shells de re-export: superfícies
+  versionadas (KERNEL-05/06) e `__all__` intactos; implementação ausente.
+- Imports internos corrigidos: `.base` → `.base_resource`/`.base_runtime`;
+  `manager` passa a importar `ResourceGovernor` de `.governor` (evita a
+  aresta tipográfica `infra→resource`, eliminando o ciclo em tipagem).
+- `FRONTEIRAS`/`FIREWALL` recompostos na fonte única (26 arestas):
+  `resource→infrastructure`, `runtime_engine→infrastructure`,
+  `infrastructure→{core,execution,extension,hardware,runtime,security,task}`.
+- Testes: `test_implementacao_pesada_fora_do_nucleo` (novo);
+  excepção de contrato para shells nos placeholders.
+- `docs/infrastructure/BASE-44-infrastructure-heavy-implementation.md`;
+  `docs/architecture/KERNEL-09-core-freeze-heavy-descend.md`;
+  `docs/project/PROJECT_STATE.md`; `docs/architecture/CORE_KERNEL_TARGET.md`
+  (sec. 10 e 12).
+
+### Fronteiras
+
+`execution` (runner) e `security` permanecem no núcleo — descer o runner
+criaria o ciclo `execution ⇄ infra`. Nenhuma superfície ou versão mudou;
+nenhum consumidor foi tocado (imports ao nível do pacote).
+
+### Validação
+
+```text
+py -3.12 -m pytest
+tests=504  failures=0  errors=0  skipped=0
+```
+
+### Próximo passo
+
+`/wsai-plan KERNEL-10` — Addon SDK / Projects foundation.
+
 ## 2026-09-09 — KERNEL-08 — Migração incremental de imports (via core.public)
 
 ### Objectivo

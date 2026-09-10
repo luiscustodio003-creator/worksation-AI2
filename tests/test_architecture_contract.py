@@ -288,7 +288,14 @@ def test_artigo8_subsistemas_futuros_nao_antecipados() -> None:
 
 
 def test_artigo8_nenhuma_pasta_placeholder() -> None:
-    """Nenhum subsistema existe apenas com ``__init__.py`` sem re-exportações."""
+    """Nenhum subsistema existe apenas com ``__init__.py`` sem re-exportações.
+
+    Excepção KERNEL-09: ``resource`` e ``runtime_engine`` são shells de
+    re-export deliberados — a sua implementação pesada desceu para
+    ``wsai2.infrastructure``; continuam a existir como fronteira (__init__
+    com re-exportações + versão), não como pasta vazia.
+    """
+    shells_de_reesportacao = {"resource", "runtime_engine"}
     for subsistema in _subsistemas_src():
         pasta = RAIZ_SRC / subsistema
         ficheiros = [
@@ -296,7 +303,9 @@ def test_artigo8_nenhuma_pasta_placeholder() -> None:
             for p in pasta.iterdir()
             if p.suffix == ".py" and p.name != "__init__.py"
         ]
-        assert ficheiros, f"{subsistema} é uma pasta placeholder (só __init__.py)"
+        assert ficheiros or subsistema in shells_de_reesportacao, (
+            f"{subsistema} é uma pasta placeholder (só __init__.py)"
+        )
         init = pasta / "__init__.py"
         if init.exists():
             arvore = ast.parse(init.read_text(encoding="utf-8"))

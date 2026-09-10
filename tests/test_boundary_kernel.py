@@ -105,3 +105,38 @@ def test_consumidores_apenas_ao_nivel_do_pacote():
                 ):
                     infraccoes.append(f"{ficheiro.name}: importa internos {alvo}")
     assert infraccoes == [], f"consumo de módulos internos: {infraccoes}"
+
+
+def test_implementacao_pesada_fora_do_nucleo():
+    """KERNEL-09: a mecânica pesada não reside nos pacotes do kernel.
+
+    ``resource`` e ``runtime_engine`` são shells de re-export (apenas
+    ``__init__.py``); a implementação pesada vive em
+    ``wsai2.infrastructure``, por trás dos contratos públicos.
+    """
+    for subsistema in ("resource", "runtime_engine"):
+        pasta = RAIZ_SRC / subsistema
+        internos = [
+            p.name
+            for p in pasta.iterdir()
+            if p.suffix == ".py" and p.name != "__init__.py"
+        ]
+        assert internos == [], (
+            f"{subsistema}: implementação pesada não pode residir no kernel: {internos}"
+        )
+
+    obrigatorios = {
+        "base_resource.py",
+        "base_runtime.py",
+        "governor.py",
+        "manager.py",
+        "monitoring.py",
+        "queue.py",
+        "scheduler.py",
+    }
+    infra = RAIZ_SRC / "infrastructure"
+    presentes = {p.name for p in infra.iterdir() if p.suffix == ".py"}
+    assert obrigatorios <= presentes, (
+        f"wsai2.infrastructure: faltam módulos da implementação pesada: "
+        f"{sorted(obrigatorios - presentes)}"
+    )

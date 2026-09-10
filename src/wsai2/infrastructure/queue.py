@@ -1,5 +1,9 @@
 """Filas multicamadas do Runtime Engine.
 
+Implementação pesada do kernel (KERNEL-09): vive em ``wsai2.infrastructure``,
+por trás do contrato público `wsai2.runtime_engine`, que re-exporta a
+``MultilayerExecutionQueue`` e a ``priority_for_plan``.
+
 A fila é uma camada aditiva sobre o ``Scheduler``: mantém uma fila pronta
 ordenada por prioridade, um backlog de espera e preempção **de itens ainda
 não iniciados**. Não interrompe trabalho em execução.

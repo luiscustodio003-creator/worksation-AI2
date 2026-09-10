@@ -1,5 +1,9 @@
 """Governação de recursos (hardening 05 do CORE_HARDENING_PLAN).
 
+Implementação pesada do kernel (KERNEL-09): vive em ``wsai2.infrastructure``,
+por trás do contrato público `wsai2.resource`, que re-exporta o
+``ResourceGovernor``.
+
 Evolui a gestão de memória existente para governação de recursos **sem
 duplicar mecanismos**: a medição estrutural continua no subsistema
 ``wsai2.hardware`` (Hardware Capability) e a medição momentânea no
@@ -39,7 +43,7 @@ from wsai2.core.public import ResourceError
 from wsai2.hardware import HardwareProfile
 from wsai2.runtime import RuntimeProfile
 
-from .base import (
+from .base_resource import (
     AllocationState,
     ResourceAllocation,
     ResourceBudgetResult,

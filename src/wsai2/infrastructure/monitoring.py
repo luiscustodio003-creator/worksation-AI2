@@ -1,5 +1,9 @@
 """Monitorização contínua de execuções do Runtime Engine.
 
+Implementação pesada do kernel (KERNEL-09): vive em ``wsai2.infrastructure``,
+por trás do contrato público `wsai2.runtime_engine`, que re-exporta o
+``ExecutionMonitor`` e os relatórios de observabilidade.
+
 Completa a observabilidade da unidade 8.5: além dos relatórios **pós-facto**
 (``ExecutionReport``/``SchedulerReport``), o ``ExecutionMonitor`` observa a
 execução **enquanto decorre** — regista o estado em curso de cada execução
@@ -28,10 +32,10 @@ import time
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Callable
 
-from .base import ExecutionReport
+from .base_runtime import ExecutionReport
 
 if TYPE_CHECKING:
-    from .base import SchedulerReport
+    from .base_runtime import SchedulerReport
 
 
 @dataclass(frozen=True)

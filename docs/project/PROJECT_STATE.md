@@ -135,8 +135,9 @@ vigente; `COMMAND_EXECUTION_CONTRACT.md` governa a transição).
 - **KERNEL-06 — OBSERVABILITY BOUNDARY: CONCLUÍDA** (`docs/architecture/KERNEL-06-observability-boundary.md`). `RUNTIME_ENGINE_CONTRACT_VERSION = "1.0"`; superfície sancionada (16 símbolos) congelada e partida em observabilidade (10) vs governação (6); `test_subcontrato_de_observabilidade` novo; regra de consumidores ao nível do pacote alargada ao `runtime_engine`. Implementação pesada (colecção de métricas) permanece interna → KERNEL-08/09. Suíte **501/501 verdes**.
 - **KERNEL-07 — ARCHITECTURE CONTRACT TESTS: CONCLUÍDA** (`docs/architecture/KERNEL-07-architecture-contract-tests.md`). Fonte única de verdade `tests/architecture_contracts.py` (FRONTEIRAS, FIREWALL, superfícies, versões) + refactor dos 3 ficheiros de contrato (literais removidos) + `test_kernel_todas_as_superficies_publicas_versionadas` (os 5 subsistemas do kernel com superfície versionada; bumps deliberados detectados). Sem alteração de `src`. Suíte **502/502 verdes**.
 - **KERNEL-08 — IMPORT MIGRATION (via core.public): CONCLUÍDA** (`docs/architecture/KERNEL-08-import-migration-core-public.md`). Opção A do plano: os 13 consumidores migram de `wsai2.core.{errors,context}` para `wsai2.core.public` (mesmos objectos; zero arestas novas) + regra de contrato `test_consumidores_core_apenas_via_public` (scan AST: fora de `core`, só `core.public`). Descida física da implementação pesada fica como decisão em aberto. Suíte **503/503 verdes**.
-- **Próxima unidade:** `/wsai-plan KERNEL-09` — Core freeze (superfície versionada; peso fora do núcleo).
-- **Política de reconstrução do Core (regra de superfície vs. implementação):** registada em `CORE_KERNEL_TARGET.md` (sec. 2, 6, 10, 11, 12) e `COMMAND_EXECUTION_CONTRACT.md` (regras de migração): a reconstrução nunca remove superfícies públicas já versionadas; extrai-se do núcleo apenas a implementação pesada (mecânica de execução), por trás dos contratos públicos, no KERNEL-08/09.
+- **KERNEL-09 — CORE FREEZE (implementação pesada fora do núcleo): CONCLUÍDA** (`docs/architecture/KERNEL-09-core-freeze-heavy-descend.md`). Descida completa (opção B do plano KERNEL-08, confirmada): novo subsistema `wsai2.infrastructure` (7 módulos: base_resource, governor, base_runtime, manager, scheduler, queue, monitoring) recolhe a mecânica pesada; `resource`/`runtime_engine` viram shells de re-export (superfícies e versões intactas; `git mv` com histórico). Fronteiras recompostas (26 arestas: `resource→infrastructure`, `runtime_engine→infrastructure`, `infrastructure→{core,execution,extension,hardware,runtime,security,task}`); `execution`/`security` ficam no núcleo (ciclo `execution⇄infra` bloqueia o runner). Guarda nova `test_implementacao_pesada_fora_do_nucleo` + BASE-44 + excepção de shell nos placeholders. Suíte **504/504 verdes**.
+- **Próxima unidade:** `/wsai-plan KERNEL-10` — Addon SDK / Projects foundation.
+- **Política de reconstrução do Core (regra de superfície vs. implementação):** registada em `CORE_KERNEL_TARGET.md` (sec. 2, 6, 10, 11, 12) e `COMMAND_EXECUTION_CONTRACT.md` (regras de migração): a reconstrução nunca remove superfícies públicas já versionadas; a implementação pesada (mecânica de execução) foi extraída do núcleo para `wsai2.infrastructure`, por trás dos contratos públicos, no KERNEL-09.
 
 ## Estado Git
 
@@ -148,7 +149,7 @@ documentação arquitectural/estado alinhados.
 
 ## Regra de continuação
 
-**Migração do Kernel — TRANSITION (KERNEL-01 a KERNEL-08 concluídas).**
+**Migração do Kernel — TRANSITION (KERNEL-01 a KERNEL-09 concluídas).**
 
 ```text
 KERNEL-01  Inventário real da base            ✓ CONCLUÍDA (auditoria read-only)
@@ -159,7 +160,8 @@ KERNEL-05  Resource / Execution boundary      ✓ CONCLUÍDA (Opção A; frontei
 KERNEL-06  Observability boundary             ✓ CONCLUÍDA (fronteira de observabilidade; 501/501)
 KERNEL-07  Architecture contract tests        ✓ CONCLUÍDA (fonte única de contratos; 502/502)
 KERNEL-08  Migração incremental de imports    ✓ CONCLUÍDA (consumidores só via core.public; 503/503)
-KERNEL-09  Core freeze                        → PRÓXIMA UNIDADE (/wsai-plan)
+KERNEL-09  Core freeze                        ✓ CONCLUÍDA (implementação pesada em wsai2.infrastructure; 504/504)
+KERNEL-10  Addon SDK / Projects foundation    → PRÓXIMA UNIDADE (/wsai-plan)
 KERNEL-05  Resource / Execution boundary
 KERNEL-06  Observability boundary
 KERNEL-07  Architecture contract tests

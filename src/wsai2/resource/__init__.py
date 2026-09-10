@@ -5,14 +5,13 @@ CORE_HARDENING_PLAN): normalizar limites declarativos, validar folga
 efectiva contra os perfis de hardware e runtime e contabilizar
 alocações/reservas ao longo de execuções.
 
-A medição estrutural (Hardware Capability) e a medição momentânea
-(Runtime State) pertencem aos subsistemas ``wsai2.hardware`` e
-``wsai2.runtime``; este subsistema reutiliza-as sem duplicar.
-O agendamento (8.5) e o enforce de timeout/cancelamento (8.4) estão
-fora do âmbito desta unidade.
+Desde o KERNEL-09, este pacote é **apenas a fronteira** (shell de
+re-export): a superfície sancionada mantém-se aqui, mas a implementação
+pesada (tipos de contrato e o ``ResourceGovernor``) desceu para
+`wsai2.infrastructure`, por trás deste contrato público.
 """
 
-from .base import (
+from wsai2.infrastructure.base_resource import (
     AllocationState,
     ResourceAllocation,
     ResourceBudgetResult,
@@ -20,7 +19,7 @@ from .base import (
     ResourceDimension,
     ResourceVerdict,
 )
-from .governor import ResourceGovernor
+from wsai2.infrastructure.governor import ResourceGovernor
 
 # Contrato público da fronteira de recursos (KERNEL-05): a superfície
 # sancionada é o `__all__` abaixo, congelada por teste de contrato.

@@ -8,6 +8,8 @@ gate de forma automática.
 """
 
 # Aresta autorizada: subsistema origem -> subsistema destino.
+# KERNEL-09: a implementação pesada desceu para `infrastructure`; os
+# pacotes resource/runtime_engine tornaram-se shells de re-export.
 FRONTEIRAS: frozenset[tuple[str, str]] = frozenset(
     {
         ("capability", "hardware"),
@@ -17,19 +19,19 @@ FRONTEIRAS: frozenset[tuple[str, str]] = frozenset(
         ("execution", "resource"),
         ("extension", "core"),
         ("extension", "security"),
+        ("infrastructure", "core"),
+        ("infrastructure", "execution"),
+        ("infrastructure", "extension"),
+        ("infrastructure", "hardware"),
+        ("infrastructure", "runtime"),
+        ("infrastructure", "security"),
+        ("infrastructure", "task"),
         ("knowledge", "core"),
         ("model", "capability"),
         ("model", "hardware"),
         ("model", "runtime"),
-        ("resource", "core"),
-        ("resource", "extension"),
-        ("resource", "hardware"),
-        ("resource", "runtime"),
-        ("runtime_engine", "core"),
-        ("runtime_engine", "execution"),
-        ("runtime_engine", "resource"),
-        ("runtime_engine", "security"),
-        ("runtime_engine", "task"),
+        ("resource", "infrastructure"),
+        ("runtime_engine", "infrastructure"),
         ("security", "core"),
         ("task", "capability"),
         ("task", "hardware"),
@@ -54,13 +56,14 @@ FIREWALL: dict[str, frozenset[str]] = {
     "execution": frozenset({"core", "resource"}),
     "extension": frozenset({"core", "security"}),
     "hardware": frozenset(),
+    "infrastructure": frozenset({"core", "execution", "extension", "hardware", "runtime", "security", "task"}),
     "knowledge": frozenset({"core"}),
     "model": frozenset({"capability", "hardware", "runtime"}),
     "platform": frozenset(),
     "provider": frozenset(),
-    "resource": frozenset({"core", "extension", "hardware", "runtime"}),
+    "resource": frozenset({"infrastructure"}),
     "runtime": frozenset(),
-    "runtime_engine": frozenset({"core", "execution", "resource", "security", "task"}),
+    "runtime_engine": frozenset({"infrastructure"}),
     "security": frozenset({"core"}),
     "task": frozenset({"capability", "hardware", "model", "provider", "runtime"}),
 }
