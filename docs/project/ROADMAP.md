@@ -137,7 +137,9 @@ A Fase 8 começou pela **baseline e auditoria**, não por uma reescrita. O Runti
 - tasks;
 - knowledge.
 
-**Estado:** estratégia contract-first com transporte stdlib definida. **API-01 concluída**: contrato `API_CONTRACT_VERSION = "1.0"`, `ApiRequest`, `ApiResponse`, `ApiGateway`, `StdLibHttpGateway` e health. **API-02 concluída**: `GET /system` (handler `system` apresenta o `SystemInfoService` da Application; contrato JSON `platform` + `uptime`). **API-03 concluída**: `GET /hardware` (handler `hardware` apresenta o `HardwareProfileService`; perfil estrutural em JSON). **API-04 concluída**: `GET /runtime` (handler `runtime` apresenta o `RuntimeProfileService`; estado momentâneo em JSON). **API-05 concluída**: `GET /capabilities` (handler `capabilities` apresenta o `CapabilitiesService`; relatório de compatibilidade em JSON). **API-06 concluída**: `GET /models` (handler `models` apresenta o `ModelsService`; veredictos de compatibilidade em JSON). **API-07 concluída**: `POST /tasks` (handler `tasks` apresenta o `TaskAnalysisService`; primeiro endpoint com entrada via corpo JSON; aresta `api → task` sancionada; 610/610 verdes). **API-08 concluída**: `POST /knowledge` (handler `knowledge` apresenta o `KnowledgeContextService`; correspondências + contexto em JSON; filtro por `kind`; aresta `api → knowledge` sancionada; 620/620 verdes). **API-09 concluída**: `POST /executions`, `POST /executions/status` e `POST /executions/cancel` (handlers `execution_start`/`execution_status`/`execution_cancel` apresentam o ciclo de vida da execução; duck typing para relatórios/snapshots; sem novas arestas; 635/635 verdes). API-10+ permanecem por executar.
+**Estado:** estratégia contract-first com transporte stdlib definida. **API-01 concluída**: contrato `API_CONTRACT_VERSION = "1.0"`, `ApiRequest`, `ApiResponse`, `ApiGateway`, `StdLibHttpGateway` e health. **API-02 concluída**: `GET /system` (handler `system` apresenta o `SystemInfoService` da Application; contrato JSON `platform` + `uptime`). **API-03 concluída**: `GET /hardware` (handler `hardware` apresenta o `HardwareProfileService`; perfil estrutural em JSON). **API-04 concluída**: `GET /runtime` (handler `runtime` apresenta o `RuntimeProfileService`; estado momentâneo em JSON). **API-05 concluída**: `GET /capabilities` (handler `capabilities` apresenta o `CapabilitiesService`; relatório de compatibilidade em JSON). **API-06 concluída**: `GET /models` (handler `models` apresenta o `ModelsService`; veredictos de compatibilidade em JSON). **API-07 concluída**: `POST /tasks` (handler `tasks` apresenta o `TaskAnalysisService`; primeiro endpoint com entrada via corpo JSON; aresta `api → task` sancionada; 610/610 verdes). **API-08 concluída**: `POST /knowledge` (handler `knowledge` apresenta o `KnowledgeContextService`; correspondências + contexto em JSON; filtro por `kind`; aresta `api → knowledge` sancionada; 620/620 verdes). **API-09 concluída**: `POST /executions`, `POST /executions/status` e `POST /executions/cancel` (handlers `execution_start`/`execution_status`/`execution_cancel` apresentam o ciclo de vida da execução; duck typing para relatórios/snapshots; sem novas arestas; 635/635 verdes). **API-10 concluída**: Integration Gate — validação global do Ramo B aprovada (`APPROVED`); **Ramo B `COMPLETE / FROZEN`**.
+
+**Estado:** **Ram B COMPLETE / FROZEN**. Dependency gate satisfeito (Application `COMPLETE / FROZEN`). Próximo ramo: C — UI.
 
 ## Fase 11 — UI
 
@@ -184,7 +186,9 @@ BRANCH B — API
     API-07  Tasks                           ✓ CONCLUÍDA (POST /tasks)
     API-08  Knowledge                       ✓ CONCLUÍDA (POST /knowledge)
     API-09  Execution / Status              ✓ CONCLUÍDA (POST /executions[/status|/cancel])
-    API-10  API Integration Gate
+    API-10  API Integration Gate           ✓ CONCLUÍDA (APPROVED, 635/635 verdes)
+
+Ramo B — API: **COMPLETE / FROZEN**
 
 BRANCH C — UI
     UI-01  Application Shell

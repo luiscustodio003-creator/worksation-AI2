@@ -1,5 +1,43 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-11 — API-10 — API Integration Gate (Ramo B, unidade 9)
+
+### Objectivo
+
+Validar a coerência global do Ramo B (API / Presentation) e, se aprovado,
+declarar o ramo `COMPLETE / FROZEN`.
+
+### Evidência
+
+- `docs/api/BASE-64-api-integration-gate.md` — evidência do gate (nova).
+- Suíte completa: **635/635 verdes**.
+- Fronteira API: `FRONTEIRAS` contém as 4 arestas `api → {application,
+  core, knowledge, task}`; `FIREWALL["api"]` coincide.
+- Superfície versionada: `SUPERFICIES_PUBLICAS["api"]` == `__all__` (15
+  símbolos); `API_CONTRACT_VERSION == "1.0"`.
+- Base documental: BASE-45, BASE-56..63 (8 endpoints) + BASE-64 (gate).
+- Sem placeholders: apenas `NotImplementedError` no abstractmethod
+  `ApiGateway.handle` (por design).
+
+### Decisão
+
+`APPROVED` — Ramo B `COMPLETE / FROZEN`.
+
+### Modificado
+
+- `docs/project/PROJECT_STATE.md` (API-10, Próximo ramo → C — UI, Ramo B
+  frozen, fases).
+- `docs/project/ROADMAP.md` (Fase 10 estado, BRANCH B mapa).
+- `docs/project/RUN_STATE.md` (Ramo B frozen, próximo UI-01).
+- `docs/architecture/ARCHITECTURE.md` (secção 3.10, API-10).
+- `docs/project/IMPLEMENTATION_LOG.md` (esta entrada).
+
+### Validação
+
+```text
+python -m pytest   635 passed, 0 failures, 0 errors, 0 skipped
+```
+
 ## 2026-09-11 — API-09 — Execution / Status / Cancellation (Ramo B, unidade 8)
 
 ### Objectivo

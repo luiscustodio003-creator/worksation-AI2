@@ -153,6 +153,14 @@ serializados por duck typing — sem novas arestas arquitecturais; as arestas
 reutilizadas são `api → application`, `api → task` (da API-07) e
 `api → core` (apenas via `wsai2.core.public`).
 
+Na unidade API-10 (Ramo B) foi executado o Integration Gate da API:
+validação global do Ramo B aprovada (`APPROVED`); **Ramo B declarado
+`COMPLETE / FROZEN`** — 635/635 verdes, fronteira sancionada (`api →
+{application, core, knowledge, task}`), superfície versionada (15
+símbolos, `API_CONTRACT_VERSION = "1.0"`), base documental completa
+(BASE-45, BASE-56..64), sem placeholders. A dependência `APPLICATION →
+API → UI` está satisfeita; o próximo ramo é C — UI.
+
 Em APP-02 (Ramo A), a camada Application ganhou a fronteira estável de
 use-cases `wsai2.application`: contratos puros de pedido/resposta por área
 (system/platform, hardware, runtime, capabilities, models, tasks,

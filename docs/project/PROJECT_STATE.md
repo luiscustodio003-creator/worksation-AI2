@@ -26,19 +26,27 @@
 
 **API-09 CONCLUÍDA** — `POST /executions`, `POST /executions/status`, `POST /executions/cancel` apresentam `ExecutionService`, `ExecutionStatusService` e `CancellationService` (APP-10): ciclo de vida completo de execução (submissão, estado, cancelamento) serializado em JSON puro. Módulo único `executions.py` com duck typing para relatórios/snapshots (sem novas arestas arquitecturais; `api → task` reutilizada da API-07).
 
+**API-10 CONCLUÍDA — API INTEGRATION GATE** — validação global do Ramo B aprovada (`APPROVED`): **635/635 verdes**, fronteira/superfície/versão sancionadas, base documental completa (BASE-45, BASE-56..64). **Ramo B declarado `COMPLETE / FROZEN`.**
+
 **KNOWLEDGE 9.1–9.7 CONCLUÍDA (âmbito lexical)** — enriquecimento semântico permanece como decisão material terminal e não deve ser iniciado sem planeamento próprio.
 
 **APP-11 CONCLUÍDA (Ramo A) — INTEGRATION GATE** — validação global do Ramo A aprovada (`APPROVED`): 570/570 verdes, fronteira/superfície/versão sancionadas, base documental completa (BASE-46..55). **Ramo A declarado `COMPLETE / FROZEN`.**
 
 ## Próximo ramo autorizado
 
-**BRANCH B — API** (dependência: Application concluída)
+**BRANCH C — UI** (dependência: API/Application concluídas)
 
-Estado: **ACTIVE** (API-02..09 concluídas)
+Estado: **PENDING** (aguarda arranque do Ramo C)
 
 Próxima unidade:
 
-`API-10 — API Integration Gate` (validação global do Ramo B)
+`UI-01 — Application Shell`
+
+## Ramo concluído
+
+**BRANCH B — API** (dependency gate satisfeito: Application `COMPLETE / FROZEN`)
+
+Estado: **COMPLETE / FROZEN** (API-01..10 concluídas, incluindo integration gate)
 
 ## Governação do /wsai-run
 
@@ -96,7 +104,7 @@ Os ramos são um mapa operacional e não uma autorização para criar todas as u
 - Runtime Engine — implementada e fechada.
 - Knowledge Engine — fechada no âmbito lexical (9.1–9.7).
 - Application / Use Cases (Ramo A) — **COMPLETE / FROZEN** (APP-01..11: auditoria + contratos + 8 use-cases + integration gate).
-- API — API-01..09 concluídas; API-10 pendente.
+- API — **COMPLETE / FROZEN** (API-01..10: fundação + 8 recursos de domínio + integration gate).
 - UI — ainda não iniciada.
 
 ## Política de reutilização
@@ -116,6 +124,8 @@ KERNEL-01..KERNEL-10: **CONCLUÍDOS**.
 `docs/validation/KERNEL_CONSOLIDATION_REPORT.md` é a evidência persistente do fecho. O estado `TRANSITION` do Kernel terminou; qualquer futura reabertura deve ser controlada e justificada por BUG, REGRESSION, SECURITY, CONTRACT VIOLATION, REQUIREMENT CHANGE ou outra falha real que torne o estado incorrecto.
 
 ## Última unidade funcional
+
+`API-10 — API Integration Gate` (Ramo B) — validação global aprovada; **Ramo B COMPLETE / FROZEN**; suíte real confirmada: **635/635 verdes**.
 
 `API-09 — Execution / Status / Cancellation` (Ramo B) — `POST /executions`, `POST /executions/status`, `POST /executions/cancel` apresentam o ciclo de vida completo da execução (submissão, estado e cancelamento) por trás do transporte contract-first; handler fino e injectável em `wsai2.api.executions` (módulo único com três handlers); serialização JSON de plano/relatório/snapshot via duck typing; sem novas arestas arquitecturais; suíte real confirmada: **635/635 verdes**.
 
