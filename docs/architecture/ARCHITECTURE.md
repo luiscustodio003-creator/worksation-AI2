@@ -94,6 +94,13 @@ serializando o perfil estrutural em JSON puro (`cpu`, `memory`, `gpus`,
 `storage`, `capabilities` e `overall_level`), com o mesmo padrão de
 apresentador fino injectável.
 
+Na unidade API-04 (Ramo B) foi criado `GET /runtime` (handler `runtime`
+em `wsai2.api.runtime`): apresenta o `RuntimeProfileService` (APP-05),
+serializando o estado momentâneo em JSON puro (`cpu`, `memory`,
+`processes`, `uptime`, `availability` e `overall_status`), preservando a
+separação secção 4 (runtime = estado, hardware = capacidade) e seguindo o
+mesmo padrão de apresentador fino injectável.
+
 Em APP-02 (Ramo A), a camada Application ganhou a fronteira estável de
 use-cases `wsai2.application`: contratos puros de pedido/resposta por área
 (system/platform, hardware, runtime, capabilities, models, tasks,

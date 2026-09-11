@@ -1,5 +1,50 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-11 — API-04 — Runtime (Ramo B, unidade 3)
+
+### Objectivo
+
+Apresentar o use-case `RuntimeProfileService` (APP-05) por trás do
+transporte contract-first: endpoint `GET /runtime` com o estado
+momentâneo da máquina (Runtime State).
+
+### Criado
+
+- `src/wsai2/api/runtime.py` — handler `runtime` (apresentador fino,
+  serviço injectável), serialização JSON do perfil de runtime.
+- `tests/test_api_runtime.py` — 7 testes (directo, injectável, processos,
+  uptime/availability, top_process, roundtrip HTTP 200 e 405).
+
+### Modificado
+
+- `src/wsai2/api/transport_stdlib.py` — rota `GET /runtime` nas tabelas.
+- `src/wsai2/api/__init__.py` — `runtime` na superfície pública.
+- `tests/architecture_contracts.py` — `SUPERFICIES_PUBLICAS["api"]` += `runtime`.
+- `docs/architecture/ARCHITECTURE.md` — secção 3.10 (API-04).
+- `docs/api/BASE-58-api-runtime-endpoint.md` — evidência (nova).
+
+### Decisões
+
+1. Apresentador fino: o handler não contém lógica de domínio nem I/O
+   próprio; delega no serviço injectável (padrão de API-02/API-03).
+2. Fronteira `api → application` já sancionada — nenhuma aresta nova.
+3. Contrato JSON estável: enums por `.value`, tuplas em listas; `uptime`
+   e `top_process` presentes (`null` quando indisponíveis).
+4. `/runtime` = estado (Runtime State); `/hardware` = capacidade
+   (Hardware Capability) — preserva a separação secção 4.
+
+### Validação
+
+```text
+py -3.12 -m pytest   589 passed, 0 failures, 0 errors, 0 skipped
+```
+
+(582 bases + 7 novos de API-04; contratos de arquitectura verdes.)
+
+### Próximo passo
+
+API-05 — Capabilities (`GET /capabilities`, `CapabilitiesService`).
+
 ## 2026-09-11 — API-03 — Hardware (Ramo B, unidade 2)
 
 ### Objectivo

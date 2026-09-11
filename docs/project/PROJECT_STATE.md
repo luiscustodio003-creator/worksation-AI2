@@ -14,6 +14,8 @@
 
 **API-03 CONCLUÍDA** — `GET /hardware` apresenta o `HardwareProfileService` (APP-04): handler `hardware` serializa o perfil estrutural em JSON puro (`cpu`, `memory`, `gpus`, `storage`, `capabilities`, `overall_level`), mesmo padrão de apresentador fino injectável.
 
+**API-04 CONCLUÍDA** — `GET /runtime` apresenta o `RuntimeProfileService` (APP-05): handler `runtime` serializa o estado momentâneo em JSON puro (`cpu`, `memory`, `processes`, `uptime`, `availability`, `overall_status`), preservando a separação Runtime State vs Hardware Capability.
+
 **KNOWLEDGE 9.1–9.7 CONCLUÍDA (âmbito lexical)** — enriquecimento semântico permanece como decisão material terminal e não deve ser iniciado sem planeamento próprio.
 
 **APP-11 CONCLUÍDA (Ramo A) — INTEGRATION GATE** — validação global do Ramo A aprovada (`APPROVED`): 570/570 verdes, fronteira/superfície/versão sancionadas, base documental completa (BASE-46..55). **Ramo A declarado `COMPLETE / FROZEN`.**
@@ -22,11 +24,11 @@
 
 **BRANCH B — API** (dependência: Application concluída)
 
-Estado: **ACTIVE** (API-02..03 concluídas)
+Estado: **ACTIVE** (API-02..04 concluídas)
 
 Próxima unidade:
 
-`API-04 — Runtime` (`GET /runtime`, `RuntimeProfileService`)
+`API-05 — Capabilities` (`GET /capabilities`, `CapabilitiesService`)
 
 ## Governação do /wsai-run
 
@@ -84,7 +86,7 @@ Os ramos são um mapa operacional e não uma autorização para criar todas as u
 - Runtime Engine — implementada e fechada.
 - Knowledge Engine — fechada no âmbito lexical (9.1–9.7).
 - Application / Use Cases (Ramo A) — **COMPLETE / FROZEN** (APP-01..11: auditoria + contratos + 8 use-cases + integration gate).
-- API — API-01 concluída; API-02 concluída; API-03 concluída; API-04+ pendentes.
+- API — API-01..04 concluídas; API-05+ pendentes.
 - UI — ainda não iniciada.
 
 ## Política de reutilização
@@ -104,6 +106,8 @@ KERNEL-01..KERNEL-10: **CONCLUÍDOS**.
 `docs/validation/KERNEL_CONSOLIDATION_REPORT.md` é a evidência persistente do fecho. O estado `TRANSITION` do Kernel terminou; qualquer futura reabertura deve ser controlada e justificada por BUG, REGRESSION, SECURITY, CONTRACT VIOLATION, REQUIREMENT CHANGE ou outra falha real que torne o estado incorrecto.
 
 ## Última unidade funcional
+
+`API-04 — Runtime` (Ramo B) — `GET /runtime` apresenta o `RuntimeProfileService` da Application por trás do transporte contract-first; handler fino e injectável em `wsai2.api.runtime`, serialização JSON do estado momentâneo (`cpu`/`memory`/`processes`/`uptime`/`availability`); suíte real confirmada: **589/589 verdes**.
 
 `API-03 — Hardware` (Ramo B) — `GET /hardware` apresenta o `HardwareProfileService` da Application por trás do transporte contract-first; handler fino e injectável em `wsai2.api.hardware`, serialização JSON do perfil estrutural (`cpu`/`memory`/`gpus`/`storage`/`capabilities`); suíte real confirmada: **582/582 verdes**.
 
