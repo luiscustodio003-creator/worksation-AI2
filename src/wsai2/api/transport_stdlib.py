@@ -21,6 +21,7 @@ from .hardware import hardware
 from .models import models
 from .runtime import runtime
 from .system import system
+from .tasks import tasks
 
 _ROTA_METODOS: Dict[str, frozenset[str]] = {
     "/health": frozenset({"GET"}),
@@ -29,6 +30,7 @@ _ROTA_METODOS: Dict[str, frozenset[str]] = {
     "/runtime": frozenset({"GET"}),
     "/capabilities": frozenset({"GET"}),
     "/models": frozenset({"GET"}),
+    "/tasks": frozenset({"POST"}),
 }
 
 _HANDLERS: Dict[str, Callable[[ApiRequest], ApiResponse]] = {
@@ -38,6 +40,7 @@ _HANDLERS: Dict[str, Callable[[ApiRequest], ApiResponse]] = {
     "/runtime": runtime,
     "/capabilities": capabilities,
     "/models": models,
+    "/tasks": tasks,
 }
 
 

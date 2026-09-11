@@ -117,6 +117,17 @@ em JSON puro os veredictos de compatibilidade dos modelos (`summary`,
 Intelligence (capacidades, estrutura e runtime) e seguindo o mesmo padrão
 de apresentador fino injectável.
 
+Na unidade API-07 (Ramo B) foi criado `POST /tasks` (handler `tasks` em
+`wsai2.api.tasks`): apresenta o `TaskAnalysisService` (APP-08) — primeiro
+endpoint com entrada, aceita um corpo JSON que descreve a tarefa e
+serializa em JSON puro a análise completa (`classification`, `requirements`,
+`selection` e `plan`), preservando a fidelidade ao domínio (sem fornecedores
+injectados, `provider_id` é `null` e o plano reflecte a não-executabilidade
+por falta de fornecedor saudável). Este endpoint introduz a aresta
+**`api → task`**, justificada: o handler monta a `Task` (tipo de entrada do
+use-case APP-08) a partir do corpo JSON, uma vez que a Application
+(Ramo A, congelada) não re-exporta tipos de domínio.
+
 Em APP-02 (Ramo A), a camada Application ganhou a fronteira estável de
 use-cases `wsai2.application`: contratos puros de pedido/resposta por área
 (system/platform, hardware, runtime, capabilities, models, tasks,

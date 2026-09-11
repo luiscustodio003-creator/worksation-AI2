@@ -1,5 +1,60 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-11 — API-07 — Tasks (Ramo B, unidade 6)
+
+### Objectivo
+
+Apresentar o use-case `TaskAnalysisService` (APP-08) por trás do transporte
+contract-first: endpoint `POST /tasks` com a análise completa da tarefa
+(classificação, requisitos, selecção de capacidades e plano) — primeiro
+endpoint com entrada via corpo JSON.
+
+### Criado
+
+- `src/wsai2/api/tasks.py` — handler `tasks` (apresentador fino, serviço
+  injectável), parsing/validação do corpo JSON (kind restrito ao enum,
+  erros 400), serialização JSON da análise.
+- `tests/test_api_tasks.py` — 9 testes (directo, injectável, selecção,
+  plano, capacidade impossível, kind inválido 400, body mal formado 400,
+  roundtrip HTTP 200 e 405).
+- `docs/api/BASE-61-api-tasks-endpoint.md` — evidência (nova).
+
+### Modificado
+
+- `src/wsai2/api/transport_stdlib.py` — rota `POST /tasks` nas tabelas.
+- `src/wsai2/api/__init__.py` — `tasks` na superfície pública.
+- `tests/architecture_contracts.py` — aresta `("api", "task")` em
+  `FRONTEIRAS`/`FIREWALL["api"]`; `SUPERFICIES_PUBLICAS["api"]` += `tasks`.
+- `docs/architecture/ARCHITECTURE.md` — secção 3.10 (API-07).
+- `docs/project/PROJECT_STATE.md`, `docs/project/ROADMAP.md`.
+
+### Decisões
+
+1. `POST /tasks` (não GET): a análise de tarefa exige a descrição da
+   tarefa como entrada — corpo JSON com `task_id`, `kind`, `prompt`,
+   `max_tokens` e `required_capabilities`.
+2. Apresentador fino: o handler delega a análise no serviço injectável
+   (padrão de API-02..06); o parsing do pedido é limitado à validação de
+   entrada.
+3. Nova aresta `api → task` justificada: o handler monta a `Task` (tipo de
+   entrada do use-case APP-08) a partir do corpo — a Application (Ramo A,
+   congelada) não re-exporta tipos de domínio.
+4. Fidelidade ao domínio: sem `provider_health` injectado, o plano devolve
+   `provider_id` `null` e `feasible`/`is_executable` reflectem a
+   não-execução — o apresentador não inventa fornecedores.
+
+### Validação
+
+```text
+python -m pytest   610 passed, 0 failures, 0 errors, 0 skipped
+```
+
+(601 bases + 9 novos de API-07; contratos de arquitectura verdes.)
+
+### Próximo passo
+
+API-08 — Knowledge (`GET /knowledge`, `KnowledgeContextService`).
+
 ## 2026-09-11 — API-06 — Models (Ramo B, unidade 5)
 
 ### Objectivo

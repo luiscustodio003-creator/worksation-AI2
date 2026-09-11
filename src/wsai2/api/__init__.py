@@ -17,6 +17,9 @@ A unidade API-05 acrescenta o endpoint ``capabilities``, que apresenta o
 A unidade API-06 acrescenta o endpoint ``models``, que apresenta o
 ``ModelsService`` (veredictos de compatibilidade de modelos) com o mesmo
 padrão.
+A unidade API-07 acrescenta o endpoint ``tasks``, que apresenta o
+``TaskAnalysisService`` (análise de tarefa) — primeiro endpoint POST,
+aceita corpo JSON com a descrição da tarefa e devolve a análise completa.
 """
 
 from .base import ApiGateway, health
@@ -26,6 +29,7 @@ from .hardware import hardware
 from .models import models
 from .runtime import runtime
 from .system import system
+from .tasks import tasks
 from .transport_stdlib import StdLibHttpGateway
 
 API_CONTRACT_VERSION = "1.0"
@@ -41,4 +45,5 @@ __all__ = [
     "models",
     "runtime",
     "system",
+    "tasks",
 ]

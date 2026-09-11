@@ -14,6 +14,7 @@ FRONTEIRAS: frozenset[tuple[str, str]] = frozenset(
     {
         ("api", "application"),
         ("api", "core"),
+        ("api", "task"),
         ("application", "capability"),
         ("application", "core"),
         ("application", "hardware"),
@@ -63,7 +64,7 @@ ADAPTADORES_SO = ("wsai2.platform.windows", "wsai2.platform.linux")
 # Dependências exactas permitidas POR SUBSISTEMA (Dependency Firewall,
 # KERNEL-04), com imports TYPE_CHECKING incluídos.
 FIREWALL: dict[str, frozenset[str]] = {
-    "api": frozenset({"application", "core"}),
+    "api": frozenset({"application", "core", "task"}),
     "application": frozenset({"capability", "core", "hardware", "knowledge", "model", "platform", "runtime", "runtime_engine", "task"}),
     "capability": frozenset({"hardware", "runtime"}),
     "core": frozenset({"extension"}),
@@ -121,6 +122,7 @@ SUPERFICIES_PUBLICAS: dict[str, frozenset[str]] = {
             "models",
             "runtime",
             "system",
+            "tasks",
         }
     ),
     "application": frozenset(
