@@ -22,6 +22,8 @@
 
 **API-07 CONCLUÍDA** — `POST /tasks` apresenta o `TaskAnalysisService` (APP-08): handler `tasks` serializa a análise completa da tarefa em JSON puro (`classification`/`requirements`/`selection`/`plan`), primeiro endpoint com entrada (corpo JSON validado, erros 400/405). Introduz a aresta justificada **`api → task`** (montagem da `Task` no apresentador; a Application do Ramo A não re-exporta tipos de domínio).
 
+**API-08 CONCLUÍDA** — `POST /knowledge` apresenta o `KnowledgeContextService` (APP-09): handler `knowledge` serializa correspondências e contexto em JSON puro (`query`/`matches`/`context`), mesmo padrão POST/corpo JSON validado (400/405), com filtro opcional por tipo de conhecimento (`kind`). Introduz a aresta justificada **`api → knowledge`** (enum `KnowledgeKind` no apresentador; a Application do Ramo A não re-exporta tipos de domínio).
+
 **KNOWLEDGE 9.1–9.7 CONCLUÍDA (âmbito lexical)** — enriquecimento semântico permanece como decisão material terminal e não deve ser iniciado sem planeamento próprio.
 
 **APP-11 CONCLUÍDA (Ramo A) — INTEGRATION GATE** — validação global do Ramo A aprovada (`APPROVED`): 570/570 verdes, fronteira/superfície/versão sancionadas, base documental completa (BASE-46..55). **Ramo A declarado `COMPLETE / FROZEN`.**
@@ -30,11 +32,11 @@
 
 **BRANCH B — API** (dependência: Application concluída)
 
-Estado: **ACTIVE** (API-02..07 concluídas)
+Estado: **ACTIVE** (API-02..08 concluídas)
 
 Próxima unidade:
 
-`API-08 — Knowledge` (`GET /knowledge`, `KnowledgeContextService`)
+`API-09 — Execution / Status` (`POST /executions`, `ExecutionService`/`ExecutionStatusService`)
 
 ## Governação do /wsai-run
 
@@ -92,7 +94,7 @@ Os ramos são um mapa operacional e não uma autorização para criar todas as u
 - Runtime Engine — implementada e fechada.
 - Knowledge Engine — fechada no âmbito lexical (9.1–9.7).
 - Application / Use Cases (Ramo A) — **COMPLETE / FROZEN** (APP-01..11: auditoria + contratos + 8 use-cases + integration gate).
-- API — API-01..07 concluídas; API-08+ pendentes.
+- API — API-01..08 concluídas; API-09+ pendentes.
 - UI — ainda não iniciada.
 
 ## Política de reutilização
@@ -112,6 +114,8 @@ KERNEL-01..KERNEL-10: **CONCLUÍDOS**.
 `docs/validation/KERNEL_CONSOLIDATION_REPORT.md` é a evidência persistente do fecho. O estado `TRANSITION` do Kernel terminou; qualquer futura reabertura deve ser controlada e justificada por BUG, REGRESSION, SECURITY, CONTRACT VIOLATION, REQUIREMENT CHANGE ou outra falha real que torne o estado incorrecto.
 
 ## Última unidade funcional
+
+`API-08 — Knowledge` (Ramo B) — `POST /knowledge` apresenta o `KnowledgeContextService` da Application por trás do transporte contract-first; handler fino e injectável em `wsai2.api.knowledge`, serialização JSON das correspondências e do pacote de contexto (`query`/`matches`/`context`), filtro opcional por tipo de conhecimento; aresta justificada `api → knowledge` sancionada; suíte real confirmada: **620/620 verdes**.
 
 `API-07 — Tasks` (Ramo B) — `POST /tasks` apresenta o `TaskAnalysisService` da Application por trás do transporte contract-first; primeiro endpoint com entrada (corpo JSON da tarefa, validado com 400/405); handler fino e injectável em `wsai2.api.tasks`, serialização JSON da análise completa (`classification`/`requirements`/`selection`/`plan`); aresta justificada `api → task` sancionada; suíte real confirmada: **610/610 verdes**.
 

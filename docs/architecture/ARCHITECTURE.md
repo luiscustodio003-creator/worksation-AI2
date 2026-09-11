@@ -128,6 +128,17 @@ por falta de fornecedor saudável). Este endpoint introduz a aresta
 use-case APP-08) a partir do corpo JSON, uma vez que a Application
 (Ramo A, congelada) não re-exporta tipos de domínio.
 
+Na unidade API-08 (Ramo B) foi criado `POST /knowledge` (handler
+`knowledge` em `wsai2.api.knowledge`): apresenta o `KnowledgeContextService`
+(APP-09) — mesmo padrão POST/corpo JSON, serializa em JSON puro as
+correspondências e o pacote de contexto (`query`, `matches` e `context` com
+a representação textual determinista), com filtro opcional por tipo de
+conhecimento (`kind`). Este endpoint introduz a aresta **`api → knowledge`**,
+justificada: o handler importa o enum `KnowledgeKind` para construir o
+`KnowledgeContextRequest` a partir do corpo JSON, uma vez que a Application
+(Ramo A, congelada) não re-exporta tipos de domínio — mesma justificação da
+aresta `api → task` na API-07.
+
 Em APP-02 (Ramo A), a camada Application ganhou a fronteira estável de
 use-cases `wsai2.application`: contratos puros de pedido/resposta por área
 (system/platform, hardware, runtime, capabilities, models, tasks,

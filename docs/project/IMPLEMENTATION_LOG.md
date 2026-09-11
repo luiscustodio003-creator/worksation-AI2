@@ -1,5 +1,55 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-11 — API-08 — Knowledge (Ramo B, unidade 7)
+
+### Objectivo
+
+Apresentar o use-case `KnowledgeContextService` (APP-09) por trás do
+transporte contract-first: endpoint `POST /knowledge` com as correspondências
+e o pacote de contexto para uma consulta, com filtro opcional por tipo de
+conhecimento — mesmo padrão de entrada via corpo JSON da API-07.
+
+### Criado
+
+- `src/wsai2/api/knowledge.py` — handler `knowledge` (apresentador fino,
+  serviço injectável), parsing/validação do corpo JSON (`query` obrigatória,
+  `limit` positivo, `kind` restrito ao enum, erros 400), serialização JSON
+  de correspondências e contexto (incluindo `context.text()`).
+- `tests/test_api_knowledge.py` — 10 testes (directo, injectável, contexto
+  textual, filtro por kind, sem resultados, kind inválido 400, body mal
+  formado 400, consulta vazia 400, roundtrip HTTP 200 e 405).
+- `docs/api/BASE-62-api-knowledge-endpoint.md` — evidência (nova).
+
+### Modificado
+
+- `src/wsai2/api/transport_stdlib.py` — rota `POST /knowledge` nas tabelas.
+- `src/wsai2/api/__init__.py` — `knowledge` na superfície pública.
+- `tests/architecture_contracts.py` — aresta `("api", "knowledge")` em
+  `FRONTEIRAS`/`FIREWALL["api"]`; `SUPERFICIES_PUBLICAS["api"]` += `knowledge`.
+- `docs/architecture/ARCHITECTURE.md` — secção 3.10 (API-08).
+- `docs/project/PROJECT_STATE.md`, `docs/project/ROADMAP.md`,
+  `docs/project/RUN_STATE.md`.
+
+### Decisões
+
+1. `POST /knowledge` (não GET): o use-case exige a consulta como entrada —
+   corpo JSON com `query`, `limit` e `kind` opcional.
+2. Apresentador fino: o handler delega no serviço injectável (padrão de
+   API-02..07); o parsing do pedido é limitado à validação de entrada.
+3. Nova aresta `api → knowledge` justificada: o handler importa o enum
+   `KnowledgeKind` para montar o `KnowledgeContextRequest` (a Application,
+   Ramo A congelada, não re-exporta tipos de domínio) — mesma justificação
+   de `api → task`.
+4. Fidelidade ao domínio APP-09: o apresentador não inventa correspondências
+   nem contexto — serializa apenas o `KnowledgeContextResponse` (incluindo a
+   representação textual determinista).
+
+### Validação
+
+```text
+python -m pytest   620 passed, 0 failures, 0 errors, 0 skipped
+```
+
 ## 2026-09-11 — API-07 — Tasks (Ramo B, unidade 6)
 
 ### Objectivo

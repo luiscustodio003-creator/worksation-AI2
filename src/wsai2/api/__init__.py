@@ -20,12 +20,16 @@ padrão.
 A unidade API-07 acrescenta o endpoint ``tasks``, que apresenta o
 ``TaskAnalysisService`` (análise de tarefa) — primeiro endpoint POST,
 aceita corpo JSON com a descrição da tarefa e devolve a análise completa.
+A unidade API-08 acrescenta o endpoint ``knowledge``, que apresenta o
+``KnowledgeContextService`` (contexto de conhecimento) — mesmo padrão
+POST/corpo JSON, devolvendo correspondências e pacote de contexto.
 """
 
 from .base import ApiGateway, health
 from .capabilities import capabilities
 from .contract import ApiRequest, ApiResponse
 from .hardware import hardware
+from .knowledge import knowledge
 from .models import models
 from .runtime import runtime
 from .system import system
@@ -42,6 +46,7 @@ __all__ = [
     "capabilities",
     "hardware",
     "health",
+    "knowledge",
     "models",
     "runtime",
     "system",
