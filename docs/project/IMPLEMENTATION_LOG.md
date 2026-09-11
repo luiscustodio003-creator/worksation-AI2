@@ -1,5 +1,45 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-11 — UI-PREP — Preparação Arquitectural da UI
+
+### Objectivo
+
+Criar a documentação arquitectural, a política de migração e a skill
+operacional para o BRANCH C (UI), garantindo que quando a implementação
+da UI começar já existem arquitectura, contratos, regras e plano de
+migração documentados.
+
+### Evidência
+
+- `docs/architecture/WSAI2_UI_UX_ARCHITECTURE.md` — filosofia,
+  princípios de UX, layout (sidebar, área de conteúdo, barra de
+  estado), comunicação UI→API, contratos, estados, segurança,
+  extensibilidade, tecnologias (nova).
+- `docs/architecture/WSAI2_BROWSER_ARCHITECTURE.md` — Browser como
+  capacidade integrada, layout, componentes, integração com API,
+  extração de conteúdo, segurança, roadmap (nova).
+- `docs/architecture/WSAI2_UI_LEGACY_MIGRATION.md` — política de
+  migração do WSAI antigo (worksation-AI), categorias (reutilizar/
+  adaptar/não migrar), mapeamento de endpoints antigos → contratos
+  WSAI 2, estrutura alvo, regras de migração, ordem sugerida (nova).
+- `.opencode/skills/wsai-ui/` — skill operacional com SKILL.md,
+  architecture.md, ux.md, browser.md, integration.md, migration.md
+  (nova).
+
+### Modificação
+
+- `docs/project/PROJECT_STATE.md` (secção BRANCH C — UI-PREP).
+- `docs/project/ROADMAP.md` (UI-PREP na Fase C).
+- `docs/project/RUN_STATE.md` (unidade activa UI-PREP).
+- `docs/architecture/ARCHITECTURE.md` (referência à preparação UI).
+- `docs/project/IMPLEMENTATION_LOG.md` (esta entrada).
+
+### Nota
+
+Esta unidade é documental e não adiciona código nem testes. Não há
+commit de código — apenas documentos e skill. Não há baseline de
+testes alterada (mantém-se 635/635).
+
 ## 2026-09-11 — API-10 — API Integration Gate (Ramo B, unidade 9)
 
 ### Objectivo

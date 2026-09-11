@@ -191,6 +191,7 @@ BRANCH B — API
 Ramo B — API: **COMPLETE / FROZEN**
 
 BRANCH C — UI
+    UI-PREP  UI Preparation (Documentation)      ✓ CONCLUÍDA
     UI-01  Application Shell
     UI-02  Dashboard
     UI-03  Hardware

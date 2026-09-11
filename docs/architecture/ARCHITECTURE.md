@@ -161,6 +161,13 @@ símbolos, `API_CONTRACT_VERSION = "1.0"`), base documental completa
 (BASE-45, BASE-56..64), sem placeholders. A dependência `APPLICATION →
 API → UI` está satisfeita; o próximo ramo é C — UI.
 
+A preparação arquitectural da UI foi concluída (UI-PREP): documentos
+`WSAI2_UI_UX_ARCHITECTURE.md` (filosofia, layout, princípios, comunicação
+UI→API), `WSAI2_BROWSER_ARCHITECTURE.md` (Browser integrado como
+capacidade) e `WSAI2_UI_LEGACY_MIGRATION.md` (política de migração do
+WSAI antigo com mapeamento de endpoints e regras de tratamento); skill
+`wsai-ui` criada em `.opencode/skills/wsai-ui/`.
+
 Em APP-02 (Ramo A), a camada Application ganhou a fronteira estável de
 use-cases `wsai2.application`: contratos puros de pedido/resposta por área
 (system/platform, hardware, runtime, capabilities, models, tasks,

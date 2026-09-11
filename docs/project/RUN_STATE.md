@@ -7,9 +7,9 @@ PROJECT_STATUS: ACTIVE
 KERNEL_STATUS: FROZEN
 ACTIVE_BRANCH: (nenhum) — entre ramos
 BRANCH_STATUS: READY — próximo ramo C — UI
-ACTIVE_UNIT: API-10 — API Integration Gate
-UNIT_STATUS: COMPLETE / FROZEN
-CURRENT_STEP: GATE
+ACTIVE_UNIT: UI-PREP — Preparação Arquitectural da UI (documental)
+UNIT_STATUS: COMPLETE
+CURRENT_STEP: DOCUMENTATION
 NEXT_ACTION: UI-01 — Application Shell (Ramo C)
 BLOCKED_REASON: NONE
 ```
@@ -29,9 +29,9 @@ BLOCKED_REASON: NONE
 
 ```text
 BRANCH: (nenhum) — entre ramos
-UNIT: API-10 — API Integration Gate (COMPLETE / FROZEN)
-STEP: GATE
-STATUS: Ramo B COMPLETE / FROZEN; próximo: C — UI
+UNIT: UI-PREP — Preparação Arquitectural da UI (COMPLETE)
+STEP: DOCUMENTATION
+STATUS: Documentação arquitectural da UI concluída; próximo: UI-01
 ```
 
 ## Unidades congeladas (Ramo B)
@@ -64,6 +64,12 @@ API-09  Execution / Status / Cancel    COMPLETE / FROZEN
 API-10  API Integration Gate           COMPLETE / FROZEN
         Evidência: docs/api/BASE-64-api-integration-gate.md
                 + docs/project/IMPLEMENTATION_LOG.md (API-10)
+UI-PREP UI Preparation (Documentation)  COMPLETE
+        Evidência: docs/architecture/WSAI2_UI_UX_ARCHITECTURE.md
+                + docs/architecture/WSAI2_BROWSER_ARCHITECTURE.md
+                + docs/architecture/WSAI2_UI_LEGACY_MIGRATION.md
+                + .opencode/skills/wsai-ui/
+                + docs/project/IMPLEMENTATION_LOG.md (UI-PREP)
 ```
 
 ## Unidades congeladas (Ramo A)

@@ -36,11 +36,18 @@
 
 **BRANCH C — UI** (dependência: API/Application concluídas)
 
-Estado: **PENDING** (aguarda arranque do Ramo C)
+Estado: **PENDING** — preparação arquitectural concluída (UI-PREP); aguarda arranque do Ramo C.
 
 Próxima unidade:
 
-`UI-01 — Application Shell`
+`UI-01 — Application Shell` (primeira unidade de implementação do Ramo C)
+
+Preparação documental concluída:
+
+- `docs/architecture/WSAI2_UI_UX_ARCHITECTURE.md` — filosofia, layout, princípios, comunicação UI→API.
+- `docs/architecture/WSAI2_BROWSER_ARCHITECTURE.md` — arquitectura do Browser integrado.
+- `docs/architecture/WSAI2_UI_LEGACY_MIGRATION.md` — política de migração do WSAI antigo.
+- `.opencode/skills/wsai-ui/` — skill operacional (SKILL.md + architecture.md + ux.md + browser.md + integration.md + migration.md).
 
 ## Ramo concluído
 
