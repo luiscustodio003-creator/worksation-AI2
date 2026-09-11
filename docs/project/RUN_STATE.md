@@ -6,19 +6,19 @@
 PROJECT_STATUS: ACTIVE
 KERNEL_STATUS: FROZEN
 ACTIVE_BRANCH: A — APPLICATION / USE CASES
-BRANCH_STATUS: IN_PROGRESS
-ACTIVE_UNIT: APP-11
-UNIT_STATUS: PENDING
-CURRENT_STEP: AUDIT
-NEXT_ACTION: Application Integration Gate
-BLOCKED_REASON: NONE
+BRANCH_STATUS: COMPLETE / FROZEN
+ACTIVE_UNIT: NONE
+UNIT_STATUS: COMPLETE
+CURRENT_STEP: GATE
+NEXT_ACTION: Dependency Gate (Ramo A) — aprovado; Ramo B PENDING
+BLOCKED_REASON: AWAITING AUTHORIZATION (Ramo B)
 ```
 
 ## Branches
 
 | Ramo | Estado | Dependência | Próximo passo |
 |---|---|---|---|
-| A — Application / Use Cases | IN_PROGRESS | Kernel frozen | APP-11 (APP-01..10 congeladas) |
+| A — Application / Use Cases | COMPLETE / FROZEN | Kernel frozen | — (APP-01..11) |
 | B — API | PENDING | Application | API-02 |
 | C — UI | PENDING | API/Application | UI-01 |
 | D — Knowledge Semantic | BLOCKED | decisão material própria | KNOW-SEM-01 |
@@ -29,10 +29,9 @@ BLOCKED_REASON: NONE
 
 ```text
 BRANCH: A
-UNIT: APP-11
-DESCRIPTION: Application Integration Gate
-STEP: AUDIT
-STATUS: PENDING
+UNIT: (Ramo concluído — sem unidade activa)
+STEP: GATE
+STATUS: COMPLETE / FROZEN
 ```
 
 ## Unidades congeladas (Ramo A)
@@ -67,6 +66,9 @@ APP-09  Knowledge Context              COMPLETE / FROZEN
 APP-10  Exec/Status/Cancellation         COMPLETE / FROZEN
         Evidência: docs/application/BASE-54-execution-status-cancellation-use-cases.md
                 + docs/project/IMPLEMENTATION_LOG.md (APP-10)
+APP-11  Application Integration Gate    COMPLETE / FROZEN
+        Evidência: docs/application/BASE-55-application-integration-gate.md
+                + docs/project/IMPLEMENTATION_LOG.md (APP-11)
 ```
 
 ## Regra de retoma

@@ -165,7 +165,9 @@ BRANCH A — APPLICATION / USE CASES
     APP-08  Tasks                                ✓ CONCLUÍDA (TaskAnalysisService)
     APP-09  Knowledge                           ✓ CONCLUÍDA (KnowledgeContextService)
     APP-10  Execution/Status/Cancellation        ✓ CONCLUÍDA (ExecutionService)
-    APP-11  Application Integration Gate
+    APP-11  Application Integration Gate        ✓ CONCLUÍDA (APPROVED)
+
+Ramo A — Application / Use Cases: **COMPLETE / FROZEN**
     APP-06  Capabilities
     APP-07  Models
     APP-08  Tasks

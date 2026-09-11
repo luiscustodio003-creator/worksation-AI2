@@ -1,5 +1,32 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-10 — APP-11 — Application Integration Gate (Ramo A, unidade 11)
+
+### Objectivo
+
+Validar a coerência do Ramo A e, se aprovado, declarar o ramo
+`COMPLETE / FROZEN`.
+
+### Validação (gate)
+
+- Suíte completa: **570 passed, 0 failures, 0 errors, 0 skipped**.
+- Fronteira: 9 arestas `application → {capability, core, hardware,
+  knowledge, model, platform, runtime, runtime_engine, task}`;
+  `FIREWALL["application"]` exacto; `provider` excluído.
+- Superfície: `SUPERFICIES_PUBLICAS["application"]` == `__all__`
+  (30 símbolos: 20 contratos + 10 serviços); versão `"1.0"` consistente.
+- Evidências: `BASE-46` + `BASE-47..55`; docstrings no presente.
+
+### Decisão
+
+`APPROVED` — Ramo A `COMPLETE / FROZEN`. O próximo ramo (B — API) fica
+`PENDING` e só inicia após a sincronização Git (commit + push).
+
+### Próximo passo
+
+Ramo B — API (API-02) quando autorizado; o `RUN_STATE` mantém a unidade
+activa no ramo seguinte.
+
 ## 2026-09-10 — APP-10 — Execution / Status / Cancellation (Ramo A, unidade 10)
 
 ### Objectivo
