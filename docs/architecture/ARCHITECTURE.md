@@ -88,6 +88,12 @@ recolha no serviço injectável e não importa os domínios directamente
 (`api → application`, fronteira sancionada); o serviço foi exposto na
 superfície pública da API.
 
+Na unidade API-03 (Ramo B) foi criado `GET /hardware` (handler `hardware`
+em `wsai2.api.hardware`): apresenta o `HardwareProfileService` (APP-04),
+serializando o perfil estrutural em JSON puro (`cpu`, `memory`, `gpus`,
+`storage`, `capabilities` e `overall_level`), com o mesmo padrão de
+apresentador fino injectável.
+
 Em APP-02 (Ramo A), a camada Application ganhou a fronteira estável de
 use-cases `wsai2.application`: contratos puros de pedido/resposta por área
 (system/platform, hardware, runtime, capabilities, models, tasks,

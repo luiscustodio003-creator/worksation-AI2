@@ -16,16 +16,19 @@ from typing import Callable, Dict, Optional, Tuple
 
 from .base import ApiGateway, health
 from .contract import ApiRequest, ApiResponse
+from .hardware import hardware
 from .system import system
 
 _ROTA_METODOS: Dict[str, frozenset[str]] = {
     "/health": frozenset({"GET"}),
     "/system": frozenset({"GET"}),
+    "/hardware": frozenset({"GET"}),
 }
 
 _HANDLERS: Dict[str, Callable[[ApiRequest], ApiResponse]] = {
     "/health": health,
     "/system": system,
+    "/hardware": hardware,
 }
 
 

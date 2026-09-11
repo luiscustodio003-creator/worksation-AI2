@@ -7,10 +7,10 @@ PROJECT_STATUS: ACTIVE
 KERNEL_STATUS: FROZEN
 ACTIVE_BRANCH: B — API
 BRANCH_STATUS: ACTIVE
-ACTIVE_UNIT: API-02 — System
+ACTIVE_UNIT: API-03 — Hardware
 UNIT_STATUS: COMPLETE / FROZEN
 CURRENT_STEP: GATE
-NEXT_ACTION: API-03 — Hardware (GET /hardware)
+NEXT_ACTION: API-04 — Runtime (GET /runtime)
 BLOCKED_REASON: NONE
 ```
 
@@ -19,7 +19,7 @@ BLOCKED_REASON: NONE
 | Ramo | Estado | Dependência | Próximo passo |
 |---|---|---|---|
 | A — Application / Use Cases | COMPLETE / FROZEN | Kernel frozen | — (APP-01..11) |
-| B — API | ACTIVE | Application | API-03 |
+| B — API | ACTIVE | Application | API-04 |
 | C — UI | PENDING | API/Application | UI-01 |
 | D — Knowledge Semantic | BLOCKED | decisão material própria | KNOW-SEM-01 |
 | E — Addon Ecosystem | PENDING | contratos públicos | ADDON-01 |
@@ -29,9 +29,9 @@ BLOCKED_REASON: NONE
 
 ```text
 BRANCH: B — API
-UNIT: API-02 — System (COMPLETE / FROZEN)
+UNIT: API-03 — Hardware (COMPLETE / FROZEN)
 STEP: GATE
-STATUS: A aguardar arranque da API-03
+STATUS: A aguardar arranque da API-04
 ```
 
 ## Unidades congeladas (Ramo B)
@@ -40,6 +40,9 @@ STATUS: A aguardar arranque da API-03
 API-02  System                         COMPLETE / FROZEN
         Evidência: docs/api/BASE-56-api-system-endpoint.md
                 + docs/project/IMPLEMENTATION_LOG.md (API-02)
+API-03  Hardware                       COMPLETE / FROZEN
+        Evidência: docs/api/BASE-57-api-hardware-endpoint.md
+                + docs/project/IMPLEMENTATION_LOG.md (API-03)
 ```
 
 ## Unidades congeladas (Ramo A)

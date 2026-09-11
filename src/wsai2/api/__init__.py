@@ -8,10 +8,13 @@ por outro transporte sem tocar nos handlers) e o serviço de exemplo
 ``health``, dependente apenas de ``wsai2.core.public`` (regra KERNEL-08).
 A unidade API-02 acrescenta o endpoint ``system``, que consome o
 ``SystemInfoService`` da camada Application (fronteira ``api -> application``).
+A unidade API-03 acrescenta o endpoint ``hardware``, que apresenta o
+``HardwareProfileService`` (perfil estrutural) com o mesmo padrão.
 """
 
 from .base import ApiGateway, health
 from .contract import ApiRequest, ApiResponse
+from .hardware import hardware
 from .system import system
 from .transport_stdlib import StdLibHttpGateway
 
@@ -22,6 +25,7 @@ __all__ = [
     "ApiRequest",
     "ApiResponse",
     "StdLibHttpGateway",
+    "hardware",
     "health",
     "system",
 ]

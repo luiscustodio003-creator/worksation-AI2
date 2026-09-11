@@ -1,5 +1,48 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-11 — API-03 — Hardware (Ramo B, unidade 2)
+
+### Objectivo
+
+Apresentar o use-case `HardwareProfileService` (APP-04) por trás do
+transporte contract-first: endpoint `GET /hardware` com o perfil
+estrutural da máquina.
+
+### Criado
+
+- `src/wsai2/api/hardware.py` — handler `hardware` (apresentador fino,
+  serviço injectável), serialização JSON do perfil estrutural.
+- `tests/test_api_hardware.py` — 6 testes (directo, injectável, gpus/
+  storage, capacidades, roundtrip HTTP 200 e 405).
+
+### Modificado
+
+- `src/wsai2/api/transport_stdlib.py` — rota `GET /hardware` nas tabelas.
+- `src/wsai2/api/__init__.py` — `hardware` na superfície pública.
+- `tests/architecture_contracts.py` — `SUPERFICIES_PUBLICAS["api"]` += `hardware`.
+- `docs/architecture/ARCHITECTURE.md` — secção 3.10 (API-03).
+- `docs/api/BASE-57-api-hardware-endpoint.md` — evidência (nova).
+
+### Decisões
+
+1. Apresentador fino: o handler não contém lógica de domínio nem I/O
+   próprio; delega no serviço injectável (padrão de API-02).
+2. Fronteira `api → application` já sancionada — nenhuma aresta nova.
+3. Contrato JSON estável: enums por `.value`, tuplas em listas.
+4. REUSE do `HardwareProfileService` do Ramo A.
+
+### Validação
+
+```text
+py -3.12 -m pytest   582 passed, 0 failures, 0 errors, 0 skipped
+```
+
+(576 bases + 6 novos de API-03; contratos de arquitectura verdes.)
+
+### Próximo passo
+
+API-04 — Runtime (`GET /runtime`, `RuntimeProfileService`).
+
 ## 2026-09-11 — API-02 — System (Ramo B, unidade 1)
 
 ### Objectivo

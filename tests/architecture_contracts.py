@@ -115,6 +115,7 @@ SUPERFICIES_PUBLICAS: dict[str, frozenset[str]] = {
             "ApiRequest",
             "ApiResponse",
             "StdLibHttpGateway",
+            "hardware",
             "health",
             "system",
         }
