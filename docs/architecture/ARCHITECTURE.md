@@ -101,6 +101,14 @@ serializando o estado momentâneo em JSON puro (`cpu`, `memory`,
 separação secção 4 (runtime = estado, hardware = capacidade) e seguindo o
 mesmo padrão de apresentador fino injectável.
 
+Na unidade API-05 (Ramo B) foi criado `GET /capabilities` (handler
+`capabilities` em `wsai2.api.capabilities`): apresenta o
+`CapabilitiesService` (APP-06), serializando em JSON puro o relatório de
+compatibilidade (`summary`, `counts` e `entries` com `id`, `name`,
+`domain`, `state`, `is_available`, `justification`, `requirements` e
+`checks`), preservando a distinção estrutura/runtime na avaliação e
+seguindo o mesmo padrão de apresentador fino injectável.
+
 Em APP-02 (Ramo A), a camada Application ganhou a fronteira estável de
 use-cases `wsai2.application`: contratos puros de pedido/resposta por área
 (system/platform, hardware, runtime, capabilities, models, tasks,

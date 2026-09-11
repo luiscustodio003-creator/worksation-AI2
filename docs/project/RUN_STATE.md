@@ -7,10 +7,10 @@ PROJECT_STATUS: ACTIVE
 KERNEL_STATUS: FROZEN
 ACTIVE_BRANCH: B — API
 BRANCH_STATUS: ACTIVE
-ACTIVE_UNIT: API-04 — Runtime
+ACTIVE_UNIT: API-05 — Capabilities
 UNIT_STATUS: COMPLETE / FROZEN
 CURRENT_STEP: GATE
-NEXT_ACTION: API-05 — Capabilities (GET /capabilities)
+NEXT_ACTION: API-06 — Models (GET /models)
 BLOCKED_REASON: NONE
 ```
 
@@ -19,7 +19,7 @@ BLOCKED_REASON: NONE
 | Ramo | Estado | Dependência | Próximo passo |
 |---|---|---|---|
 | A — Application / Use Cases | COMPLETE / FROZEN | Kernel frozen | — (APP-01..11) |
-| B — API | ACTIVE | Application | API-05 |
+| B — API | ACTIVE | Application | API-06 |
 | C — UI | PENDING | API/Application | UI-01 |
 | D — Knowledge Semantic | BLOCKED | decisão material própria | KNOW-SEM-01 |
 | E — Addon Ecosystem | PENDING | contratos públicos | ADDON-01 |
@@ -29,9 +29,9 @@ BLOCKED_REASON: NONE
 
 ```text
 BRANCH: B — API
-UNIT: API-04 — Runtime (COMPLETE / FROZEN)
+UNIT: API-05 — Capabilities (COMPLETE / FROZEN)
 STEP: GATE
-STATUS: A aguardar arranque da API-05
+STATUS: A aguardar arranque da API-06
 ```
 
 ## Unidades congeladas (Ramo B)
@@ -46,6 +46,9 @@ API-03  Hardware                       COMPLETE / FROZEN
 API-04  Runtime                        COMPLETE / FROZEN
         Evidência: docs/api/BASE-58-api-runtime-endpoint.md
                 + docs/project/IMPLEMENTATION_LOG.md (API-04)
+API-05  Capabilities                   COMPLETE / FROZEN
+        Evidência: docs/api/BASE-59-api-capabilities-endpoint.md
+                + docs/project/IMPLEMENTATION_LOG.md (API-05)
 ```
 
 ## Unidades congeladas (Ramo A)

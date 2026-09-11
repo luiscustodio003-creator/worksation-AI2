@@ -15,6 +15,7 @@ from threading import Lock
 from typing import Callable, Dict, Optional, Tuple
 
 from .base import ApiGateway, health
+from .capabilities import capabilities
 from .contract import ApiRequest, ApiResponse
 from .hardware import hardware
 from .runtime import runtime
@@ -25,6 +26,7 @@ _ROTA_METODOS: Dict[str, frozenset[str]] = {
     "/system": frozenset({"GET"}),
     "/hardware": frozenset({"GET"}),
     "/runtime": frozenset({"GET"}),
+    "/capabilities": frozenset({"GET"}),
 }
 
 _HANDLERS: Dict[str, Callable[[ApiRequest], ApiResponse]] = {
@@ -32,6 +34,7 @@ _HANDLERS: Dict[str, Callable[[ApiRequest], ApiResponse]] = {
     "/system": system,
     "/hardware": hardware,
     "/runtime": runtime,
+    "/capabilities": capabilities,
 }
 
 

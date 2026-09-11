@@ -12,9 +12,12 @@ A unidade API-03 acrescenta o endpoint ``hardware``, que apresenta o
 ``HardwareProfileService`` (perfil estrutural) com o mesmo padrão.
 A unidade API-04 acrescenta o endpoint ``runtime``, que apresenta o
 ``RuntimeProfileService`` (estado momentâneo) com o mesmo padrão.
+A unidade API-05 acrescenta o endpoint ``capabilities``, que apresenta o
+``CapabilitiesService`` (catálogo de capacidades) com o mesmo padrão.
 """
 
 from .base import ApiGateway, health
+from .capabilities import capabilities
 from .contract import ApiRequest, ApiResponse
 from .hardware import hardware
 from .runtime import runtime
@@ -28,6 +31,7 @@ __all__ = [
     "ApiRequest",
     "ApiResponse",
     "StdLibHttpGateway",
+    "capabilities",
     "hardware",
     "health",
     "runtime",

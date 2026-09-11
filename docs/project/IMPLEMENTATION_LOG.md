@@ -1,5 +1,53 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-11 — API-05 — Capabilities (Ramo B, unidade 4)
+
+### Objectivo
+
+Apresentar o use-case `CapabilitiesService` (APP-06) por trás do
+transporte contract-first: endpoint `GET /capabilities` com o catálogo de
+capacidades avaliadas contra o hardware e o runtime actuais.
+
+### Criado
+
+- `src/wsai2/api/capabilities.py` — handler `capabilities` (apresentador
+  fino, serviço injectável), serialização JSON do relatório de
+  compatibilidade.
+- `tests/test_api_capabilities.py` — 6 testes (directo, injectável,
+  entradas, requisitos/checks, roundtrip HTTP 200 e 405).
+
+### Modificado
+
+- `src/wsai2/api/transport_stdlib.py` — rota `GET /capabilities` nas tabelas.
+- `src/wsai2/api/__init__.py` — `capabilities` na superfície pública.
+- `tests/architecture_contracts.py` — `SUPERFICIES_PUBLICAS["api"]` += `capabilities`.
+- `docs/architecture/ARCHITECTURE.md` — secção 3.10 (API-05).
+- `docs/api/BASE-59-api-capabilities-endpoint.md` — evidência (nova).
+
+### Decisões
+
+1. Apresentador fino: o handler não contém lógica de domínio nem I/O
+   próprio; delega no serviço injectável (padrão de API-02..04).
+2. Fronteira `api → application` já sancionada — nenhuma aresta nova.
+3. Contrato JSON estável: enums por `.value`; `checks` como lista com
+   `name`/`required`/`available`/`satisfied`; `summary` e `counts`
+   derivados do relatório.
+4. Distinção estrutura/runtime preservada: requisitos estruturais
+   falhados → `unavailable`; requisitos de runtime falhados →
+   `restricted`.
+
+### Validação
+
+```text
+py -3.12 -m pytest   595 passed, 0 failures, 0 errors, 0 skipped
+```
+
+(589 bases + 6 novos de API-05; contratos de arquitectura verdes.)
+
+### Próximo passo
+
+API-06 — Models (`GET /models`, `ModelService`).
+
 ## 2026-09-11 — API-04 — Runtime (Ramo B, unidade 3)
 
 ### Objectivo
