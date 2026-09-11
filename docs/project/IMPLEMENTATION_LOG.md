@@ -1,5 +1,53 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-11 — API-06 — Models (Ramo B, unidade 5)
+
+### Objectivo
+
+Apresentar o use-case `ModelsService` (APP-07) por trás do transporte
+contract-first: endpoint `GET /models` com os veredictos de
+compatibilidade dos modelos contra o hardware, o runtime e as
+capacidades do sistema.
+
+### Criado
+
+- `src/wsai2/api/models.py` — handler `models` (apresentador fino,
+  serviço injectável), serialização JSON dos veredictos de
+  compatibilidade.
+- `tests/test_api_models.py` — 6 testes (directo, injectável, veredictos,
+  checks/required_capabilities, roundtrip HTTP 200 e 405).
+
+### Modificado
+
+- `src/wsai2/api/transport_stdlib.py` — rota `GET /models` nas tabelas.
+- `src/wsai2/api/__init__.py` — `models` na superfície pública.
+- `tests/architecture_contracts.py` — `SUPERFICIES_PUBLICAS["api"]` += `models`.
+- `docs/architecture/ARCHITECTURE.md` — secção 3.10 (API-06).
+- `docs/api/BASE-60-api-models-endpoint.md` — evidência (nova).
+
+### Decisões
+
+1. Apresentador fino: o handler não contém lógica de domínio nem I/O
+   próprio; delega no serviço injectável (padrão de API-02..05).
+2. Fronteira `api → application` já sancionada — nenhuma aresta nova.
+3. Contrato JSON estável: enums por `.value`; tuplas convertidas em
+   listas (ex.: `required_capabilities` nos checks); `counts` e `summary`
+   derivados dos veredictos.
+4. Dimensões da avaliação preservadas no veredicto: capacidades
+   requeridas, requisitos estruturais e requisitos de runtime.
+
+### Validação
+
+```text
+py -3.12 -m pytest   601 passed, 0 failures, 0 errors, 0 skipped
+```
+
+(595 bases + 6 novos de API-06; contratos de arquitectura verdes.)
+
+### Próximo passo
+
+API-07 — Tasks (análise de tarefa, `TaskAnalysisService`).
+
 ## 2026-09-11 — API-05 — Capabilities (Ramo B, unidade 4)
 
 ### Objectivo

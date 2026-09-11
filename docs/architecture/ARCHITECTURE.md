@@ -109,6 +109,14 @@ compatibilidade (`summary`, `counts` e `entries` com `id`, `name`,
 `checks`), preservando a distinção estrutura/runtime na avaliação e
 seguindo o mesmo padrão de apresentador fino injectável.
 
+Na unidade API-06 (Ramo B) foi criado `GET /models` (handler `models` em
+`wsai2.api.models`): apresenta o `ModelsService` (APP-07), serializando
+em JSON puro os veredictos de compatibilidade dos modelos (`summary`,
+`counts` e `verdicts` com `model_id`, `state`, `is_available`, `summary`,
+`checks` e `missing_capabilities`), preservando as três dimensões do Model
+Intelligence (capacidades, estrutura e runtime) e seguindo o mesmo padrão
+de apresentador fino injectável.
+
 Em APP-02 (Ramo A), a camada Application ganhou a fronteira estável de
 use-cases `wsai2.application`: contratos puros de pedido/resposta por área
 (system/platform, hardware, runtime, capabilities, models, tasks,

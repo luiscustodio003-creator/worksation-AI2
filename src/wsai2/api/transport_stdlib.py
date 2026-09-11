@@ -18,6 +18,7 @@ from .base import ApiGateway, health
 from .capabilities import capabilities
 from .contract import ApiRequest, ApiResponse
 from .hardware import hardware
+from .models import models
 from .runtime import runtime
 from .system import system
 
@@ -27,6 +28,7 @@ _ROTA_METODOS: Dict[str, frozenset[str]] = {
     "/hardware": frozenset({"GET"}),
     "/runtime": frozenset({"GET"}),
     "/capabilities": frozenset({"GET"}),
+    "/models": frozenset({"GET"}),
 }
 
 _HANDLERS: Dict[str, Callable[[ApiRequest], ApiResponse]] = {
@@ -35,6 +37,7 @@ _HANDLERS: Dict[str, Callable[[ApiRequest], ApiResponse]] = {
     "/hardware": hardware,
     "/runtime": runtime,
     "/capabilities": capabilities,
+    "/models": models,
 }
 
 

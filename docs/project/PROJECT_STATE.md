@@ -18,6 +18,8 @@
 
 **API-05 CONCLUÍDA** — `GET /capabilities` apresenta o `CapabilitiesService` (APP-06): handler `capabilities` serializa o relatório de compatibilidade em JSON puro (`summary`, `counts`, `entries` com `id`/`name`/`domain`/`state`/`justification`/`requirements`/`checks`), preservando a distinção estrutura/runtime.
 
+**API-06 CONCLUÍDA** — `GET /models` apresenta o `ModelsService` (APP-07): handler `models` serializa os veredictos de compatibilidade dos modelos em JSON puro (`summary`, `counts`, `verdicts` com `model_id`/`state`/`is_available`/`checks`/`missing_capabilities`), preservando as dimensões capacidades/estrutura/runtime.
+
 **KNOWLEDGE 9.1–9.7 CONCLUÍDA (âmbito lexical)** — enriquecimento semântico permanece como decisão material terminal e não deve ser iniciado sem planeamento próprio.
 
 **APP-11 CONCLUÍDA (Ramo A) — INTEGRATION GATE** — validação global do Ramo A aprovada (`APPROVED`): 570/570 verdes, fronteira/superfície/versão sancionadas, base documental completa (BASE-46..55). **Ramo A declarado `COMPLETE / FROZEN`.**
@@ -26,11 +28,11 @@
 
 **BRANCH B — API** (dependência: Application concluída)
 
-Estado: **ACTIVE** (API-02..05 concluídas)
+Estado: **ACTIVE** (API-02..06 concluídas)
 
 Próxima unidade:
 
-`API-06 — Models` (`GET /models`, `ModelService`)
+`API-07 — Tasks` (análise de tarefa, `TaskAnalysisService`)
 
 ## Governação do /wsai-run
 
@@ -88,7 +90,7 @@ Os ramos são um mapa operacional e não uma autorização para criar todas as u
 - Runtime Engine — implementada e fechada.
 - Knowledge Engine — fechada no âmbito lexical (9.1–9.7).
 - Application / Use Cases (Ramo A) — **COMPLETE / FROZEN** (APP-01..11: auditoria + contratos + 8 use-cases + integration gate).
-- API — API-01..05 concluídas; API-06+ pendentes.
+- API — API-01..06 concluídas; API-07+ pendentes.
 - UI — ainda não iniciada.
 
 ## Política de reutilização
@@ -108,6 +110,8 @@ KERNEL-01..KERNEL-10: **CONCLUÍDOS**.
 `docs/validation/KERNEL_CONSOLIDATION_REPORT.md` é a evidência persistente do fecho. O estado `TRANSITION` do Kernel terminou; qualquer futura reabertura deve ser controlada e justificada por BUG, REGRESSION, SECURITY, CONTRACT VIOLATION, REQUIREMENT CHANGE ou outra falha real que torne o estado incorrecto.
 
 ## Última unidade funcional
+
+`API-06 — Models` (Ramo B) — `GET /models` apresenta o `ModelsService` da Application por trás do transporte contract-first; handler fino e injectável em `wsai2.api.models`, serialização JSON dos veredictos de compatibilidade (`summary`/`counts`/`verdicts`); suíte real confirmada: **601/601 verdes**.
 
 `API-05 — Capabilities` (Ramo B) — `GET /capabilities` apresenta o `CapabilitiesService` da Application por trás do transporte contract-first; handler fino e injectável em `wsai2.api.capabilities`, serialização JSON do relatório de compatibilidade (`summary`/`counts`/`entries`); suíte real confirmada: **595/595 verdes**.
 

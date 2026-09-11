@@ -118,6 +118,7 @@ SUPERFICIES_PUBLICAS: dict[str, frozenset[str]] = {
             "capabilities",
             "hardware",
             "health",
+            "models",
             "runtime",
             "system",
         }

@@ -14,12 +14,16 @@ A unidade API-04 acrescenta o endpoint ``runtime``, que apresenta o
 ``RuntimeProfileService`` (estado momentâneo) com o mesmo padrão.
 A unidade API-05 acrescenta o endpoint ``capabilities``, que apresenta o
 ``CapabilitiesService`` (catálogo de capacidades) com o mesmo padrão.
+A unidade API-06 acrescenta o endpoint ``models``, que apresenta o
+``ModelsService`` (veredictos de compatibilidade de modelos) com o mesmo
+padrão.
 """
 
 from .base import ApiGateway, health
 from .capabilities import capabilities
 from .contract import ApiRequest, ApiResponse
 from .hardware import hardware
+from .models import models
 from .runtime import runtime
 from .system import system
 from .transport_stdlib import StdLibHttpGateway
@@ -34,6 +38,7 @@ __all__ = [
     "capabilities",
     "hardware",
     "health",
+    "models",
     "runtime",
     "system",
 ]
