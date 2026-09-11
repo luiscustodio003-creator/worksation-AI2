@@ -7,10 +7,10 @@ PROJECT_STATUS: ACTIVE
 KERNEL_STATUS: FROZEN
 ACTIVE_BRANCH: B — API
 BRANCH_STATUS: ACTIVE
-ACTIVE_UNIT: API-08 — Knowledge
+ACTIVE_UNIT: API-09 — Execution / Status / Cancellation
 UNIT_STATUS: COMPLETE / FROZEN
 CURRENT_STEP: GATE
-NEXT_ACTION: API-09 — Execution / Status (execução e estado de execução)
+NEXT_ACTION: API-10 — API Integration Gate (validação global do Ramo B)
 BLOCKED_REASON: NONE
 ```
 
@@ -19,7 +19,7 @@ BLOCKED_REASON: NONE
 | Ramo | Estado | Dependência | Próximo passo |
 |---|---|---|---|
 | A — Application / Use Cases | COMPLETE / FROZEN | Kernel frozen | — (APP-01..11) |
-| B — API | ACTIVE | Application | API-09 |
+| B — API | ACTIVE | Application | API-10 |
 | C — UI | PENDING | API/Application | UI-01 |
 | D — Knowledge Semantic | BLOCKED | decisão material própria | KNOW-SEM-01 |
 | E — Addon Ecosystem | PENDING | contratos públicos | ADDON-01 |
@@ -29,9 +29,9 @@ BLOCKED_REASON: NONE
 
 ```text
 BRANCH: B — API
-UNIT: API-08 — Knowledge (COMPLETE / FROZEN)
+UNIT: API-09 — Execution / Status / Cancellation (COMPLETE / FROZEN)
 STEP: GATE
-STATUS: A aguardar arranque da API-09
+STATUS: A aguardar arranque da API-10
 ```
 
 ## Unidades congeladas (Ramo B)
@@ -58,6 +58,9 @@ API-07  Tasks                          COMPLETE / FROZEN
 API-08  Knowledge                      COMPLETE / FROZEN
         Evidência: docs/api/BASE-62-api-knowledge-endpoint.md
                 + docs/project/IMPLEMENTATION_LOG.md (API-08)
+API-09  Execution / Status / Cancel    COMPLETE / FROZEN
+        Evidência: docs/api/BASE-63-api-execution-endpoints.md
+                + docs/project/IMPLEMENTATION_LOG.md (API-09)
 ```
 
 ## Unidades congeladas (Ramo A)

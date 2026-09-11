@@ -23,11 +23,17 @@ aceita corpo JSON com a descrição da tarefa e devolve a análise completa.
 A unidade API-08 acrescenta o endpoint ``knowledge``, que apresenta o
 ``KnowledgeContextService`` (contexto de conhecimento) — mesmo padrão
 POST/corpo JSON, devolvendo correspondências e pacote de contexto.
+A unidade API-09 acrescenta os endpoints ``execution_start``,
+``execution_status`` e ``execution_cancel``, que apresentam os use-cases
+``ExecutionService``, ``ExecutionStatusService`` e ``CancellationService``
+(execução, estado e cancelamento) — três rotas que compõem o ciclo de vida
+de uma execução.
 """
 
 from .base import ApiGateway, health
 from .capabilities import capabilities
 from .contract import ApiRequest, ApiResponse
+from .executions import execution_cancel, execution_start, execution_status
 from .hardware import hardware
 from .knowledge import knowledge
 from .models import models
@@ -44,6 +50,9 @@ __all__ = [
     "ApiResponse",
     "StdLibHttpGateway",
     "capabilities",
+    "execution_cancel",
+    "execution_start",
+    "execution_status",
     "hardware",
     "health",
     "knowledge",

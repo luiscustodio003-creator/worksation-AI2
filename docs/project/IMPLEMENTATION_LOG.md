@@ -1,5 +1,56 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-11 — API-09 — Execution / Status / Cancellation (Ramo B, unidade 8)
+
+### Objectivo
+
+Apresentar os use-cases `ExecutionService`, `ExecutionStatusService` e
+`CancellationService` (APP-10) por trás do transporte contract-first: três
+endpoints que compõem o ciclo de vida de uma execução — submissão, estado e
+cancelamento — com o mesmo padrão de entrada via corpo JSON.
+
+### Criado
+
+- `src/wsai2/api/executions.py` — módulo único com três handlers
+  (`execution_start`, `execution_status`, `execution_cancel`),
+  parsing/validação de corpo JSON, serialização JSON de plano/relatório/
+  snapshot por duck typing.
+- `tests/test_api_execution.py` — 15 testes (directo, plano inviável,
+  plano executável, prioridade/timeout, kind inválido 400, body mal
+  formado 400, estado desconhecido/concluído, cancelamento com/sem fonte,
+  execution_id obrigatório 400, roundtrips HTTP e 405).
+- `docs/api/BASE-63-api-execution-endpoints.md` — evidência (nova).
+
+### Modificado
+
+- `src/wsai2/api/transport_stdlib.py` — rotas `/executions`,
+  `/executions/status` e `/executions/cancel` nas tabelas.
+- `src/wsai2/api/__init__.py` — três funções na superfície pública.
+- `tests/architecture_contracts.py` — `SUPERFICIES_PUBLICAS["api"]` +=
+  `execution_start`, `execution_status`, `execution_cancel`.
+- `docs/architecture/ARCHITECTURE.md` — secção 3.10 (API-09).
+- `docs/project/PROJECT_STATE.md`, `docs/project/ROADMAP.md`,
+  `docs/project/RUN_STATE.md`.
+
+### Decisões
+
+1. POST nas três rotas: o transporte stdlib remove a query string do path,
+   impossibilitando `GET /executions/status?id=...`; POST/corpo JSON é
+   consistente com API-07/08.
+2. Módulo único: três handlers que partilham helpers de parsing/serialização.
+3. Duck typing para `ExecutionReport`/`ExecutionSnapshot`/`StepOutcome` —
+   os tipos vivem em `wsai2.infrastructure` (KERNEL-09), onde o `api` não
+   pode importar (firewall); aceder a atributos evita arestas novas
+   (padrão de API-02..06).
+4. Fidelidade ao domínio APP-10: sem gestor, o plano não é executável
+   (report null); sem fonte de cancelamento, `cancelled=False`.
+
+### Validação
+
+```text
+python -m pytest   635 passed, 0 failures, 0 errors, 0 skipped
+```
+
 ## 2026-09-11 — API-08 — Knowledge (Ramo B, unidade 7)
 
 ### Objectivo

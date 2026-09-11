@@ -17,6 +17,7 @@ from typing import Callable, Dict, Optional, Tuple
 from .base import ApiGateway, health
 from .capabilities import capabilities
 from .contract import ApiRequest, ApiResponse
+from .executions import execution_cancel, execution_start, execution_status
 from .hardware import hardware
 from .knowledge import knowledge
 from .models import models
@@ -33,6 +34,9 @@ _ROTA_METODOS: Dict[str, frozenset[str]] = {
     "/models": frozenset({"GET"}),
     "/tasks": frozenset({"POST"}),
     "/knowledge": frozenset({"POST"}),
+    "/executions": frozenset({"POST"}),
+    "/executions/status": frozenset({"POST"}),
+    "/executions/cancel": frozenset({"POST"}),
 }
 
 _HANDLERS: Dict[str, Callable[[ApiRequest], ApiResponse]] = {
@@ -44,6 +48,9 @@ _HANDLERS: Dict[str, Callable[[ApiRequest], ApiResponse]] = {
     "/models": models,
     "/tasks": tasks,
     "/knowledge": knowledge,
+    "/executions": execution_start,
+    "/executions/status": execution_status,
+    "/executions/cancel": execution_cancel,
 }
 
 

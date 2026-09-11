@@ -139,6 +139,20 @@ justificada: o handler importa o enum `KnowledgeKind` para construir o
 (Ramo A, congelada) não re-exporta tipos de domínio — mesma justificação da
 aresta `api → task` na API-07.
 
+Na unidade API-09 (Ramo B) foram criados `POST /executions`,
+`POST /executions/status` e `POST /executions/cancel` (handlers
+`execution_start`, `execution_status` e `execution_cancel` em
+`wsai2.api.executions`): apresentam o ciclo de vida completo da execução
+(`ExecutionService`, `ExecutionStatusService` e `CancellationService`, APP-10)
+— submissão da tarefa, consulta de estado e cancelamento. Use-se POST nas
+três rotas porque o transporte stdlib remove a query string do path (não
+suporta `GET /.../status?id=...`); o corpo JSON segue o padrão de API-07/08.
+Os tipos de relatório/estado (`ExecutionReport`, `ExecutionSnapshot`,
+`StepOutcome`) vivem em `wsai2.infrastructure` (KERNEL-09) e são
+serializados por duck typing — sem novas arestas arquitecturais; as arestas
+reutilizadas são `api → application`, `api → task` (da API-07) e
+`api → core` (apenas via `wsai2.core.public`).
+
 Em APP-02 (Ramo A), a camada Application ganhou a fronteira estável de
 use-cases `wsai2.application`: contratos puros de pedido/resposta por área
 (system/platform, hardware, runtime, capabilities, models, tasks,
