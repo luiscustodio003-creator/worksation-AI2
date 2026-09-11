@@ -10,6 +10,8 @@
 
 **API-01 CONCLUÍDA** — fundação contract-first com `ApiRequest`, `ApiResponse`, `ApiGateway`, `StdLibHttpGateway` e health.
 
+**API-02 CONCLUÍDA** — primeiro endpoint de domínio do Ramo B: `GET /system` apresenta o `SystemInfoService` da Application por trás do transporte contract-first (handler `system` em `wsai2.api.system`, serviço injectável, contrato JSON estável `platform` + `uptime`).
+
 **KNOWLEDGE 9.1–9.7 CONCLUÍDA (âmbito lexical)** — enriquecimento semântico permanece como decisão material terminal e não deve ser iniciado sem planeamento próprio.
 
 **APP-11 CONCLUÍDA (Ramo A) — INTEGRATION GATE** — validação global do Ramo A aprovada (`APPROVED`): 570/570 verdes, fronteira/superfície/versão sancionadas, base documental completa (BASE-46..55). **Ramo A declarado `COMPLETE / FROZEN`.**
@@ -18,11 +20,11 @@
 
 **BRANCH B — API** (dependência: Application concluída)
 
-Estado: **PENDING** (o Dependency Gate do Ramo A foi satisfeito; o arranque do Ramo B requer nova autorização)
+Estado: **ACTIVE** (API-02 concluída; o Arranque do Ramo B foi autorizado)
 
 Próxima unidade:
 
-`API-02 — API de use-cases da Application`
+`API-03 — Hardware` (`GET /hardware`, `HardwareProfileService`)
 
 ## Governação do /wsai-run
 
@@ -80,7 +82,7 @@ Os ramos são um mapa operacional e não uma autorização para criar todas as u
 - Runtime Engine — implementada e fechada.
 - Knowledge Engine — fechada no âmbito lexical (9.1–9.7).
 - Application / Use Cases (Ramo A) — **COMPLETE / FROZEN** (APP-01..11: auditoria + contratos + 8 use-cases + integration gate).
-- API — API-01 concluída; API-02+ pendentes.
+- API — API-01 concluída; API-02 concluída; API-03+ pendentes.
 - UI — ainda não iniciada.
 
 ## Política de reutilização
@@ -100,6 +102,8 @@ KERNEL-01..KERNEL-10: **CONCLUÍDOS**.
 `docs/validation/KERNEL_CONSOLIDATION_REPORT.md` é a evidência persistente do fecho. O estado `TRANSITION` do Kernel terminou; qualquer futura reabertura deve ser controlada e justificada por BUG, REGRESSION, SECURITY, CONTRACT VIOLATION, REQUIREMENT CHANGE ou outra falha real que torne o estado incorrecto.
 
 ## Última unidade funcional
+
+`API-02 — System` (Ramo B) — `GET /system` apresenta o `SystemInfoService` da Application por trás do transporte contract-first; handler fino e injectável em `wsai2.api.system`, contrato JSON estável `platform` + `uptime`; suíte real confirmada: **576/576 verdes**.
 
 `APP-11 — Application Integration Gate` (Ramo A) — validação global aprovada; **Ramo A COMPLETE / FROZEN**; suíte real confirmada: **570/570 verdes**.
 

@@ -6,10 +6,13 @@ contrato de mensagens (``ApiRequest``/``ApiResponse``), o porte
 ``ApiGateway`` (transporte injectável — permite trocar ``http.server``
 por outro transporte sem tocar nos handlers) e o serviço de exemplo
 ``health``, dependente apenas de ``wsai2.core.public`` (regra KERNEL-08).
+A unidade API-02 acrescenta o endpoint ``system``, que consome o
+``SystemInfoService`` da camada Application (fronteira ``api -> application``).
 """
 
 from .base import ApiGateway, health
 from .contract import ApiRequest, ApiResponse
+from .system import system
 from .transport_stdlib import StdLibHttpGateway
 
 API_CONTRACT_VERSION = "1.0"
@@ -20,4 +23,5 @@ __all__ = [
     "ApiResponse",
     "StdLibHttpGateway",
     "health",
+    "system",
 ]

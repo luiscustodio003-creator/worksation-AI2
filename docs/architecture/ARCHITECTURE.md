@@ -78,6 +78,16 @@ entram por unidades API-02+ com arestas específicas justificadas. A
 Application não contém lógica central de decisão — expõe as superfícies
 públicas do núcleo.
 
+Na unidade API-02 (Ramo B) foi criado o primeiro endpoint de domínio:
+`GET /system` (handler `system` em `wsai2.api.system`) que apresenta o
+use-case `SystemInfoService` da Application por trás do transporte
+contract-first, serializando `SystemInfoResponse` em JSON puro
+(`platform` + `uptime`, com `null` estável quando o uptime é
+indisponível). O handler é um apresentador fino e sem estado — delega a
+recolha no serviço injectável e não importa os domínios directamente
+(`api → application`, fronteira sancionada); o serviço foi exposto na
+superfície pública da API.
+
 Em APP-02 (Ramo A), a camada Application ganhou a fronteira estável de
 use-cases `wsai2.application`: contratos puros de pedido/resposta por área
 (system/platform, hardware, runtime, capabilities, models, tasks,

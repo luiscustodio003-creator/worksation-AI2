@@ -1,5 +1,47 @@
 # WORKSTATION AI 2 — IMPLEMENTATION LOG
 
+## 2026-09-11 — API-02 — System (Ramo B, unidade 1)
+
+### Objectivo
+
+Apresentar o use-case `SystemInfoService` (APP-03) por trás do transporte
+contract-first: primeiro endpoint de domínio do Ramo B — `GET /system`.
+
+### Criado
+
+- `src/wsai2/api/system.py` — handler `system` (apresentador fino,
+  serviço injectável), serialização JSON de `platform` + `uptime`.
+- `tests/test_api_system.py` — 6 testes (directo, injectável, uptime
+  serializado/ausente, roundtrip HTTP 200 e 405).
+
+### Modificado
+
+- `src/wsai2/api/transport_stdlib.py` — rota `GET /system` nas tabelas.
+- `src/wsai2/api/__init__.py` — `system` na superfície pública.
+- `tests/architecture_contracts.py` — `SUPERFICIES_PUBLICAS["api"]` += `system`.
+- `docs/architecture/ARCHITECTURE.md` — secção 3.10 (API-02).
+- `docs/api/BASE-56-api-system-endpoint.md` — evidência (nova).
+
+### Decisões
+
+1. Apresentador fino: o handler não contém lógica de domínio nem I/O
+   próprio; delega no serviço injectável.
+2. Fronteira `api → application` já sancionada — nenhuma aresta nova.
+3. Contrato JSON estável: `uptime` sempre presente (`null` se indisponível).
+4. REUSE do `SystemInfoService` do Ramo A (sem responsabilidade duplicada).
+
+### Validação
+
+```text
+py -3.12 -m pytest   576 passed, 0 failures, 0 errors, 0 skipped
+```
+
+(570 bases + 6 novos de API-02; contratos de arquitectura verdes.)
+
+### Próximo passo
+
+API-03 — Hardware (`GET /hardware`, `HardwareProfileService`).
+
 ## 2026-09-10 — APP-11 — Application Integration Gate (Ramo A, unidade 11)
 
 ### Objectivo

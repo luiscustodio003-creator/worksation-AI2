@@ -137,7 +137,7 @@ A Fase 8 começou pela **baseline e auditoria**, não por uma reescrita. O Runti
 - tasks;
 - knowledge.
 
-**Estado:** estratégia contract-first com transporte stdlib definida. **API-01 concluída**: contrato `API_CONTRACT_VERSION = "1.0"`, `ApiRequest`, `ApiResponse`, `ApiGateway`, `StdLibHttpGateway` e health. API-02+ permanecem por executar.
+**Estado:** estratégia contract-first com transporte stdlib definida. **API-01 concluída**: contrato `API_CONTRACT_VERSION = "1.0"`, `ApiRequest`, `ApiResponse`, `ApiGateway`, `StdLibHttpGateway` e health. **API-02 concluída**: `GET /system` (handler `system` apresenta o `SystemInfoService` da Application; contrato JSON `platform` + `uptime`). API-03+ permanecem por executar.
 
 ## Fase 11 — UI
 
@@ -176,7 +176,7 @@ Ramo A — Application / Use Cases: **COMPLETE / FROZEN**
     APP-11  Application Integration Gate
 
 BRANCH B — API
-    API-02  System
+    API-02  System                          ✓ CONCLUÍDA (GET /system)
     API-03  Hardware
     API-04  Runtime
     API-05  Capabilities

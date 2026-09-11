@@ -5,13 +5,13 @@
 ```text
 PROJECT_STATUS: ACTIVE
 KERNEL_STATUS: FROZEN
-ACTIVE_BRANCH: A — APPLICATION / USE CASES
-BRANCH_STATUS: COMPLETE / FROZEN
-ACTIVE_UNIT: NONE
-UNIT_STATUS: COMPLETE
+ACTIVE_BRANCH: B — API
+BRANCH_STATUS: ACTIVE
+ACTIVE_UNIT: API-02 — System
+UNIT_STATUS: COMPLETE / FROZEN
 CURRENT_STEP: GATE
-NEXT_ACTION: Dependency Gate (Ramo A) — aprovado; Ramo B PENDING
-BLOCKED_REASON: AWAITING AUTHORIZATION (Ramo B)
+NEXT_ACTION: API-03 — Hardware (GET /hardware)
+BLOCKED_REASON: NONE
 ```
 
 ## Branches
@@ -19,7 +19,7 @@ BLOCKED_REASON: AWAITING AUTHORIZATION (Ramo B)
 | Ramo | Estado | Dependência | Próximo passo |
 |---|---|---|---|
 | A — Application / Use Cases | COMPLETE / FROZEN | Kernel frozen | — (APP-01..11) |
-| B — API | PENDING | Application | API-02 |
+| B — API | ACTIVE | Application | API-03 |
 | C — UI | PENDING | API/Application | UI-01 |
 | D — Knowledge Semantic | BLOCKED | decisão material própria | KNOW-SEM-01 |
 | E — Addon Ecosystem | PENDING | contratos públicos | ADDON-01 |
@@ -28,10 +28,18 @@ BLOCKED_REASON: AWAITING AUTHORIZATION (Ramo B)
 ## Unidade activa
 
 ```text
-BRANCH: A
-UNIT: (Ramo concluído — sem unidade activa)
+BRANCH: B — API
+UNIT: API-02 — System (COMPLETE / FROZEN)
 STEP: GATE
-STATUS: COMPLETE / FROZEN
+STATUS: A aguardar arranque da API-03
+```
+
+## Unidades congeladas (Ramo B)
+
+```text
+API-02  System                         COMPLETE / FROZEN
+        Evidência: docs/api/BASE-56-api-system-endpoint.md
+                + docs/project/IMPLEMENTATION_LOG.md (API-02)
 ```
 
 ## Unidades congeladas (Ramo A)
